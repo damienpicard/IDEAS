@@ -9,10 +9,11 @@ function ShortTimeResponseHX
 
   import SI = Modelica.SIunits;
 
+  input Real hBor = 50;
   input String name=
       "example";
   final parameter String modelToSimulate=
-      "IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.BaseClasses.BoreHoles.Examples.SingleBoreHoleSerStepLoad"
+      "IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.BaseClasses.Scripts.SingleBoreHoleSerStepLoadScript"
     "model to simulate";
 
   input Data.Records.Soil soi=Data.SoilData.example()
@@ -47,18 +48,18 @@ algorithm
   Modelica.Utilities.Files.removeFile(filPathAndName + "_sim");
   Modelica.Utilities.Files.removeFile(filPathAndName + "Data");
 
-  translateModel(modelToSimulate +
-    "(redeclare IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.Data.SoilData." + soi.name + " soi" +
-    ",redeclare IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.Data.FillingData." + fill.name +
-    " fill" + ",redeclare IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.Data.GeometricData." +
-    geo.name + " geo" +
-    ",redeclare IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.Data.StepResponse." + steRes.name +
-    " steRes" + ",redeclare IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.Data.Advanced." + adv.name +
-    " adv)");
+//   translateModel(modelToSimulate +
+//     "( IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.Data.SoilData." + soi.name + " soi" +
+//     ", IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.Data.FillingData." + fill.name +
+//     " fill" + ", IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.Data.GeometricData." +
+//     geo.name + " geo" +
+//     ", IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.Data.StepResponse." + steRes.name +
+//     " steRes" + ", IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.Data.Advanced." + adv.name +
+//     " adv)");
 
   // simulation for short time
   simulateModel(
-      modelToSimulate,
+      modelToSimulate + "(geo(hBor=" + String(hBor) + "),adv(hBor=" + String(hBor) + "))",
       stopTime=steRes.tBre_d*steRes.tStep,
       numberOfIntervals=nbOfPoi,
       method="dassl",

@@ -5,7 +5,7 @@ record Advanced "Advanced parameters"
 
   parameter String name="Advanced";
 
-  parameter SI.Height hBor "Total height of the borehole";
+  parameter SI.Height hBor=100 "Total height of the borehole";
 
   /*--------Discretization: */
   parameter Integer nVer=10
