@@ -13,7 +13,7 @@ function ShortTimeResponseHX
   input String name=
       "example";
   final parameter String modelToSimulate=
-      "IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.BaseClasses.Scripts.SingleBoreHoleSerStepLoadScript"
+      "IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.BaseClasses.BoreHoles.Examples.SingleBoreHoleSerStepLoadScript"
     "model to simulate";
 
   input Data.Records.Soil soi=Data.SoilData.example()

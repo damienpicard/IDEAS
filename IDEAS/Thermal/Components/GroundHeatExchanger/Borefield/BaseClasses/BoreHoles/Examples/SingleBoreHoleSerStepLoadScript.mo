@@ -1,4 +1,4 @@
-within IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.BaseClasses.Scripts;
+within IDEAS.Thermal.Components.GroundHeatExchanger.Borefield.BaseClasses.BoreHoles.Examples;
 model SingleBoreHoleSerStepLoadScript "SingleBoreHoleSer with step input load "
   extends Modelica.Icons.Example;
 
