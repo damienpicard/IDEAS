@@ -2,7 +2,8 @@ within IDEAS.Fluid.Valves;
 model Thermostatic3WayValve "Thermostatic 3-way valve with hot and cold side"
   extends BaseClasses.Partial3WayValve(
       idealSource(m_flow(start=m_flow_nominal*0.5)),
-      final allowFlowReversal=false);
+      final allowFlowReversal=false,
+    vol(m_flow_small=1E-2*abs(m_flow_nominal)));
   parameter Boolean dynamicValve = false
     "Set to true to simulate a valve opening delay: typically slower but more robust"
     annotation(Dialog(tab="Dynamics", group="Filter"));
