@@ -3,6 +3,9 @@ Boiler
 HP_AirWater
 HeatPumpOnOff
 HeatPumpTset
+PerformanceMapProduction
+PolynomialProduction
 BaseClasses
 Interfaces
+Data
 Examples
