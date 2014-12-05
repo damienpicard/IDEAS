@@ -2,8 +2,7 @@ within IDEAS.Fluid.Production.BaseClasses.HeatSources;
 model PerformanceMap3DHeatSource
   "Heat source based on data from a 3D performance map"
   //Extensions
-  extends IDEAS.Fluid.Production.BaseClasses.PartialHeatSource(
-    modulating=true);
+  extends IDEAS.Fluid.Production.BaseClasses.PartialModulatingHeatSource;
 
   //Parameters en Constants
   constant Real kgps2lph=3600/Medium.density(Medium.setState_pTX(Medium.p_default, Medium.T_default, Medium.X_default))*1000
@@ -14,10 +13,10 @@ model PerformanceMap3DHeatSource
   //Components
   Utilities.Tables.InterpolationTable3D interpolationTable(space=space)
     "Interpolation table to determine the efficiency at a modulation grade"
-    annotation (Placement(transformation(extent={{-10,12},{10,32}})));
+    annotation (Placement(transformation(extent={{-12,-58},{8,-38}})));
   Utilities.Tables.InterpolationTable3D interpolationTableQMax(space=space)
     "Interpolation table to determine the maximum possible power output at 100% modulation"
-    annotation (Placement(transformation(extent={{-10,-24},{10,-4}})));
+    annotation (Placement(transformation(extent={{-12,-88},{8,-68}})));
 
 equation
   //Calculation of the efficiency at 100% modulation
@@ -33,7 +32,7 @@ equation
   //Calculation of the modulation
   release = if noEvent(m_flow > Modelica.Constants.eps) then 0.0 else 1.0;
   modulationInit = QAsked/QMax*100;
-    hysteresis.u = modulationInit;
+  hysteresis.u = modulationInit;
   modulation =   if avoidEvents then onOff_internal_filtered * IDEAS.Utilities.Math.Functions.smoothMin(modulationInit, 100, deltaX=0.1) elseif hysteresis.y and noEvent(release<0.5) then IDEAS.Utilities.Math.Functions.smoothMin(modulationInit, 100, deltaX=0.1) else 0;
 
   //Calcualation of the heat powers

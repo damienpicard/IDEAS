@@ -1,19 +1,18 @@
 within IDEAS.Fluid.Production;
-model PerformanceMapProduction "Production model based on performance maps"
+model PerformanceMap1DProduction "Production model based on performance maps"
 
   extends BaseClasses.PartialHeater(
       QNomRef=data.QNomRef,
       etaRef=data.etaRef,
       TMax=data.TMax,
       TMin=data.TMin,
-      modulationMin=data.modulationMin,
-      modulationStart=data.modulationStart,
-    redeclare BaseClasses.HeatSources.PerformanceMap3DHeatSource heatSource(
-        redeclare package Medium = Medium, space=data.space));
+      use_onOffSignal=true,
+    redeclare BaseClasses.HeatSources.PerformanceMap1DHeatSource heatSource(
+        redeclare package Medium = Medium, table=data.table));
 
-  replaceable BaseClasses.PartialPerformanceMap data
+  replaceable BaseClasses.PartialPerformanceMap1D data
     "Data file containing the performance map"
-    annotation (Placement(transformation(extent={{-92,54},{-72,74}})), choicesAllMatching=true);
+    annotation (Placement(transformation(extent={{-80,60},{-60,80}})), choicesAllMatching=true);
 equation
   PEl = 7 + heatSource.modulation/100*(33 - 7);
   PFuel = heatSource.PFuel;
@@ -45,4 +44,4 @@ equation
           points={{-100,-20},{-46,-20}},
           color={0,0,255},
           smooth=Smooth.None)}));
-end PerformanceMapProduction;
+end PerformanceMap1DProduction;
