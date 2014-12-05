@@ -84,12 +84,6 @@ partial model PartialHeater
         rotation=180,
         origin={-12,72})));
 
-  Modelica.Thermal.HeatTransfer.Components.HeatCapacitor mDry(C=cDry, T(start=
-          T_start)) "Lumped dry mass subject to heat exchange/accumulation"
-    annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={-78,-30})));
   Modelica.Thermal.HeatTransfer.Components.ThermalConductor thermalLosses(G=
         UALoss) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
@@ -151,10 +145,6 @@ partial model PartialHeater
         origin={-10,-2})));
 equation
 
-  connect(mDry.port, thermalLosses.port_a) annotation (Line(
-      points={{-68,-30},{-40,-30},{-40,-60}},
-      color={191,0,0},
-      smooth=Smooth.None));
   connect(thermalLosses.port_b, heatPort) annotation (Line(
       points={{-40,-80},{-40,-100}},
       color={191,0,0},
