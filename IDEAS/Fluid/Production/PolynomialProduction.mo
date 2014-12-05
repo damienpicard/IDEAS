@@ -10,7 +10,7 @@ model PolynomialProduction
       TMin=data.TMin,
       modulationMin=data.modulationMin,
       modulationStart=data.modulationStart,
-    redeclare BaseClasses.HeatSources.PolynomialHeatSource heatSource(
+    redeclare replaceable BaseClasses.HeatSources.PolynomialHeatSource heatSource(
       redeclare package Medium = Medium,
       beta=data.beta,
       powers=data.powers));
