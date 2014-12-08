@@ -13,7 +13,7 @@ InteriorConvection
 InteriorConvectionWindow
 ExteriorConvection
 ExteriorSolarAbsorption
-ExteriorHeatRadidation
+ExteriorHeatRadiation
 SwWindowResponse
 SwWindowResponseSignal
 SwWindowResponseHeatPort

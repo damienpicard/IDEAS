@@ -6,18 +6,15 @@ model PartialDynamicHeaterWithLosses
   import IDEAS.Fluid.Production.BaseClasses.HeaterType;
   extends IDEAS.Fluid.Interfaces.TwoPortFlowResistanceParameters(
     final computeFlowResistance=true, dp_nominal = 0);
-  extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations(T_start=293.15);
+  extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations(T_start=293.15, redeclare
+      replaceable package Medium =
+        IDEAS.Media.Water.Simple);
 
   parameter HeaterType heaterType
     "Type of the heater, is used mainly for post processing";
   parameter Modelica.SIunits.Power QNom "Nominal power";
 
-  Modelica.Blocks.Interfaces.RealOutput PFuel(unit="W")
-    "Fuel consumption in watt"                                                     annotation (Placement(transformation(extent={{-100,90},{-120,110}}),
-        iconTransformation(
-        extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={40,122})));
+  Modelica.SIunits.Power PFuel "Fuel consumption in watt";
   parameter Modelica.SIunits.Time tauHeatLoss=7200
     "Time constant of environmental heat losses";
   parameter Modelica.SIunits.Mass mWater=5 "Mass of water in the condensor";
@@ -42,12 +39,12 @@ model PartialDynamicHeaterWithLosses
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={-10,120})));
-  Modelica.Blocks.Interfaces.RealOutput PEl(unit="W") "Electrical consumption"
-    annotation (Placement(transformation(extent={{-100,50},{-120,70}}),
+  Modelica.Blocks.Interfaces.RealOutput PEl "Electrical consumption"
+    annotation (Placement(transformation(extent={{-252,10},{-232,30}}),
         iconTransformation(
         extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={80,122})));
+        rotation=-90,
+        origin={-74,-100})));
 
   parameter SI.MassFlowRate m_flow_nominal "Nominal mass flow rate";
   parameter SI.Pressure dp_nominal=0 "Pressure";
@@ -68,7 +65,7 @@ model PartialDynamicHeaterWithLosses
     linearizeFlowResistance=linearizeFlowResistance,
     deltaM=deltaM,
     homotopyInitialization=homotopyInitialization,
-    vol(mFactor=if mWater > Modelica.Constants.eps then 1 + cDry/Medium.specificHeatCapacityCp(Medium.setState_pTX(Medium.p_default, Medium.T_default, Medium.X_default))/mWater else 1))
+    mFactor= if mWater > Modelica.Constants.eps then 1 + cDry/Medium.specificHeatCapacityCp(Medium.setState_pTX(Medium.p_default, Medium.T_default, Medium.X_default))/mWater else 0)
          annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
@@ -113,8 +110,8 @@ equation
   annotation (
     Diagram(coordinateSystem(extent={{-100,-100},{100,120}},
           preserveAspectRatio=false), graphics),
-    Icon(coordinateSystem(extent={{-100,-100},{100,120}}, preserveAspectRatio=false),
-                    graphics),
+    Icon(coordinateSystem(extent={{-100,-100},{100,120}}, preserveAspectRatio=
+            false), graphics),
     Documentation(info="<html>
 <p><b>Description</b> </p>
 <p>This is a partial model from which most heaters (boilers, heat pumps) will extend. This model is <u>dynamic</u> (there is a water content in the heater and a dry mass lumped to it) and it has <u>thermal losses to the environment</u>. To complete this model and turn it into a heater, a <u>heatSource</u> has to be added, specifying how much heat is injected in the heatedFluid pipe, at which efficiency, if there is a maximum power, etc. HeatSource models are grouped in <a href=\"modelica://IDEAS.Thermal.Components.Production.BaseClasses\">IDEAS.Thermal.Components.Production.BaseClasses.</a></p>

@@ -53,11 +53,13 @@ public
        AWall)
     "determination of absorbed solar radiation by wall based on incident radiation"
     annotation (Placement(transformation(extent={{-20,-40},{-40,-20}})));
-  IDEAS.Buildings.Components.BaseClasses.ExteriorHeatRadidation extRad(final A=
+  IDEAS.Buildings.Components.BaseClasses.ExteriorHeatRadiation extRad(final A=
         AWall, inc=inc)
     "determination of radiant heat exchange with the environment and sky"
     annotation (Placement(transformation(extent={{-20,-20},{-40,0}})));
 
+  outer SimInfoManager sim "Simulation information manager for climate data"
+    annotation (Placement(transformation(extent={{36,-102},{56,-82}})));
 public
   IDEAS.Buildings.Components.BaseClasses.OuterWallParameters outWallPar(inc=inc,azi=azi,lat=sim.lat,A=AWall) if sim.use_lin;
   Modelica.Blocks.Interfaces.RealInput solDir if sim.use_lin;
