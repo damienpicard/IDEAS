@@ -69,18 +69,6 @@ protected
   Modelica.SIunits.MassFlowRate m_flow_pump;
   Modelica.Blocks.Interfaces.RealOutput on_internal_filtered;
 public
-  Modelica.Blocks.Continuous.Filter filter1(
-     order=2,
-     f_cut=5/(2*Modelica.Constants.pi*riseTime),
-     x(each stateSelect=StateSelect.always),
-     u_nominal=m_flow_nominal,
-     u(final quantity="MassFlowRate", final unit="kg/s", nominal=m_flow_nominal),
-     y(final quantity="MassFlowRate", final unit="kg/s", nominal=m_flow_nominal),
-     final analogFilter=Modelica.Blocks.Types.AnalogFilter.CriticalDamping,
-     final filterType=Modelica.Blocks.Types.FilterType.LowPass) if
-        useInput and filteredMassFlowRate
-    "Second order filter to approximate valve opening time, and to improve numerics"
-    annotation (Placement(transformation(extent={{80,43},{94,57}})));
   Modelica.Blocks.Math.BooleanToReal booleanToReal if use_onOffSignal
     annotation (Placement(transformation(extent={{0,34},{12,46}})));
   Modelica.Blocks.Sources.BooleanExpression realExpression3(y=on_internal) if use_onOffSignal
