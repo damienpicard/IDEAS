@@ -298,7 +298,7 @@ equation
 
   P_el = powerTable.y*sca*modulationRate_internal*modulationSignal_internal;
 
-
+  if avoidEvents then
     connect(modulationRate_internal, modulationRate.y);
     connect(compressorOnBlock.y, booleanToReal.u) annotation (Line(
       points={{-58,-58},{-53.2,-58}},
