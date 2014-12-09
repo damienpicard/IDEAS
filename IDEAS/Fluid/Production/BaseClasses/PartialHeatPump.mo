@@ -21,7 +21,7 @@ partial model PartialHeatPump "Heat pump partial"
     IDEAS.Media.Water.Simple constrainedby
     Modelica.Media.Interfaces.PartialMedium "Fluid medium at secondary side"
     annotation(choicesAllMatching=true);
-  replaceable parameter HeatPumpData heatPumpData
+  replaceable parameter IDEAS.Fluid.Production.BaseClasses.OnOffHeatPumpData heatPumpData
   constrainedby HeatPumpData "Record containing heat pump performance data"
     annotation (choicesAllMatching=true, Placement(transformation(extent={{-98,-98},{-78,-78}})));
   extends IDEAS.Fluid.Interfaces.OnOffInterface(use_onOffSignal=true);
