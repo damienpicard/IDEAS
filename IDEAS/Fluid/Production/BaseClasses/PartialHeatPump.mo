@@ -273,10 +273,12 @@ public
         origin={88,76})));
 equation
   cop = copTable.y;
-  connect(modulationInternal, modulationRate.y);
+
   if avoidEvents then
+    connect(modulationInternal, modulationRate.y);
     P_el = powerTable.y * sca*modulationInternal*modulationSignal_internal;
   else
+    modulationInternal = 1;
     P_el = if compressorOn then  powerTable.y * sca * modulationSignal_internal else 0;
   end if;
   if use_modulationSignal then
