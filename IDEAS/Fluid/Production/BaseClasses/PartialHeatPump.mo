@@ -17,10 +17,7 @@ partial model PartialHeatPump "Heat pump partial"
     Modelica.Media.Interfaces.PartialMedium "Brine medium at primary side"
     annotation (choicesAllMatching=true);
   replaceable package MediumFluid = IDEAS.Media.Water.Simple constrainedby
-    Modelica.Media.Interfaces.PartialMedium "Fluid medium at secondary side"
-  replaceable parameter IDEAS.Fluid.Production.BaseClasses.OnOffHeatPumpData heatPumpData
-  constrainedby HeatPumpData "Record containing heat pump performance data"
-    annotation (choicesAllMatching=true, Placement(transformation(extent={{-98,-98},{-78,-78}})));
+    Modelica.Media.Interfaces.PartialMedium "Fluid medium at secondary side";
   extends IDEAS.Fluid.Interfaces.OnOffInterface(use_onOffSignal=true);
 
   parameter Boolean use_scaling=false
@@ -291,6 +288,9 @@ public
         extent={{-6,-6},{6,6}},
         rotation=270,
         origin={88,76})));
+  replaceable parameter OnOffHeatPumpData heatPumpData constrainedby
+    OnOffHeatPumpData
+    annotation (Placement(transformation(extent={{-94,74},{-74,94}})));
 equation
   cop = copTable.y;
   P_evap = P_el*(cop - 1);
@@ -464,5 +464,4 @@ Initial version
 <h4>Validation</h4>
 <p>Examples of this model can be found in<a href=\"modelica://IDEAS.Fluid.Production.Examples.HeatPump_BrineWater\"> IDEAS.Fluid.Production.Examples.HeatPump_BrineWater</a>, <a href=\"modelica://IDEAS.Fluid.Production.Examples.HeatPump_BrineWaterTset\">IDEAS.Fluid.Production.Examples.HeatPump_BrineWaterTset</a> and <a href=\"modelica://IDEAS.Fluid.Production.Examples.HeatPump_Events\">IDEAS.Fluid.Production.Examples.HeatPump_Events</a></p>
 </html>"));
-
 end PartialHeatPump;
