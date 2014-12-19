@@ -54,7 +54,7 @@ model Pump "Prescribed mass flow rate, no heat exchange."
     annotation (Placement(transformation(extent={{40,72},{60,92}}),
         iconTransformation(extent={{60,50},{80,70}})));
   Modelica.Blocks.Continuous.Filter filter(
-     order=2,
+     final order=2,
      f_cut=5/(2*Modelica.Constants.pi*riseTime),
      x(each stateSelect=StateSelect.always),
      u_nominal=m_flow_nominal,
@@ -74,7 +74,7 @@ public
   Modelica.Blocks.Sources.BooleanExpression realExpression3(y=on_internal) if use_onOffSignal
     annotation (Placement(transformation(extent={{-28,30},{-8,50}})));
   Modelica.Blocks.Continuous.Filter filterOnOff(
-     order=2,
+     final order=2,
      f_cut=5/(2*Modelica.Constants.pi*riseTime),
      x(each stateSelect=StateSelect.always),
      final analogFilter=Modelica.Blocks.Types.AnalogFilter.CriticalDamping,

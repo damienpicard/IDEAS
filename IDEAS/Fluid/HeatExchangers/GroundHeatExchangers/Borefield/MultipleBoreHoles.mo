@@ -7,7 +7,7 @@ model MultipleBoreHoles
   extends IDEAS.Fluid.Interfaces.PartialTwoPortInterface(
     m_flow_nominal=bfData.m_flow_nominal,
     redeclare package Medium =
-        Modelica.Media.Water.ConstantPropertyLiquidWater,
+        IDEAS.Media.Water.Simple,
     final allowFlowReversal=false);
 
   extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations;
