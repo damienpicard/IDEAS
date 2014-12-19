@@ -11,9 +11,6 @@ model RunningMeanTemperatureEN15251_discrete
    discrete Modelica.Blocks.Interfaces.RealOutput TRm(unit="K",displayUnit = "degC")
     "running mean average temperature"
      annotation (Placement(transformation(extent={{96,-10},{116,10}})));
-   Modelica.Blocks.Interfaces.RealInput TIn(unit="K",displayUnit = "degC")
-    "Temperature for which the running mean is calculated"
-     annotation (Placement(transformation(extent={{-126,-20},{-86,20}})));
 
 protected
   discrete Real[7] TAveDay(unit="K",displayUnit = "degC")
@@ -23,8 +20,13 @@ protected
 
   Real intTIn "integral of TIn";
 
+public
+  outer SimInfoManager       sim
+    annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
+  Modelica.Blocks.Sources.RealExpression realExpression(y=sim.Te)
+    annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
 equation
-  der(intTIn) =  TIn;
+  der(intTIn) =  realExpression.y;
 algorithm
   when initial() then
     // initialization of the discrete variables
@@ -45,4 +47,5 @@ algorithm
             -100},{100,100}}), graphics),
     experiment(StopTime=864000),
     __Dymola_experimentSetupOutput);
+
 end RunningMeanTemperatureEN15251_discrete;
