@@ -1,6 +1,6 @@
 within IDEAS.Fluid.Production.BaseClasses;
-partial model PartialHeater
-  "A partial for a  production component which heats a fluid"
+partial model PartialBoiler
+  "General model for a heat production that heats a fluid, such as a boiler, condensing boiler, ... and modelled using performance maps."
 
   //Extensions
   extends IDEAS.Fluid.Interfaces.TwoPortFlowResistanceParameters(
@@ -8,25 +8,14 @@ partial model PartialHeater
   extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations(T_start=293.15);
   extends IDEAS.Fluid.Interfaces.OnOffInterface;
 
-  parameter SI.Frequency riseTime=120
-    "The time it takes to reach full/zero power when switching"
-    annotation(Dialog(tab="Advanced", group="Events", enable=avoidEvents));
-
-  //Data parameters
-  parameter Modelica.SIunits.Power QNomRef
-    "Nominal power of the production unit for which the data is given";
-  parameter Real etaRef
-    "Nominal efficiency (higher heating value)of the xxx boiler at 50/30degC.  See datafile";
-  parameter Modelica.SIunits.Temperature TMax "Maximum set point temperature";
-  parameter Modelica.SIunits.Temperature TMin "Minimum set point temperature";
-
   //Scalable parameters
-  parameter Modelica.SIunits.Power QNom "Nominal power"
+  parameter Modelica.SIunits.Power QNom = heatSource.data.QNomRef
+    "Nominal power: if it differs from data.QNomRef, the model will be scaled"
   annotation(Dialog(group = "Nominal condition"));
   parameter Modelica.SIunits.Time tauHeatLoss=7200
     "Time constant of environmental heat losses";
-  parameter Modelica.SIunits.Mass mWater=5 "Mass of water in the condensor";
-  parameter Modelica.SIunits.HeatCapacity cDry=4800
+  parameter Modelica.SIunits.Mass mWater = 50 "Mass of water in the boiler";
+  parameter Modelica.SIunits.HeatCapacity cDry=5000
     "Capacity of dry material lumped to condensor";
 
   final parameter Modelica.SIunits.ThermalConductance UALoss=(cDry + mWater*
@@ -34,7 +23,7 @@ partial model PartialHeater
 
   parameter SI.MassFlowRate m_flow_nominal "Nominal mass flow rate"
   annotation(Dialog(group = "Nominal condition"));
-  parameter SI.Pressure dp_nominal=0 "Pressure";
+  parameter SI.Pressure dp_nominal=0 "Pressure drop";
 
   parameter Boolean dynamicBalance=true
     "Set to true to use a dynamic balance, which often leads to smaller systems of equations"
@@ -43,7 +32,6 @@ partial model PartialHeater
     annotation (Dialog(tab="Flow resistance"));
 
   //Variables
-  Modelica.SIunits.Power PFuel "Fuel consumption in watt";
   Modelica.Blocks.Interfaces.RealInput TSet
     "Temperature setpoint, acts as on/off signal too" annotation (Placement(
         transformation(extent={{-20,-20},{20,20}},
@@ -53,36 +41,41 @@ partial model PartialHeater
         rotation=-90,
         origin={40,104})));
   Modelica.Blocks.Interfaces.RealOutput PEl "Electrical consumption"
-      annotation (Placement(transformation(extent={{100,82},{120,102}}),
+      annotation (Placement(transformation(extent={{-100,40},{-120,60}}),
         iconTransformation(
-        extent={{-10,-10},{10,10}},
-        rotation=-90,
-        origin={-74,-100})));
+        extent={{10,-10},{-10,10}},
+        rotation=0,
+        origin={-110,50})));
 
   //Components
-  replaceable PartialHeatSource heatSource(
-    QNomRef=QNomRef,
-    etaRef=etaRef,
-    TMax=TMax,
-    TMin=TMin,
+  replaceable IDEAS.Fluid.Production.BaseClasses.PartialHeatSource   heatSource(
     UALoss=UALoss,
     QNom=QNom,
     m_flow_nominal=m_flow_nominal,
     riseTime=riseTime,
-    use_onOffSignal=true)          constrainedby PartialHeatSource(
-    QNomRef=QNomRef,
-    etaRef=etaRef,
-    TMax=TMax,
-    TMin=TMin,
+    use_onOffSignal=use_onOffSignal,
+    onOff=onOff,
+    avoidEvents=avoidEvents,
+    redeclare package Medium = Medium)
+                                constrainedby
+    IDEAS.Fluid.Production.BaseClasses.PartialHeatSource(
     UALoss=UALoss,
     QNom=QNom,
     m_flow_nominal=m_flow_nominal,
-    riseTime=riseTime)
-    annotation (Placement(
+    riseTime=riseTime,
+    use_onOffSignal=use_onOffSignal,
+    onOff=onOff,
+    avoidEvents=avoidEvents,
+    redeclare package Medium = Medium)
+    annotation (choicesAllMatching=true, Placement(
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-12,72})));
+
+  parameter SI.Frequency riseTime=120
+    "The time it takes to reach full/zero power when switching"
+    annotation(Dialog(tab="Advanced", group="Events", enable=avoidEvents));
 
   Modelica.Thermal.HeatTransfer.Components.ThermalConductor thermalLosses(G=
         UALoss) annotation (Placement(transformation(
@@ -143,6 +136,12 @@ partial model PartialHeater
         extent={{10,-10},{-10,10}},
         rotation=90,
         origin={-10,-2})));
+  parameter Boolean avoidEvents=true
+    "Set to true to switch heat pumps on using a continuous transition"
+    annotation (Dialog(tab="Advanced"));
+    Modelica.Blocks.Interfaces.RealOutput PFuel(unit="W")
+    "Resulting fuel consumption" annotation (Placement(transformation(extent={{-100,20},
+            {-120,40}}), iconTransformation(extent={{-100,20},{-120,40}})));
 equation
 
   connect(thermalLosses.port_b, heatPort) annotation (Line(
@@ -199,11 +198,17 @@ equation
       smooth=Smooth.None));
 
   if use_onOffSignal then
+      connect(on, heatSource.on) annotation (Line(
+        points={{-20,108},{-20,86},{-32,86},{-32,54},{-10,54},{-10,61.2}},
+        color={255,0,255},
+        smooth=Smooth.None));
   end if;
-  connect(on, heatSource.on) annotation (Line(
-      points={{-20,108},{-20,86},{-32,86},{-32,54},{-10,54},{-10,61.2}},
-      color={255,0,255},
-      smooth=Smooth.None));
+
+  connect(heatSource.PFuel, PFuel) annotation (Line(
+      points={{-23,67},{-54,67},{-54,66},{-80,66},{-80,30},{-110,30}},
+      color={0,0,127},
+      smooth=Smooth.None,
+      pattern=LinePattern.Dot));
       annotation (
     Diagram(coordinateSystem(extent={{-100,-100},{100,100}},
           preserveAspectRatio=false), graphics),
@@ -222,7 +227,11 @@ equation
         fillColor = {255,0,0},
         fillPattern = FillPattern.Solid,
         points = {{-40,-90},{-20,-70},{0,-90},{0,-50},{-20,-30},{-40,-50},{-40,-90}},
-          rotation=270)}),
+          rotation=270),
+        Text(
+          extent={{-100,100},{100,60}},
+          lineColor={0,0,255},
+          textString="%name")}),
     Documentation(info="<html>
 <p><b>Description</b> </p>
 <p>This is a partial model from which most heaters (boilers, heat pumps) will extend. This model is <u>dynamic</u> (there is a water content in the heater and a dry mass lumped to it) and it has <u>thermal losses to the environment</u>. To complete this model and turn it into a heater, a <u>heatSource</u> has to be added, specifying how much heat is injected in the heatedFluid pipe, at which efficiency, if there is a maximum power, etc. HeatSource models are grouped in <a href=\"modelica://IDEAS.Thermal.Components.Production.BaseClasses\">IDEAS.Thermal.Components.Production.BaseClasses.</a></p>
@@ -251,4 +260,4 @@ equation
 <li>2014 March, Filip Jorissen, Annex60 compatibility</li>
 </ul>
 </html>"));
-end PartialHeater;
+end PartialBoiler;
