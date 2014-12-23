@@ -27,7 +27,7 @@ partial model IOZone
   Modelica.Blocks.Interfaces.RealInput outWallSolDif[nOutWall]
     annotation (Placement(transformation(extent={{-140,-260},{-100,-220}})));
 
-  Modelica.Blocks.Interfaces.RealInput TEmb[nEmb]
+  Modelica.Blocks.Interfaces.RealInput QEmb[nEmb]
     annotation (Placement(transformation(extent={{-146,62},{-100,108}}),
         iconTransformation(extent={{-140,68},{-100,108}})));
   Modelica.Blocks.Interfaces.RealInput QConv[nZones]
@@ -41,15 +41,13 @@ partial model IOZone
     annotation (Placement(transformation(extent={{100,-10},{140,30}})));
   Modelica.Blocks.Interfaces.RealOutput TConv[nZones]
     annotation (Placement(transformation(extent={{100,30},{140,70}})));
-  Modelica.Blocks.Interfaces.RealOutput QEmb[nEmb]
+  Modelica.Blocks.Interfaces.RealOutput TEmb[nEmb]
     annotation (Placement(transformation(extent={{100,72},{138,110}})));
   Modelica.Blocks.Interfaces.RealOutput genOut[nOut] "general outputs"
     annotation (Placement(transformation(extent={{100,-110},{140,-70}})));
   Modelica.Blocks.Interfaces.RealOutput TSensor[nZones]
     "Sensor temperature of the zones"
     annotation (Placement(transformation(extent={{100,-70},{140,-30}})));
-  heatPortPrescribedTemperature[nEmb] heatEmb
-    annotation (Placement(transformation(extent={{-60,80},{-40,100}})));
   heatPortPrescribedHeatFlow[nZones] heatCon
     annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
   heatPortPrescribedHeatFlow[nZones] heatRad
@@ -71,21 +69,15 @@ partial model IOZone
     occBeh=false,
     DHW=false) "Simulation information manager for climate data"
     annotation (Placement(transformation(extent={{80,-360},{100,-340}})));
+  heatPortPrescribedHeatFlow[nEmb] heatEmb
+    annotation (Placement(transformation(extent={{-60,72},{-40,92}})));
 equation
-  connect(TEmb, heatEmb.T) annotation (Line(
-      points={{-123,85},{-86,85},{-86,97},{-60.8,97}},
-      color={0,0,127},
-      smooth=Smooth.None));
   connect(QConv, heatCon.Q_flow) annotation (Line(
       points={{-122,48},{-88,48},{-88,57},{-60.8,57}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(QRad, heatRad.Q_flow) annotation (Line(
       points={{-121,9},{-86,9},{-86,17},{-60.8,17}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(heatEmb.Q_flow, QEmb) annotation (Line(
-      points={{-61.2,83},{-66,83},{-66,70},{84,70},{84,91},{119,91}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(heatCon.T, TConv) annotation (Line(
@@ -100,6 +92,14 @@ equation
   connect(Te,sim.Te_in);
   connect(Tsky,sim.Tsky_in);
   connect(Va,sim.Va_in);
+  connect(QEmb, heatEmb.Q_flow) annotation (Line(
+      points={{-123,85},{-92.5,85},{-92.5,89},{-60.8,89}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(heatEmb.T, TEmb) annotation (Line(
+      points={{-61.2,75},{-72,75},{-72,66},{70,66},{70,91},{119,91}},
+      color={0,0,127},
+      smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -400},{100,100}}), graphics), Icon(coordinateSystem(extent={{-100,
             -400},{100,100}}, preserveAspectRatio=false), graphics={

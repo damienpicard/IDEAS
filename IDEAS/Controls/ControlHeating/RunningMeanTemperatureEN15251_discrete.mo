@@ -47,5 +47,4 @@ algorithm
             -100},{100,100}}), graphics),
     experiment(StopTime=864000),
     __Dymola_experimentSetupOutput);
-
 end RunningMeanTemperatureEN15251_discrete;

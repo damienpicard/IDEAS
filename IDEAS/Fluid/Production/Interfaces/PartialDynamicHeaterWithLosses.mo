@@ -21,7 +21,7 @@ model PartialDynamicHeaterWithLosses
   parameter Modelica.SIunits.HeatCapacity cDry=4800
     "Capacity of dry material lumped to condensor";
 
-  final parameter Modelica.SIunits.ThermalConductance UALoss=(cDry + mWater*
+  parameter Modelica.SIunits.ThermalConductance UALoss=(cDry + mWater*
       Medium.specificHeatCapacityCp(Medium.setState_pTX(Medium.p_default, Medium.T_default,Medium.X_default)))/tauHeatLoss;
 
   Modelica.Thermal.HeatTransfer.Components.ThermalConductor thermalLosses(G=
