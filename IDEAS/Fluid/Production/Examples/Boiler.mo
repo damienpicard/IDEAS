@@ -103,15 +103,15 @@ equation
       color={0,0,255},
       smooth=Smooth.None));
   connect(bou.ports[1], heater.port_a) annotation (Line(
-      points={{-4,20},{-18,20},{-18,22},{-31.82,22}},
+      points={{-4,20},{-18,20},{-18,30},{-32,30}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(realExpression.y, heater.TSet) annotation (Line(
-      points={{-51,8},{-37.4,8},{-37.4,15.6}},
+      points={{-51,8},{-38.03,8},{-38.03,15.3}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(heater.port_b, senTemBoiler_out.port_a) annotation (Line(
-      points={{-31.82,30},{-31.82,38},{-26,38}},
+      points={{-32,22},{-32,38},{-26,38}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(senTemBoiler_out.port_b, pipe.port_a) annotation (Line(
@@ -123,7 +123,7 @@ equation
       color={0,127,255},
       smooth=Smooth.None));
   connect(senTemBoiler_in.port_b, heater.port_a) annotation (Line(
-      points={{-30,-12},{-31.82,-12},{-31.82,22}},
+      points={{-30,-12},{-32,-12},{-32,30}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(pulse1.y, pump.m_flowSet) annotation (Line(
