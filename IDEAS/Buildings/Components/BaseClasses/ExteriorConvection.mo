@@ -9,7 +9,8 @@ model ExteriorConvection "exterior surface convection"
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
 
 equation
-  port_a.Q_flow = sim.hCon*A*(port_a.T - sim.Te);
+  //port_a.Q_flow = sim.hCon*A*(port_a.T - sim.Te); --> value hCon is dependent of the time. values oscillate between 5 to 30 (approx)
+  port_a.Q_flow = 20*A*(port_a.T - sim.Te);
 
   annotation (Icon(graphics={
         Rectangle(

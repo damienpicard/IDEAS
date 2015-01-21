@@ -22,13 +22,16 @@ protected
 equation
 if not fixed then
   if Ceiling then
-    port_a.Q_flow = if noEvent(dT > 0) then max(A*1.31*abs(dT)^1.33,0.1*A*abs(dT)) else min(-A*0.76*
-      abs(dT)^1.33,-A*0.1*abs(dT));
+//     port_a.Q_flow = if noEvent(dT > 0) then max(A*1.31*abs(dT)^1.33,0.1*A*abs(dT)) else min(-A*0.76*
+//       abs(dT)^1.33,-A*0.1*abs(dT)); --> These equations are non-linear. Their effect should be investigated.
+    port_a.Q_flow = A*1.31*dT;
   elseif Floor then
-    port_a.Q_flow = if noEvent(dT > 0) then max(A*0.76*abs(dT)^1.33,0.1*A*abs(dT)) else min(-A*1.31*
-      abs(dT)^1.33,-0.1*A*abs(dT));
+//     port_a.Q_flow = if noEvent(dT > 0) then max(A*0.76*abs(dT)^1.33,0.1*A*abs(dT)) else min(-A*1.31*
+//       abs(dT)^1.33,-0.1*A*abs(dT));
+    port_a.Q_flow = A*0.76*dT;
   else
-    port_a.Q_flow = sign(dT)*max(A*1.310*abs(dT)^1.33,0.1*A*abs(dT));
+    //     port_a.Q_flow = sign(dT)*max(A*1.310*abs(dT)^1.33,0.1*A*abs(dT));
+    port_a.Q_flow = A*1.310*dT;
   end if;
 else
 //  if Ceiling then

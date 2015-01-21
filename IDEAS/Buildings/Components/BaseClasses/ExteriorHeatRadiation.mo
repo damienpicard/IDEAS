@@ -24,7 +24,9 @@ public
     annotation (Placement(transformation(extent={{-120,40},{-80,80}})));
 equation
 
-  Tenv = (Fssky*sim.TskyPow4 + (1 - Fssky)*sim.TePow4)^0.25;
+  // Tenv = (Fssky*sim.TskyPow4 + (1 - Fssky)*sim.TePow4)^0.25; --> This should be computed outside the model
+  Tenv = 273.15 + 10;
+
 //  port_a.Q_flow = A*Modelica.Constants.sigma*epsLw*(port_a.T - Tenv)*(port_a.T
 //     + Tenv)*(port_a.T^2 + Tenv^2);
   port_a.Q_flow = A*5.67*epsLw*(port_a.T - Tenv);
