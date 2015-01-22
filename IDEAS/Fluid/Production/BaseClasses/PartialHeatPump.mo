@@ -8,11 +8,11 @@ partial model PartialHeatPump "Heat pump partial"
     dp1_nominal=heatPumpData.dp1_nominal,
     dp2_nominal=heatPumpData.dp2_nominal,
     vol1(mFactor=mFactor,
-      V=heatPumpData.m1/rho1_nominal,
+      V=heatPumpData.m1*sca/rho1_nominal,
       energyDynamics=energyDynamics,
       massDynamics=massDynamics),
     vol2(mFactor=mFactor,
-      V=heatPumpData.m2/rho2_nominal,
+      V=heatPumpData.m2*sca/rho2_nominal,
       energyDynamics=energyDynamics,
       massDynamics=massDynamics));
   extends IDEAS.Fluid.Production.Interfaces.ModulationSecurity(T_max = heatPumpData.T_cond_max,
