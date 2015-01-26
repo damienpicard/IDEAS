@@ -103,12 +103,11 @@ equation
         color={85,170,255},
         smooth=Smooth.None));
   end if;
-  end if;
-
   connect(P_val.y, wattsLawPlug.P) annotation (Line(
       points={{161,6},{166,6},{166,5},{171,5}},
       color={0,0,127},
       smooth=Smooth.None));
+
   connect(Q_val.y, wattsLawPlug.Q) annotation (Line(
       points={{161,-8},{164,-8},{164,1},{170,1}},
       color={0,0,127},
@@ -123,7 +122,6 @@ equation
           lineColor={191,0,0}),
         Polygon(
           points={{-46,-8},{-46,-20},{-44,-22},{-24,-10},{-24,2},{-26,4},{-46,-8}},
-
           lineColor={127,0,0},
           smooth=Smooth.None,
           fillColor={127,0,0},
