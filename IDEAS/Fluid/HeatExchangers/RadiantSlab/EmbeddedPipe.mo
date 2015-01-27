@@ -142,8 +142,8 @@ public
     "= true, use linear relation between m_flow and dp for any flow rate"
     annotation(Evaluate=true, Dialog(tab="Advanced"));
 initial equation
-   assert(m_flowMin/A_floor*Medium.specificHeatCapacityCp(sta_default)*(R_w_val_min + R_r_val + R_x_val) >= 0.5,
-     "Model is not valid for the set nominal and minimal mass flow rate, discretisation in multiple parts is required");
+//    assert(m_flowMin/A_floor*Medium.specificHeatCapacityCp(sta_default)*(R_w_val_min + R_r_val + R_x_val) >= 0.5,
+//      "Model is not valid for the set nominal and minimal mass flow rate, discretisation in multiple parts is required");
   if RadSlaCha.tabs then
     assert(RadSlaCha.S_1 > 0.3*RadSlaCha.T, "Thickness of the concrete or screed layer above the tubes is smaller than 0.3 * the tube interdistance. 
     The model is not valid for this case");
