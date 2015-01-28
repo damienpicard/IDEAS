@@ -23,3 +23,7 @@ StaticTwoPortHeatMassExchanger
 TwoPortFlowResistanceParameters
 TwoPortHeatMassExchanger
 Examples
+HeightPortHeatMassExchanger
+HeightPort
+PartialHeightPortInterface
+HeightPortFlowResistanceParameters

@@ -57,7 +57,10 @@ model SingleBoreHoleSerStepLoadScript "SingleBoreHoleSer with step input load "
     redeclare package Medium = Medium,
     m_flow_nominal=gen.m_flow_nominal_bh,
     dynamicBalance=false,
-    T_start=gen.T_start)
+    T_start=gen.T_start,
+    motorCooledByFluid=false,
+    addPowerToMedium=false,
+    filteredSpeed=false)
     annotation (Placement(transformation(extent={{-26,44},{-46,24}})));
   Modelica.Blocks.Sources.Constant mFlo(k=gen.m_flow_nominal_bh)
     annotation (Placement(transformation(extent={{-62,6},{-50,18}})));

@@ -1,26 +1,8 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses;
 function singleUTubeResistances
   "Thermal resistances for single U-tube, according to Bauer et al. (2011)"
-
-  // Geometry of the borehole
-  input Boolean use_Rb
-    "True if the value Rb should be used instead of calculated";
-  input Real Rb(unit="(m.K)/W") "Borehole thermal resistance";
-  input Modelica.SIunits.Height hSeg "Height of the element";
-  input Modelica.SIunits.Radius rBor "Radius of the borehole";
-  // Geometry of the pipe
-  input Modelica.SIunits.Radius rTub "Radius of the tube";
-  input Modelica.SIunits.Length eTub "Thickness of the tubes";
-  input Modelica.SIunits.Length sha
-    "Shank spacing, defined as the distance between the center of a pipe and the center of the borehole";
-
-  // Thermal properties
-  input Modelica.SIunits.ThermalConductivity kFil
-    "Thermal conductivity of the grout";
-  input Modelica.SIunits.ThermalConductivity kSoi
-    "Thermal conductivity of the soi";
-  input Modelica.SIunits.ThermalConductivity kTub
-    "Thermal conductivity of the tube";
+  extends
+    IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.partialBoreholeResistances;
 
   // Outputs
   output Modelica.SIunits.ThermalResistance Rgb
@@ -29,20 +11,13 @@ function singleUTubeResistances
     "Thermal resistance between the two grout zones";
   output Modelica.SIunits.ThermalResistance RCondGro
     "Thermal resistance between: pipe wall to capacity in grout";
-  output Real x "Capacity location";
 
 protected
-  Boolean test=false "thermodynamic test for R and x value";
-
   Modelica.SIunits.ThermalResistance Rg
     "Thermal resistance between outer borehole wall and one tube";
   Modelica.SIunits.ThermalResistance Rar
     "Thermal resistance between the two pipe outer walls";
-  Modelica.SIunits.ThermalResistance RCondPipe
-    "Thermal resistance of the pipe wall";
 
-  Real Rb_internal(unit="(m.K)/W")
-    "Fluid-to-grout resistance, as defined by Hellstroem. Resistance from the fluid in the pipe to the borehole wall";
   Real Ra(unit="(m.K)/W")
     "Grout-to-grout resistance (2D) as defined by Hellstroem. Interaction between the different grout part";
 
@@ -56,12 +31,9 @@ protected
   Real Ra_LS(unit="(m.K)/W")
     "Grout-to-grout resistance calculated with the line-source approximation";
 
-  Integer i=1 "Loop counter";
-
 algorithm
   // ********** Rb and Ra from multipole **********
   // Help variables
-  RCondPipe :=Modelica.Math.log((rTub + eTub)/rTub)/(2*Modelica.Constants.pi*hSeg*kTub);
   sigma :=(kFil - kSoi)/(kFil + kSoi);
   R_1delta_LS :=1/(2*Modelica.Constants.pi*kFil)*(log(rBor/(rTub + eTub)) + log(rBor/(2*sha)) +
     sigma*log(rBor^4/(rBor^4 - sha^4)));
@@ -82,7 +54,7 @@ algorithm
   Rg  :=2*Rb_internal/hSeg;
   Rar :=Ra/hSeg;
 
-  Modelica.Utilities.Streams.print(String(Rb_internal));
+  Modelica.Utilities.Streams.print(String(R_1delta_MP/2));
 /* **************** Simplification of Bauer for single U-tube ************************
   //Thermal resistance between: Outer wall and one tube
      Rg := Modelica.Math.acosh((rBor^2 + (rTub + eTub)^2 - sha^2)/(2*rBor*(rTub +
@@ -128,7 +100,7 @@ algorithm
            Rgg  = " + String(Rgg) + " K/W");
 
   //Conduction resistance in grout from pipe wall to capacity in grout
-  RCondGro := x*Rg + RCondPipe;
+  RCondGro := x*Rg + RCondPipe/hSeg;
 
   annotation (Diagram(graphics), Documentation(info="<html>
 <p>

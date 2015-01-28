@@ -5,15 +5,16 @@ model SingleBoreHoleSerStepLoad "SingleBoreHoleSer with step input load "
 
   package Medium = Modelica.Media.Water.ConstantPropertyLiquidWater;
 
-  redeclare replaceable parameter Data.Records.Soil soi=
-      Data.SoilData.SandStone()
+  replaceable parameter Data.SoilData.WetSand_validation
+                                          soi constrainedby Data.Records.Soil
     annotation (Placement(transformation(extent={{14,-76},{24,-66}})));
-  redeclare replaceable parameter Data.Records.Filling fil=
-      Data.FillingData.Bentonite() "Thermal properties of the filling material"
+  replaceable parameter Data.FillingData.Bentonite_validation
+                                             fil constrainedby
+    Data.Records.Filling "Thermal properties of the filling material"
     annotation (Placement(transformation(extent={{30,-76},{40,-66}})));
-  redeclare replaceable parameter Data.Records.General gen=
-      Data.GeneralData.c8x1_h110_b5_d3600_T283()
-    "General charachteristic of the borefield"
+  replaceable parameter Data.GeneralData.SandBox_validation
+                                             gen constrainedby
+    Data.Records.General "General charachteristic of the borefield"
     annotation (Placement(transformation(extent={{46,-76},{56,-66}})));
 
   SingleBoreHolesInSerie borHolSer(
@@ -48,7 +49,10 @@ model SingleBoreHoleSerStepLoad "SingleBoreHoleSer with step input load "
     redeclare package Medium = Medium,
     m_flow_nominal=gen.m_flow_nominal_bh,
     dynamicBalance=false,
-    T_start=gen.T_start)
+    T_start=gen.T_start,
+    motorCooledByFluid=false,
+    addPowerToMedium=false,
+    filteredSpeed=false)
     annotation (Placement(transformation(extent={{-14,10},{-34,-10}})));
   Sensors.TemperatureTwoPort             TSen_bor_in(
     redeclare package Medium = Medium,
@@ -113,7 +117,7 @@ equation
 </ul>
 </html>"),
     experiment(
-      StopTime=3.1536e+007,
+      StopTime=360000,
       Tolerance=1e-005,
       __Dymola_Algorithm="Dassl"),
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},

@@ -4,4 +4,8 @@ SingleUTubeInternalHEX
 CylindricalGroundLayer
 singleUTubeResistances
 convectionResistance
+partialBoreholeResistances
 Examples
+doubleUTubeResistances
+DoubleUTubeInternalHEX
+partialBoreholeResistances2
