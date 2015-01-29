@@ -54,7 +54,8 @@ algorithm
   Rg  :=2*Rb_internal/hSeg;
   Rar :=Ra/hSeg;
 
-  Modelica.Utilities.Streams.print(String(R_1delta_MP/2));
+  Modelica.Utilities.Streams.print(String(Rb_internal)  +  "  \n  "+String(Rg) +  "  \n  " + String(Rar));
+
 /* **************** Simplification of Bauer for single U-tube ************************
   //Thermal resistance between: Outer wall and one tube
      Rg := Modelica.Math.acosh((rBor^2 + (rTub + eTub)^2 - sha^2)/(2*rBor*(rTub +
@@ -102,6 +103,7 @@ algorithm
   //Conduction resistance in grout from pipe wall to capacity in grout
   RCondGro := x*Rg + RCondPipe/hSeg;
 
+  Modelica.Utilities.Streams.print(String(x));
   annotation (Diagram(graphics), Documentation(info="<html>
 <p>
 This model computes the different thermal resistances present in a single-U-tube borehole 

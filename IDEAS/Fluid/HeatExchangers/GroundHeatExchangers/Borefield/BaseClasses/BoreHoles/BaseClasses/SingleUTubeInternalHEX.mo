@@ -137,7 +137,7 @@ public
      annotation (Placement(transformation(extent={{-100,-18},{-80,2}})));
 
 initial equation
-  (Rgb_val, Rgg_val, RCondGro_val, x) =
+  (x, Rgb_val, Rgg_val, RCondGro_val) =
     singleUTubeResistances(hSeg=gen.hSeg,
     rBor=gen.rBor,
     rTub=gen.rTub,
