@@ -11,6 +11,7 @@ partial model HeatingSystem "Partial heating/cooling system"
     "Number of conditioned thermal zones in the building";
   parameter Boolean isHea=true "true if system is able to heat";
   parameter Boolean isCoo=false "true if system is able to cool";
+  parameter Boolean isDH=false "true if the system is connected to a DH grid";
 
   // --- Ports
   parameter Integer nConvPorts(min=0) = nZones
@@ -112,6 +113,13 @@ equation
       points={{161,-8},{164,-8},{164,1},{170,1}},
       color={0,0,127},
       smooth=Smooth.None));
+  // --- fluid
+  Fluid.Interfaces.FlowPort_a flowPort_supply if isDH
+    "Supply water connection to the DH grid"
+    annotation (Placement(transformation(extent={{150,-110},{170,-90}})));
+  Fluid.Interfaces.FlowPort_b flowPort_return if isDH
+    "Return water connection to the DH grid"
+    annotation (Placement(transformation(extent={{110,-110},{130,-90}})));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-200,-100},{200,
             100}}), graphics={
