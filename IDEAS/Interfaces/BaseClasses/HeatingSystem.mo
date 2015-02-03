@@ -9,9 +9,11 @@ partial model HeatingSystem "Partial heating/cooling system"
   // --- General
   parameter Integer nZones(min=1)
     "Number of conditioned thermal zones in the building";
+  // --- Boolean declarations
   parameter Boolean isHea=true "true if system is able to heat";
   parameter Boolean isCoo=false "true if system is able to cool";
   parameter Boolean isDH=false "true if the system is connected to a DH grid";
+  parameter Boolean InInterface = false;
 
   // --- Ports
   parameter Integer nConvPorts(min=0) = nZones
