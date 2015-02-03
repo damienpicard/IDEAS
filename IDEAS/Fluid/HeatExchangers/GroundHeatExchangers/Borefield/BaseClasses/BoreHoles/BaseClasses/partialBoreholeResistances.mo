@@ -25,14 +25,14 @@ partial function partialBoreholeResistances
   // Outputs
 
   output Real x "Capacity location";
-
+  output Real RCondPipe(unit="(m.K)/W") =  Modelica.Math.log((rTub + eTub)/rTub)/(2*Modelica.Constants.pi*kTub)
+    "Thermal resistance of the pipe wall";
 protected
   Boolean test=false "thermodynamic test for R and x value";
 
   Real Rb_internal(unit="(m.K)/W")
     "Fluid-to-grout resistance, as defined by Hellstroem. Resistance from the fluid in the pipe to the borehole wall";
-  Real RCondPipe(unit="(m.K)/W") =  Modelica.Math.log((rTub + eTub)/rTub)/(2*Modelica.Constants.pi*kTub)
-    "Thermal resistance of the pipe wall";
+
   Integer i=1 "Loop counter";
 
   annotation (Diagram(graphics), Documentation(info="<html>

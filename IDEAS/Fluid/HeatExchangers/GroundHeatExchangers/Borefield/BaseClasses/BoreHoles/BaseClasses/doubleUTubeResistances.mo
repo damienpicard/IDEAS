@@ -2,7 +2,8 @@ within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.Bor
 function doubleUTubeResistances
   "Thermal resistances for double U-tube, according to Zeng et al. (2003) and Bauer et al (2010)"
   extends
-    IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.partialBoreholeResistances;
+    IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.partialBoreholeResistances(
+                                                                                                    kSoi=1.87, kFil=2, kTub=0.35,sha=0.085/2, rBor=0.080,rTub=0.032,eTub=0.0029,hSeg=75,use_Rb=false,Rb=0);
 
   // Outputs
   output Modelica.SIunits.ThermalResistance Rfg = 1
@@ -24,23 +25,23 @@ function doubleUTubeResistances
     output Modelica.SIunits.ThermalResistance Rb_sum;
     output Modelica.SIunits.ThermalResistance Rb_MP;
 algorithm
-  R11 :=RCondPipe + 1/2/Modelica.Constants.pi/kFil/hSeg*(Modelica.Math.log(rBor/
+  R11 :=RCondPipe + 1/2/Modelica.Constants.pi/kFil*( Modelica.Math.log(rBor/
     (rTub + eTub)) - (kFil - kSoi)/(kFil + kSoi)*Modelica.Math.log((rBor^2 -
     sha^2)/rBor^2));
-  R12 :=1/2/Modelica.Constants.pi/kFil/hSeg*(Modelica.Math.log(rBor/(sqrt(2)*
-    sha)) - (kFil - kSoi)/(2*kFil + 2*kSoi)*Modelica.Math.log((rBor^4 - sha^4)/
+  R12 :=1/2/Modelica.Constants.pi/kFil*(Modelica.Math.log(rBor/(sqrt(2)*
+    sha)) - (kFil - kSoi)/(2*kFil + 2*kSoi)*Modelica.Math.log((rBor^4 + sha^4)/
     rBor^4));
-  R13 :=1/2/Modelica.Constants.pi/kFil/hSeg*(Modelica.Math.log(rBor/(2*sha)) - (
+  R13 :=1/2/Modelica.Constants.pi/kFil*(Modelica.Math.log(rBor/(2*sha)) - (
     kFil - kSoi)/(kFil + kSoi)*Modelica.Math.log((rBor^2 + sha^2)/rBor^2));
 
-  Rb_sum :=0.25*(R11 + 2*R12 + R13);
+  Rb_sum :=(R11 + 2*R12 + R13);
 
-  Rb_MP :=1/2/Modelica.Constants.pi/kFil/hSeg*(Modelica.Math.log(rBor/(rTub +
+  Rb_MP :=1/2/Modelica.Constants.pi/kFil*(Modelica.Math.log(rBor/(rTub +
     eTub)) + 0.5*Modelica.Math.log(sqrt(2)*sha/(rTub + eTub)) - 0.25*
     Modelica.Math.log(2*sha/(rTub + eTub)) - 0.25*Modelica.Math.log(1 - sha^8/
     rBor^8)) + RCondPipe/4;
 
-  Modelica.Utilities.Streams.Print(String(Rb_MP));
+  Modelica.Utilities.Streams.print(String(Rb_MP));
      x :=1;
   // ********** Resistances and capacity location according to Bauer **********
 //   while test == false and i <= 10 loop
