@@ -99,7 +99,7 @@ partial model HeightPort "Partial model with eight ports"
                      h_outflow(start=h_outflow_b3_start))
     "Fluid connector b2 (positive design flow direction is from port_a3 to port_b3)"
     annotation (Placement(transformation(extent={{110,-40},{90,-20}}),
-                iconTransformation(extent={{-90,30},{-110,50}})));
+                iconTransformation(extent={{110,-41},{90,-21}})));
   Modelica.Fluid.Interfaces.FluidPort_a port_a4(
                      redeclare final package Medium = Medium4,
                      m_flow(min=if allowFlowReversal4 then -Modelica.Constants.inf else 0),
@@ -112,7 +112,7 @@ partial model HeightPort "Partial model with eight ports"
                      h_outflow(start=h_outflow_b4_start))
     "Fluid connector b2 (positive design flow direction is from port_a4 to port_b4)"
     annotation (Placement(transformation(extent={{-90,-90},{-110,-70}}),
-                iconTransformation(extent={{-90,30},{-110,50}})));
+                iconTransformation(extent={{-90,-95},{-110,-75}})));
   annotation (
     preferredView="info",
     Documentation(info="<html>
@@ -160,7 +160,7 @@ are often iteration variables in nonlinear equation systems.
 </ul>
 </html>"),
     Icon(coordinateSystem(
-          preserveAspectRatio=true,
+          preserveAspectRatio=false,
           extent={{-100,-100},{100,100}},
           grid={1,1}), graphics={Text(
           extent={{-151,147},{149,107}},

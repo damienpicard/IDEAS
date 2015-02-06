@@ -1,11 +1,11 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.Examples;
-model SingleBoreHole "Test for the SingleBoreHole model"
+model SingleBoreHoleDoubleUTUbe "Test for the SingleBoreHole model"
   import IDEAS;
   import Buildings;
   extends Modelica.Icons.Example;
   package Medium = Modelica.Media.Water.ConstantPropertyLiquidWater;
 
-  IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.SingleBoreHoleSingleUTube
+  IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.SingleBoreHoleDoubleUTube
     seg(
     redeclare package Medium = Medium,
     soi=Data.SoilData.SandStone(),
@@ -60,4 +60,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end SingleBoreHole;
+end SingleBoreHoleDoubleUTUbe;

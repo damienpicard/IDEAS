@@ -1,21 +1,17 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses;
-model BoreHoleSegmentFourPort "Vertical segment of a borehole"
+model BoreHoleSegmentHeightPort "Vertical segment of a borehole"
   extends Interface.PartialBoreHoleElement;
-    replaceable package Medium =
-    Modelica.Media.Interfaces.PartialMedium "Medium in the component"
+      replaceable package Medium = Modelica.Media.Interfaces.PartialMedium
+    "Medium in the component"
       annotation (choicesAllMatching = true);
   extends IDEAS.Fluid.Interfaces.TwoPortFlowResistanceParameters;
   extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations(T_start=gen.TFil0_start,redeclare
       package Medium =                                                                                       Medium);
-  extends IDEAS.Fluid.Interfaces.PartialFourPortInterface(
+  extends IDEAS.Fluid.Interfaces.PartialHeightPortInterface(
     redeclare final package Medium1 = Medium,
     redeclare final package Medium2 = Medium,
-    final m1_flow_nominal=gen.m_flow_nominal_bh,
-    final m2_flow_nominal=gen.m_flow_nominal_bh,
-    final m1_flow_small=gen.m_flow_small,
-    final m2_flow_small=gen.m_flow_small,
-    final allowFlowReversal1=gen.allowFlowReversal,
-    final allowFlowReversal2=gen.allowFlowReversal);
+    redeclare final package Medium3 = Medium,
+    redeclare final package Medium4 = Medium);
 
   parameter Modelica.SIunits.Temperature TExt_start=T_start
     "Initial far field temperature"
@@ -24,25 +20,39 @@ model BoreHoleSegmentFourPort "Vertical segment of a borehole"
     "Initial far field temperature"
     annotation (Dialog(tab="Boundary conditions",group="T_start: ground"));
 
-  SingleUTubeInternalHEX intHEX(
+  DoubleUTubeInternalHEX intHEX(
     redeclare final package Medium = Medium,
-    final m1_flow_nominal=gen.m_flow_nominal_bh,
-    final m2_flow_nominal=gen.m_flow_nominal_bh,
+    final m1_flow_nominal=m1_flow_nominal,
+    final m2_flow_nominal=m2_flow_nominal,
+    final m3_flow_nominal=m3_flow_nominal,
+    final m4_flow_nominal=m4_flow_nominal,
     final dp1_nominal=dp_nominal,
     final dp2_nominal=0,
+    final dp3_nominal=dp_nominal,
+    final dp4_nominal=0,
     final from_dp1=from_dp,
     final from_dp2=from_dp,
+    final from_dp3=from_dp,
+    final from_dp4=from_dp,
     final linearizeFlowResistance1=linearizeFlowResistance,
     final linearizeFlowResistance2=linearizeFlowResistance,
+    final linearizeFlowResistance3=linearizeFlowResistance,
+    final linearizeFlowResistance4=linearizeFlowResistance,
     final deltaM1=deltaM,
     final deltaM2=deltaM,
-    final m1_flow_small=gen.m_flow_small,
-    final m2_flow_small=gen.m_flow_small,
+    final deltaM3=deltaM,
+    final deltaM4=deltaM,
+    final m1_flow_small=m1_flow_small,
+    final m2_flow_small=m2_flow_small,
+    final m3_flow_small=m3_flow_small,
+    final m4_flow_small=m4_flow_small,
     final soi=soi,
     final fil=fil,
     final gen=gen,
-    final allowFlowReversal1=gen.allowFlowReversal,
-    final allowFlowReversal2=gen.allowFlowReversal,
+    final allowFlowReversal1=allowFlowReversal1,
+    final allowFlowReversal2=allowFlowReversal2,
+    final allowFlowReversal3=allowFlowReversal3,
+    final allowFlowReversal4=allowFlowReversal4,
     final energyDynamics=energyDynamics,
     final massDynamics=massDynamics,
     final p1_start=p_start,
@@ -54,7 +64,17 @@ model BoreHoleSegmentFourPort "Vertical segment of a borehole"
     final T2_start=T_start,
     final X2_start=X_start,
     final C2_start=C_start,
-    final C2_nominal=C_nominal)
+    final C2_nominal=C_nominal,
+    final p3_start=p_start,
+    final T3_start=T_start,
+    final X3_start=X_start,
+    final C3_start=C_start,
+    final C3_nominal=C_nominal,
+    final p4_start=p_start,
+    final T4_start=T_start,
+    final X4_start=X_start,
+    final C4_start=C_start,
+    final C4_nominal=C_nominal)
     "Internal part of the borehole including the pipes and the filling material"
     annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
 
@@ -73,26 +93,14 @@ model BoreHoleSegmentFourPort "Vertical segment of a borehole"
     "Thermal boundary condition for the far-field"
     annotation (Placement(transformation(extent={{68,-10},{48,10}})));
 public
-  Modelica.Blocks.Sources.RealExpression realExpression(final y=gen.TExt0_start)
-    annotation (Placement(transformation(extent={{50,-42},{70,-22}})));
+  Modelica.Blocks.Sources.RealExpression realExpression(final y=T_start)
+    annotation (Placement(transformation(extent={{50,-30},{70,-10}})));
 
 protected
   Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor heaFlo
     annotation (Placement(transformation(extent={{-30,-10},{-10,10}})));
 
 equation
-  connect(intHEX.port_b1, port_b1) annotation (Line(
-      points={{-50,6.36364},{-40,6.36364},{-40,60},{100,60}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(intHEX.port_a2, port_a2) annotation (Line(
-      points={{-50,-4.54545},{-40,-4.54545},{-40,-60},{100,-60}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(intHEX.port_b2, port_b2) annotation (Line(
-      points={{-70,-4.54545},{-80,-4.54545},{-80,-60},{-100,-60}},
-      color={0,127,255},
-      smooth=Smooth.None));
   connect(intHEX.port, heaFlo.port_a) annotation (Line(
       points={{-60,10},{-45,10},{-45,1.22125e-015},{-40,1.22125e-015},{-40,0},{
           -30,0}},
@@ -104,7 +112,7 @@ equation
       color={191,0,0},
       smooth=Smooth.None));
   connect(port_a1, intHEX.port_a1) annotation (Line(
-      points={{-100,60},{-80,60},{-80,6.36364},{-70,6.36364}},
+      points={{-100,80},{-76,80},{-76,8.18182},{-70,8.18182}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(soilLay.port_b, TBouCon.port) annotation (Line(
@@ -112,8 +120,38 @@ equation
       color={191,0,0},
       smooth=Smooth.None));
   connect(realExpression.y, TBouCon.T) annotation (Line(
-      points={{71,-32},{84,-32},{84,0},{70,0}},
+      points={{71,-20},{84,-20},{84,0},{70,0}},
       color={0,0,127},
+      smooth=Smooth.None));
+  connect(port_b2, intHEX.port_b2) annotation (Line(
+      points={{-100,30},{-86,30},{-86,3.63636},{-70,3.63636}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(port_a3, intHEX.port_a3) annotation (Line(
+      points={{-100,-32},{-84,-32},{-84,-2},{-70,-2}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(port_b4, intHEX.port_b4) annotation (Line(
+      points={{-100,-80},{-78,-80},{-78,-6.81818},{-70,-6.81818}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(intHEX.port_b1, port_b1) annotation (Line(
+      points={{-50,8.18182},{-38,8.18182},{-38,80},{100,80}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(intHEX.port_a2, port_a2) annotation (Line(
+      points={{-50,3.63636},{-42,3.63636},{-42,4},{-28,4},{-28,30},{100,30}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(intHEX.port_b3, port_b3) annotation (Line(
+      points={{-50,-1.90909},{-44,-1.90909},{-44,-2},{-36,-2},{-36,-30},{100,
+          -30}},
+      color={0,127,255},
+      smooth=Smooth.None));
+
+  connect(intHEX.port_a4, port_a4) annotation (Line(
+      points={{-50,-6.36364},{-40,-6.36364},{-40,-80},{100,-80}},
+      color={0,127,255},
       smooth=Smooth.None));
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
@@ -175,4 +213,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end BoreHoleSegmentFourPort;
+end BoreHoleSegmentHeightPort;

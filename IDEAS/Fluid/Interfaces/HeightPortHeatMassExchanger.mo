@@ -496,19 +496,31 @@ First implementation.
         extent={{-100,-100},{100,100}},
         grid={1,1}), graphics={
         Rectangle(
-          extent={{-70,80},{70,-80}},
+          extent={{-70,93},{69,-100}},
           lineColor={0,0,255},
           pattern=LinePattern.None,
           fillColor={95,95,95},
           fillPattern=FillPattern.Solid),
         Rectangle(
-          extent={{-99,64},{102,54}},
+          extent={{-99,85},{102,75}},
           lineColor={0,0,255},
           pattern=LinePattern.None,
           fillColor={0,0,0},
           fillPattern=FillPattern.Solid),
         Rectangle(
-          extent={{-99,-56},{102,-66}},
+          extent={{-98,35},{103,25}},
+          lineColor={0,0,255},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-96,-27},{105,-37}},
+          lineColor={0,0,255},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-101,-78},{100,-88}},
           lineColor={0,0,255},
           pattern=LinePattern.None,
           fillColor={0,0,0},

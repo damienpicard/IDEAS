@@ -2,7 +2,8 @@ within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.Bor
 function singleUTubeResistances
   "Thermal resistances for single U-tube, according to Bauer et al. (2011)"
   extends
-    IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.partialBoreholeResistances;
+    IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.partialBoreholeResistances(
+                                                      kSoi=2.19, kFil=2.32, kTub=0.38,sha=1.3*0.0343, rBor=0.15/2,rTub=0.032,eTub=0.0023,hSeg=1,use_Rb=false,Rb=0);
 
   // Outputs
   output Modelica.SIunits.ThermalResistance Rgb
@@ -11,7 +12,6 @@ function singleUTubeResistances
     "Thermal resistance between the two grout zones";
   output Modelica.SIunits.ThermalResistance RCondGro
     "Thermal resistance between: pipe wall to capacity in grout";
-
 protected
   Modelica.SIunits.ThermalResistance Rg
     "Thermal resistance between outer borehole wall and one tube";
@@ -54,7 +54,7 @@ algorithm
   Rg  :=2*Rb_internal/hSeg;
   Rar :=Ra/hSeg;
 
-  Modelica.Utilities.Streams.print(String(Rb_internal)  +  "  \n  "+String(Rg) +  "  \n  " + String(Rar));
+  Modelica.Utilities.Streams.print(String(Rb_internal)  +  "  \n  "+String(Rg) +  "  \n  " + String(Ra));
 
 /* **************** Simplification of Bauer for single U-tube ************************
   //Thermal resistance between: Outer wall and one tube
