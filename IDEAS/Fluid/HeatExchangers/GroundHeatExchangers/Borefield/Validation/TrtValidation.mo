@@ -3,7 +3,6 @@ model TrtValidation "Validation based on thermal response test"
   extends Examples.borefield8x1(redeclare
       IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.BorefieldData.BorefieldDataTrt
                                                                                                      bfData,
-    multipleBoreholes(lenSim=350000, m_flow_nominal=1225/3600),
     pum(m_flow_nominal=1225/3600,
       motorCooledByFluid=false,
       addPowerToMedium=false),
@@ -13,7 +12,9 @@ model TrtValidation "Validation based on thermal response test"
       dp_nominal=0),
     mFlo(k=1225/3600),
     load(startTime=0),
-    T_start=273.15+11.28);
+    T_start=273.15+11.28,
+    redeclare MultipleBoreHoles2UTube multipleBoreholes(
+                      lenSim=350000, m_flow_nominal=1225/3600));
 
     Modelica.SIunits.Temperature T_measured = 3.307*log(time+1)-6.2715+273.15;
   annotation (experiment(StopTime=309000), __Dymola_experimentSetupOutput,

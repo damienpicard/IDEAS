@@ -1,12 +1,9 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses;
 model BoreHoleSegmentHeightPort "Vertical segment of a borehole"
   extends Interface.PartialBoreHoleElement;
-      replaceable package Medium = Modelica.Media.Interfaces.PartialMedium
-    "Medium in the component"
-      annotation (choicesAllMatching = true);
+
   extends IDEAS.Fluid.Interfaces.TwoPortFlowResistanceParameters;
-  extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations(T_start=gen.TFil0_start,redeclare
-      package Medium =                                                                                       Medium);
+  extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations;
   extends IDEAS.Fluid.Interfaces.PartialHeightPortInterface(
     redeclare final package Medium1 = Medium,
     redeclare final package Medium2 = Medium,
@@ -20,7 +17,7 @@ model BoreHoleSegmentHeightPort "Vertical segment of a borehole"
     "Initial far field temperature"
     annotation (Dialog(tab="Boundary conditions",group="T_start: ground"));
 
-  DoubleUTubeInternalHEX intHEX(
+  InternalHEX2UTube intHEX(
     redeclare final package Medium = Medium,
     final m1_flow_nominal=m1_flow_nominal,
     final m2_flow_nominal=m2_flow_nominal,

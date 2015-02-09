@@ -5,7 +5,7 @@ model SingleBoreHole "Test for the SingleBoreHole model"
   extends Modelica.Icons.Example;
   package Medium = Modelica.Media.Water.ConstantPropertyLiquidWater;
 
-  IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.SingleBoreHoleSingleUTube
+  IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.SingleBoreHoleUTube
     seg(
     redeclare package Medium = Medium,
     soi=Data.SoilData.SandStone(),

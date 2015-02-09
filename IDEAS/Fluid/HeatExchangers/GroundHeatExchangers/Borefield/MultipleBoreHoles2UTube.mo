@@ -1,5 +1,5 @@
 ﻿within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield;
-model MultipleBoreHoles
+model MultipleBoreHoles2UTube
   "Calculates the average fluid temperature T_fts of the borefield for a given (time dependent) load Q_flow"
   import Buildings;
 
@@ -72,44 +72,67 @@ protected
   Modelica.SIunits.Time startTime "Start time of the simulation";
 
 public
-  BaseClasses.BoreHoles.BaseClasses.SingleUTubeInternalHEX
-                                     intHEX(
+  BaseClasses.BoreHoles.BaseClasses.InternalHEX2UTube intHEX(
     redeclare final package Medium = Medium,
-    final m1_flow_nominal=bfData.gen.m_flow_nominal_bh,
-    final m2_flow_nominal=bfData.gen.m_flow_nominal_bh,
-    final dp1_nominal=dp_nominal,
-    final dp2_nominal=0,
+    final m1_flow_nominal=bfData.gen.m_flow_nominal_bh/2,
+    final m2_flow_nominal=bfData.gen.m_flow_nominal_bh/2,
+    final m3_flow_nominal=bfData.gen.m_flow_nominal_bh/2,
+    final m4_flow_nominal=bfData.gen.m_flow_nominal_bh/2,
     final from_dp1=from_dp,
     final from_dp2=from_dp,
+    final from_dp3=from_dp,
+    final from_dp4=from_dp,
     final linearizeFlowResistance1=linearizeFlowResistance,
     final linearizeFlowResistance2=linearizeFlowResistance,
+    final linearizeFlowResistance3=linearizeFlowResistance,
+    final linearizeFlowResistance4=linearizeFlowResistance,
     final deltaM1=deltaM,
     final deltaM2=deltaM,
-    final m1_flow_small=bfData.gen.m_flow_small,
-    final m2_flow_small=bfData.gen.m_flow_small,
+    final deltaM3=deltaM,
+    final deltaM4=deltaM,
+    final m1_flow_small=bfData.gen.m_flow_small/2,
+    final m2_flow_small=bfData.gen.m_flow_small/2,
+    final m3_flow_small=bfData.gen.m_flow_small/2,
+    final m4_flow_small=bfData.gen.m_flow_small/2,
     final soi=bfData.soi,
     final fil=bfData.fil,
     final gen=bfData.gen,
     final allowFlowReversal1=bfData.gen.allowFlowReversal,
     final allowFlowReversal2=bfData.gen.allowFlowReversal,
+    final allowFlowReversal3=bfData.gen.allowFlowReversal,
+    final allowFlowReversal4=bfData.gen.allowFlowReversal,
     final energyDynamics=energyDynamics,
     final massDynamics=massDynamics,
-    final p1_start=p_start,
-    final X1_start=X_start,
-    final C1_start=C_start,
-    final C1_nominal=C_nominal,
-    final p2_start=p_start,
-    final X2_start=X_start,
-    final C2_start=C_start,
-    final C2_nominal=C_nominal,
-    final scaSeg=bfData.gen.nbBh*bfData.gen.nVer,
-    final T1_start=T_start,
-    final T2_start=T_start,
-    final TFil_start=T_start)
+    final dp1_nominal=1,
+    final dp2_nominal=1,
+    final dp3_nominal=1,
+    final dp4_nominal=1,
+    final T_start = T_start)
     "Internal part of the borehole including the pipes and the filling material"
-    annotation (Placement(transformation(extent={{-12,13},{12,-13}},
+    annotation (Placement(transformation(
+        extent={{-12,13},{12,-13}},
         rotation=270,
-        origin={3,-10})));
+        origin={3,-8})));
+//     final p1_start=p_start,
+//     final T1_start=T_start,
+//     final X1_start=X_start,
+//     final C1_start=C_start,
+//     final C1_nominal=C_nominal,
+//     final p2_start=p_start,
+//     final T2_start=T_start,
+//     final X2_start=X_start,
+//     final C2_start=C_start,
+//     final C2_nominal=C_nominal,
+//     final p3_start=p_start,
+//     final T3_start=T_start,
+//     final X3_start=X_start,
+//     final C3_start=C_start,
+//     final C3_nominal=C_nominal,
+//     final p4_start=p_start,
+//     final T4_start=T_start,
+//     final X4_start=X_start,
+//     final C4_start=C_start,
+//     final C4_nominal=C_nominal
 initial algorithm
   // Initialisation of the internal energy (zeros) and the load vector. Load vector have the same lenght as the number of aggregated pulse and cover lenSim
   U := 0;
@@ -131,7 +154,7 @@ initial algorithm
 equation
   assert(time < lenSim, "The chosen value for lenSim is too small. It cannot cover the whole simulation time!");
 
-  Q_flow = port_a.m_flow*(actualStream(port_a.h_outflow) - actualStream(port_b.h_outflow));
+  Q_flow = intHEX.port_a1.m_flow*(actualStream(intHEX.port_a1.h_outflow) - actualStream(intHEX.port_b2.h_outflow)) + intHEX.port_a3.m_flow*(actualStream(intHEX.port_a3.h_outflow) - actualStream(intHEX.port_b4.h_outflow));
 
   der(U) = Q_flow
     "Integration of load to calculate below the average load/(discrete time step)";
@@ -169,26 +192,38 @@ equation
       points={{-56.9,-44},{-46,-44}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(TWallBou.port, intHEX.port) annotation (Line(
-      points={{-24,-44},{-20,-44},{-20,-12},{-10,-12},{-10,-11.1818},{-8.81818,
-          -11.1818}},
-      color={191,0,0},
-      smooth=Smooth.None));
-
-  connect(intHEX.port_b1, intHEX.port_a2) annotation (Line(
-      points={{-4.09091,-23.1818},{-4.09091,-30},{10.0909,-30},{10.0909,
-          -23.1818}},
-      color={0,127,255},
-      smooth=Smooth.None));
 
   connect(port_a, intHEX.port_a1) annotation (Line(
-      points={{-100,0},{-52,0},{-52,0.818182},{-4.09091,0.818182}},
+      points={{-100,0},{-52,0},{-52,2.81818},{-6.45455,2.81818}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(port_b, intHEX.port_b2) annotation (Line(
-      points={{100,0},{54,0},{54,2},{10.0909,2},{10.0909,0.818182}},
+  connect(port_a, intHEX.port_a3) annotation (Line(
+      points={{-100,0},{-52,0},{-52,14},{6.78182,14},{6.78182,2.81818}},
       color={0,127,255},
       smooth=Smooth.None));
+  connect(intHEX.port_b2, port_b) annotation (Line(
+      points={{-0.545455,2.81818},{-0.545455,8},{72,8},{72,0},{100,0}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(intHEX.port_b4, port_b) annotation (Line(
+      points={{13.0455,2.81818},{55.5228,2.81818},{55.5228,0},{100,0}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(intHEX.port, TWallBou.port) annotation (Line(
+      points={{-8.81818,-9.18182},{-20,-9.18182},{-20,-44},{-24,-44}},
+      color={191,0,0},
+      smooth=Smooth.None));
+  connect(intHEX.port_b1, intHEX.port_a2) annotation (Line(
+      points={{-6.45455,-21.1818},{-6.45455,-30},{-0.545455,-30},{-0.545455,
+          -21.1818}},
+      color={0,127,255},
+      smooth=Smooth.None));
+
+  connect(intHEX.port_b3, intHEX.port_a4) annotation (Line(
+      points={{6.66364,-21.1818},{6.66364,-30},{12.4545,-30},{12.4545,-21.1818}},
+      color={0,127,255},
+      smooth=Smooth.None));
+
   annotation (
     experiment(StopTime=70000, __Dymola_NumberOfIntervals=50),
     __Dymola_experimentSetupOutput,
@@ -259,9 +294,8 @@ equation
           lineColor={0,0,0},
           fillColor={0,0,255},
           fillPattern=FillPattern.Forward)}),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
-            100,100}}),
-                    graphics),
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
+            100}}), graphics),
                     Documentation(info="<html>
   <p>The proposed model is a so-called hybrid step-response
 model (HSRM). This type of model uses the
@@ -306,4 +340,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end MultipleBoreHoles;
+end MultipleBoreHoles2UTube;

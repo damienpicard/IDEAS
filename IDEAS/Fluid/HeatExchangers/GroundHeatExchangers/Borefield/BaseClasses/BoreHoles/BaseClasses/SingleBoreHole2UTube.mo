@@ -1,5 +1,5 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses;
-model SingleBoreHoleDoubleUTube "Single 2U-tube borehole heat exchanger"
+model SingleBoreHole2UTube "Single 2U-tube borehole heat exchanger"
 
   extends Interface.PartialSingleBoreHole(m_flow_nominal = gen.m_flow_nominal_bh,T_start=gen.T_start,dp_nominal=gen.dp_nominal);
 
@@ -9,8 +9,8 @@ model SingleBoreHoleDoubleUTube "Single 2U-tube borehole heat exchanger"
     each final    fil=fil,
     each final    gen=gen,
     final dp_nominal={if i == 1 and use_parallel then gen.dp_nominal elseif i == 1 and not use_parallel  then gen.dp_nominal/2 else 0 for i in 1:gen.nVer},
-    final TExt_start=T_start*ones(gen.nVer),
-    final TFil_start=T_start*ones(gen.nVer),
+    each final TExt_start=T_start,
+    each final TFil_start=T_start,
     each final    show_T=show_T,
     each final    computeFlowResistance=computeFlowResistance,
     each final    from_dp=from_dp,
@@ -219,4 +219,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end SingleBoreHoleDoubleUTube;
+end SingleBoreHole2UTube;

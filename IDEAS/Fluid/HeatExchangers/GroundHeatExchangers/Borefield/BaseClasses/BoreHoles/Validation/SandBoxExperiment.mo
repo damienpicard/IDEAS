@@ -1,7 +1,7 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.Validation;
 model SandBoxExperiment
   "Comparison of the borehole model with the sandbox experiment."
-  extends Examples.SingleBoreHoleSerStepLoad(
+  extends Examples.SingleBoreHoleUTubeSerStepLoad(
     redeclare Data.SoilData.WetSand_validation soi,
     redeclare Data.FillingData.Bentonite_validation fil,
     redeclare Data.GeneralData.SandBox_validation gen);

@@ -3,7 +3,7 @@ function doubleUTubeResistances
   "Thermal resistances for double U-tube, according to Zeng et al. (2003) and Bauer et al (2010)"
   extends
     IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.partialBoreholeResistances(
-                                                                                                    kSoi=2.19, kFil=2.32, kTub=0.38,sha=1.3*0.0343, rBor=0.15/2,rTub=0.032,eTub=0.0023,hSeg=75,use_Rb=false,Rb=0);
+                                                                                                    kSoi=2.19, kFil=2.32, kTub=0.38,sha=0.0279*1.87, rBor=0.15/2,rTub=0.025,eTub=0.0029,hSeg=40,use_Rb=false,Rb=0);
 
     // kSoi=1.87, kFil=2.2, kTub=0.35,sha=0.085/2, rBor=0.080,rTub=0.032,eTub=0.0029,hSeg=75,use_Rb=false,Rb=0
     //
@@ -38,9 +38,9 @@ protected
 
   Real Ra( unit="(m.K)/W");
 
-  Real Rg(unit="(m.K)/W");
-  Real Rar1(unit="(m.K)/W");
-  Real Rar2(unit="(m.K)/W");
+  Modelica.SIunits.ThermalResistance Rg;
+  Modelica.SIunits.ThermalResistance Rar1;
+  Modelica.SIunits.ThermalResistance Rar2;
 algorithm
   R11 :=RCondPipe + 1/2/Modelica.Constants.pi/kFil*( Modelica.Math.log(rBor/
     (rTub + eTub)) - (kFil - kSoi)/(kFil + kSoi)*Modelica.Math.log((rBor^2 -
@@ -55,8 +55,8 @@ algorithm
   Ra :=2*(R11 - R12);
 
   // ------ Calculation according to Bauer et al. (2010)
-  Rg :=4*Rb_internal - RCondPipe;
-  Rar1 :=(2 + sqrt(2))*Rg*(Ra - RCondPipe)/(Rg + Ra - RCondPipe);
+  Rg :=(4*Rb_internal - RCondPipe)/hSeg;
+  Rar1 :=((2 + sqrt(2))*Rg*hSeg*(Ra - RCondPipe)/(Rg*hSeg + Ra - RCondPipe))/hSeg;
   Rar2 :=sqrt(2)*Rar1;
 
 //   1/2/Modelica.Constants.pi/kFil*(Modelica.Math.log(rBor/(rTub +
@@ -64,7 +64,7 @@ algorithm
 //     Modelica.Math.log(2*sha/(rTub + eTub)) - 0.25*Modelica.Math.log(1 - sha^8/
 //     rBor^8)) + RCondPipe/4;
 
-  Modelica.Utilities.Streams.print(String(Rb_internal)  +  "  \n" + String(Ra));
+  Modelica.Utilities.Streams.print(String(Rb_internal)  +  "  \n  "+String(Rg) +  "  \n  " + String(Ra));
 
    x :=1;
   // ********** Resistances and capacity location according to Bauer **********
@@ -74,7 +74,7 @@ algorithm
        Modelica.Math.log(rBor/(2*(rTub + eTub)))*((15 - i + 1)/15);
 
      //Thermal resistance between the grout zone and bore hole wall
-     Rgb := ((1 - x)*Rg)/hSeg;
+     Rgb := (1 - x)*Rg;
 
      //Thermal resistance between the two grout zones
      Rgg1 := 2*Rgb*(Rar1 - 2*x*Rg)/(2*Rgb - Rar1 + 2*x*Rg);
@@ -98,13 +98,14 @@ algorithm
             kSoi = " + String(kSoi) + " W/m/K
             kFil = " + String(kFil) + " W/m/K
             kTub = " + String(kTub) + " W/m/K
-   Computed x    = " + String(x) + " K/W
+   Computed x    = " + String(x) + " m
             Rgb  = " + String(Rgb) + " K/W
             Rgg1  = " + String(Rgg1) + " K/W
             Rgg2  = " + String(Rgg2) + " K/W");
 
   //Conduction resistance in grout from pipe wall to capacity in grout
   RCondGro := x*Rg + RCondPipe/hSeg;
+  Modelica.Utilities.Streams.print(String(x));
 
   annotation (Diagram(graphics), Documentation(info="<html>
 <p>

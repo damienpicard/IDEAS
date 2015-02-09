@@ -12,7 +12,7 @@ model borefield8x8WithVariableLoad
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
   parameter Integer lenSim=3600*24*366 "length of the simulation";
 
-  MultipleBoreHoles multipleBoreholes(
+  MultipleBoreHolesUTube multipleBoreholes(
     lenSim=lenSim,
     redeclare package Medium = Medium,
     bfData=bfData) "borefield"

@@ -7,8 +7,8 @@ partial model PartialSingleBoreHole "Single borehole heat exchanger"
    extends IDEAS.Fluid.Interfaces.PartialTwoPortInterface;
   //  (redeclare package
 //       Medium =                                                                                   Medium);
-  extends IDEAS.Fluid.Interfaces.TwoPortFlowResistanceParameters(final
-      computeFlowResistance=false, final linearizeFlowResistance=false);
+  extends IDEAS.Fluid.Interfaces.TwoPortFlowResistanceParameters(
+      computeFlowResistance=false, linearizeFlowResistance=false);
   extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations;
 
   Modelica.SIunits.Temperature TWallAve "Average borehole temperature";

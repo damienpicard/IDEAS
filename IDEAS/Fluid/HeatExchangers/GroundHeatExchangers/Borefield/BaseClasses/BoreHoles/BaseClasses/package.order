@@ -1,9 +1,9 @@
-SingleBoreHoleSingleUTube
-SingleBoreHoleDoubleUTube
+SingleBoreHoleUTube
+SingleBoreHole2UTube
 BoreHoleSegmentFourPort
 BoreHoleSegmentHeightPort
-SingleUTubeInternalHEX
-DoubleUTubeInternalHEX
+InternalHEXUTube
+InternalHEX2UTube
 CylindricalGroundLayer
 singleUTubeResistances
 doubleUTubeResistances

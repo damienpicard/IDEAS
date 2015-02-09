@@ -14,7 +14,7 @@ model borefield8x1
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
   parameter Integer lenSim=3600*24*366 "length of the simulation";
 
-  MultipleBoreHoles multipleBoreholes(
+  replaceable MultipleBoreHolesUTube multipleBoreholes(
     lenSim=lenSim,
     redeclare package Medium = Medium,
     bfData=bfData,
@@ -47,7 +47,10 @@ model borefield8x1
     redeclare package Medium = Medium,
     dynamicBalance=false,
     m_flow_nominal=bfData.m_flow_nominal,
-    T_start=T_start)
+    T_start=T_start,
+    motorCooledByFluid=false,
+    addPowerToMedium=false,
+    filteredSpeed=false)
     annotation (Placement(transformation(extent={{-16,22},{-36,2}})));
   Modelica.Blocks.Sources.Constant mFlo(k=bfData.m_flow_nominal)
     annotation (Placement(transformation(extent={{-60,-18},{-48,-6}})));

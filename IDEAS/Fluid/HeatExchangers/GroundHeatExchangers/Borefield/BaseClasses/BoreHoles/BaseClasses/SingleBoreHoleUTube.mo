@@ -1,5 +1,5 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses;
-model SingleBoreHoleSingleUTube "Single U-tube borehole heat exchanger"
+model SingleBoreHoleUTube "Single U-tube borehole heat exchanger"
 
   extends Interface.PartialSingleBoreHole(m_flow_nominal = gen.m_flow_nominal_bh,T_start=gen.T_start,dp_nominal=gen.dp_nominal);
 
@@ -9,8 +9,8 @@ model SingleBoreHoleSingleUTube "Single U-tube borehole heat exchanger"
     each final    fil=fil,
     each final    gen=gen,
     final dp_nominal={if i == 1 then gen.dp_nominal else 0 for i in 1:gen.nVer},
-    final TExt_start=T_start*ones(gen.nVer),
-    final TFil_start=T_start*ones(gen.nVer),
+    each final TExt_start=T_start,
+    each final TFil_start=T_start,
     each final    show_T=show_T,
     each final    computeFlowResistance=computeFlowResistance,
     each final    from_dp=from_dp,
@@ -175,4 +175,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end SingleBoreHoleSingleUTube;
+end SingleBoreHoleUTube;

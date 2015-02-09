@@ -1,10 +1,9 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.Examples;
-model SingleBoreHoleDoubleUTubeSerStepLoad
-  "SingleBoreHoleSer with step input load "
+model SingleBoreHoleUTubeSerStepLoad "SingleBoreHoleSer with step input load "
   import Buildings;
   extends Modelica.Icons.Example;
 
-  package Medium = IDEAS.Media.Water.Simple;
+  package Medium = Modelica.Media.Water.ConstantPropertyLiquidWater;
 
   replaceable parameter Data.SoilData.WetSand_validation
                                           soi constrainedby Data.Records.Soil
@@ -18,16 +17,21 @@ model SingleBoreHoleDoubleUTubeSerStepLoad
     Data.Records.General "General charachteristic of the borefield"
     annotation (Placement(transformation(extent={{46,-76},{56,-66}})));
 
-  SingleBoreHolesInSerie borHolSer(
-    redeclare each package Medium = Medium,
+  redeclare replaceable SingleBoreHolesUTubeInSerie borHolSer(
+    redeclare package Medium = Medium,
     soi=soi,
     fil=fil,
-    gen=gen,
-    redeclare
-      IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.SingleBoreHoleDoubleUTube
-                                                                                                          borHol)
-    "Borehole heat exchanger"          annotation (Placement(
-        transformation(extent={{-12,-58},{12,-34}}, rotation=0)));
+    gen=gen) "Borehole heat exchanger" annotation (Placement(transformation(
+          extent={{-12,-58},{12,-34}}, rotation=0)));
+
+    //       ,
+    // redeclare replaceable
+    //   IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.SingleBoreHoleUTube
+    //   borHol) constrainedby SingleBoreHolesUTubeInSerie(
+    // redeclare package Medium = Medium,
+    // soi=soi,
+    // fil=fil,
+    // gen=gen)
 
   IDEAS.Fluid.Sources.Boundary_ph sin(redeclare package Medium =
         Medium, nPorts=1) "Sink"
@@ -128,4 +132,4 @@ equation
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}),
         graphics));
-end SingleBoreHoleDoubleUTubeSerStepLoad;
+end SingleBoreHoleUTubeSerStepLoad;

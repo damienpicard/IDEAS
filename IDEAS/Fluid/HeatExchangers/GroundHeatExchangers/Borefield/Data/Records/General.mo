@@ -12,7 +12,7 @@ record General "General parameters of the borefield"
 
   parameter Boolean use_Rb = false
     "True if the value borehole thermal resistance Rb should be given and used";
-  parameter Real Rb(unit="(m.K)/W") = 0
+  parameter Real Rb(unit="(m.K)/W") = 0.14
     "Borehole thermal resistance Rb. Only to fill in if known";
 
   parameter SI.Temperature T_start=283.15

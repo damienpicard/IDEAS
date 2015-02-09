@@ -5,13 +5,13 @@ model SingleBoreHolesInSerie "Test for the SingleBoreHole model"
   extends Modelica.Icons.Example;
   package Medium = Modelica.Media.Water.ConstantPropertyLiquidWater;
 
-  IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.SingleBoreHolesInSerie
+  IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.SingleBoreHolesUTubeInSerie
     seg(
     redeclare package Medium = Medium,
     soi=Data.SoilData.SandStone(),
     fil=Data.FillingData.Bentonite(),
-    gen=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.GeneralData.c8x1_h110_b5_d3600_T283())
-            annotation (Placement(transformation(
+    gen=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.GeneralData.c8x1_h110_b5_d3600_T283
+        ()) annotation (Placement(transformation(
         extent={{-13,-13},{13,13}},
         rotation=270,
         origin={9,33})));

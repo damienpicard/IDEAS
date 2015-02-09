@@ -1,5 +1,5 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses;
-model DoubleUTubeInternalHEX
+model InternalHEX2UTube
   "Internal part of a borehole for a double U-Tube configuration. In loop 1, fluid 1 streams from a1 to b1 and comes back from a3 to b3. In loop 2: fluid 2 streams from a2 to b2 and comes back from a4 to b4."
   import Buildings;
   extends Interface.PartialBoreHoleInternalHEX;
@@ -9,10 +9,10 @@ model DoubleUTubeInternalHEX
     redeclare final package Medium2 = Medium,
     redeclare final package Medium3 = Medium,
     redeclare final package Medium4 = Medium,
-    T1_start=TFil_start,
-    T2_start=TFil_start,
-    T3_start=TFil_start,
-    T4_start=TFil_start,
+    T1_start=T_start,
+    T2_start=T_start,
+    T3_start=T_start,
+    T4_start=T_start,
     final tau1=Modelica.Constants.pi*gen.rTub^2*gen.hSeg*rho1_nominal/
         m1_flow_nominal,
     final tau2=Modelica.Constants.pi*gen.rTub^2*gen.hSeg*rho2_nominal/
@@ -52,7 +52,7 @@ model DoubleUTubeInternalHEX
       final V=gen.volOneLegSeg*scaSeg,
       nPorts=2));
 
-  parameter Modelica.SIunits.Temperature TFil_start=gen.TFil0_start
+  parameter Modelica.SIunits.Temperature T_start
     "Initial temperature of the filling material"
     annotation (Dialog(group="Filling material"));
 
@@ -157,7 +157,7 @@ model DoubleUTubeInternalHEX
         origin={-29,-39})));
 
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil1(T(start=
-          TFil_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
+          T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
       der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)),
     C=Co_fil/4*scaSeg) "Heat capacity of the filling material"
                                             annotation (Placement(
@@ -167,7 +167,7 @@ model DoubleUTubeInternalHEX
         origin={31.6,92})));
 
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil2(T(start=
-          TFil_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
+          T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
       der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)),
     C=Co_fil/4*scaSeg) "Heat capacity of the filling material"
                                             annotation (Placement(
@@ -176,7 +176,7 @@ model DoubleUTubeInternalHEX
         rotation=180,
         origin={81.6,-32})));
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil3(T(start=
-          TFil_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
+          T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
       der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)),
     C=Co_fil/4*scaSeg) "Heat capacity of the filling material"
                                             annotation (Placement(
@@ -185,7 +185,7 @@ model DoubleUTubeInternalHEX
         rotation=180,
         origin={61.6,-52})));
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil4(T(start=
-          TFil_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
+          T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
       der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)),
     C=Co_fil/4*scaSeg) "Heat capacity of the filling material"
                                             annotation (Placement(
@@ -566,4 +566,4 @@ First implementation.
 </html>"),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
             100}}), graphics));
-end DoubleUTubeInternalHEX;
+end InternalHEX2UTube;

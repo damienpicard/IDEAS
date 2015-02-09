@@ -1,14 +1,13 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses;
-model SingleUTubeInternalHEX
-  "Internal part of a borehole for a U-Tube configuration"
+model InternalHEXUTube "Internal part of a borehole for a U-Tube configuration"
   import Buildings;
   extends Interface.PartialBoreHoleInternalHEX;
 
   extends IDEAS.Fluid.Interfaces.FourPortHeatMassExchanger(
     redeclare final package Medium1 = Medium,
     redeclare final package Medium2 = Medium,
-    T1_start=TFil_start,
-    T2_start=TFil_start,
+    T1_start=T_start,
+    T2_start=T_start,
     final tau1=Modelica.Constants.pi*gen.rTub^2*gen.hSeg*rho1_nominal/
         m1_flow_nominal,
     final tau2=Modelica.Constants.pi*gen.rTub^2*gen.hSeg*rho2_nominal/
@@ -28,7 +27,7 @@ model SingleUTubeInternalHEX
       final m_flow_small=m2_flow_small,
       V=gen.volOneLegSeg*scaSeg));
 
-  parameter Modelica.SIunits.Temperature TFil_start=gen.TFil0_start
+  parameter Modelica.SIunits.Temperature T_start
     "Initial temperature of the filling material"
     annotation (Dialog(group="Filling material"));
 
@@ -57,7 +56,7 @@ model SingleUTubeInternalHEX
         origin={20,2})));
 
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil1(C=Co_fil/2*scaSeg, T(
-        start=TFil_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
+        start=T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
         der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)))
     "Heat capacity of the filling material"
                                          annotation (
@@ -67,7 +66,7 @@ model SingleUTubeInternalHEX
         origin={80,0})));
 
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil2(C=Co_fil/2*scaSeg, T(
-        start=TFil_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
+        start=T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
         der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)))
     "Heat capacity of the filling material"                                                                                        annotation (
       Placement(transformation(
@@ -295,4 +294,4 @@ First implementation.
 </html>"),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
             100,100}}), graphics));
-end SingleUTubeInternalHEX;
+end InternalHEXUTube;

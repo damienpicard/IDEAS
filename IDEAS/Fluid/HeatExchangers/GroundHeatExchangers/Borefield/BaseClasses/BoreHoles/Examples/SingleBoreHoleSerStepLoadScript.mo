@@ -3,23 +3,24 @@ model SingleBoreHoleSerStepLoadScript "SingleBoreHoleSer with step input load "
   import Buildings;
   extends Modelica.Icons.Example;
 
-  package Medium = Modelica.Media.Water.ConstantPropertyLiquidWater;
+  package Medium = IDEAS.Media.Water.Simple;
 
-  parameter Data.SoilData.SandStone soi
+  parameter Data.SoilData.SoilTrt   soi
      annotation (Placement(transformation(extent={{14,-46},{24,-36}})));
-  parameter Data.FillingData.Bentonite fil
+  parameter Data.FillingData.FillingTrt fil
     "Thermal properties of the filling material"
      annotation (Placement(transformation(extent={{30,-46},{40,-36}})));
-  parameter Data.GeneralData.c8x1_h110_b5_d3600_T283 gen
+  parameter Data.GeneralData.GeneralTrt              gen
     "General charachteristic of the borehole"
     annotation (Placement(transformation(extent={{46,-46},{56,-36}})));
 
-  BoreHoles.SingleBoreHolesInSerie borHolSer(
+  replaceable SingleBoreHoles2UTubeInSerie borHolSer(
     redeclare each package Medium = Medium,
     soi=soi,
     fil=fil,
-    gen=gen) "Borehole heat exchanger" annotation (Placement(
-        transformation(extent={{-12,-20},{12,4}},   rotation=0)));
+    gen=gen) constrainedby SingleBoreHolesUTubeInSerie
+    "Borehole heat exchanger" annotation (Placement(transformation(extent={{-12,
+            -20},{12,4}}, rotation=0)));
 
   IDEAS.Fluid.Sources.Boundary_ph sin(redeclare package Medium =
         Medium, nPorts=1) "Sink"

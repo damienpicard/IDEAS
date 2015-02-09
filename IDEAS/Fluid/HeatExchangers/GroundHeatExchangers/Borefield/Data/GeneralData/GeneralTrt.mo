@@ -12,8 +12,8 @@ extends Records.General(
     cooBh={{0,0}},
     rTub=0.025,
     kTub=0.38,
-    eTub=0.0023,
-    xC=rBor/3,
+    eTub=0.0029,
+    xC=0.0279*1.89,
     T_start=273.15+11.28,
     tStep=600);
 end GeneralTrt;
