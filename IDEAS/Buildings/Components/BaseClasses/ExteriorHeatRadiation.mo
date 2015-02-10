@@ -25,7 +25,7 @@ public
 equation
 
   // Tenv = (Fssky*sim.TskyPow4 + (1 - Fssky)*sim.TePow4)^0.25; --> This should be computed outside the model
-  Tenv = 273.15 + 10;
+  Tenv = 293.15;
 
 //  port_a.Q_flow = A*Modelica.Constants.sigma*epsLw*(port_a.T - Tenv)*(port_a.T
 //     + Tenv)*(port_a.T^2 + Tenv^2);
