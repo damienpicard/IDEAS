@@ -22,6 +22,15 @@ partial function partialBoreholeResistances
   input Modelica.SIunits.ThermalConductivity kTub
     "Thermal conductivity of the tube";
 
+  // thermal properties
+  input Modelica.SIunits.ThermalConductivity kMed
+    "Thermal conductivity of the fluid";
+  input Modelica.SIunits.DynamicViscosity mueMed
+    "Dynamic viscosity of the fluid";
+  input Modelica.SIunits.SpecificHeatCapacity cpMed
+    "Specific heat capacity of the fluid";
+  input Modelica.SIunits.MassFlowRate m_flow_nominal "Nominal mass flow rate";
+
   // Outputs
 
   output Real x "Capacity location";
@@ -37,6 +46,15 @@ protected
 
   Integer i=1 "Loop counter";
 
+  Real RConv(unit="(m.K)/W") = convectionResistance(
+    hSeg=hSeg,
+    rBor=rBor,
+    rTub=rTub,
+    kMed=kMed,
+    mueMed=mueMed,
+    cpMed=cpMed,
+    m_flow=m_flow_nominal,
+    m_flow_nominal=m_flow_nominal)*hSeg;
   annotation (Diagram(graphics), Documentation(info="<html>
 <p>
 This model computes the different thermal resistances present in a single-U-tube borehole 

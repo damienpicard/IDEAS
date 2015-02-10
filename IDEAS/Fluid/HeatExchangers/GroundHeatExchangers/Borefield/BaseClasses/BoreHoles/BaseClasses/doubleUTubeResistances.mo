@@ -2,8 +2,9 @@ within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.Bor
 function doubleUTubeResistances
   "Thermal resistances for double U-tube, according to Zeng et al. (2003) and Bauer et al (2010)"
   extends
-    IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.partialBoreholeResistances(
-                                                                                                    kSoi=2.19, kFil=2.32, kTub=0.38,sha=0.0279*1.87, rBor=0.15/2,rTub=0.025,eTub=0.0029,hSeg=40,use_Rb=false,Rb=0);
+    IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.partialBoreholeResistances;
+
+    // (                                                                                               kSoi=2.19, kFil=2.32, kTub=0.38,sha=0.0279*1.87, rBor=0.15/2,rTub=0.025,eTub=0.0029,hSeg=40,use_Rb=false,Rb=0);
 
     // kSoi=1.87, kFil=2.2, kTub=0.35,sha=0.085/2, rBor=0.080,rTub=0.032,eTub=0.0029,hSeg=75,use_Rb=false,Rb=0
     //
@@ -42,7 +43,7 @@ protected
   Modelica.SIunits.ThermalResistance Rar1;
   Modelica.SIunits.ThermalResistance Rar2;
 algorithm
-  R11 :=RCondPipe + 1/2/Modelica.Constants.pi/kFil*( Modelica.Math.log(rBor/
+  R11 :=RCondPipe + RConv + 1/2/Modelica.Constants.pi/kFil*( Modelica.Math.log(rBor/
     (rTub + eTub)) - (kFil - kSoi)/(kFil + kSoi)*Modelica.Math.log((rBor^2 -
     sha^2)/rBor^2));
   R12 :=1/2/Modelica.Constants.pi/kFil*(Modelica.Math.log(rBor/(sqrt(2)*
@@ -51,27 +52,27 @@ algorithm
   R13 :=1/2/Modelica.Constants.pi/kFil*(Modelica.Math.log(rBor/(2*sha)) - (
     kFil - kSoi)/(kFil + kSoi)*Modelica.Math.log((rBor^2 - sha^2)/rBor^2));
 
-  Rb_internal :=if use_Rb then Rb else (R11 + 2*R12 + R13); // surprising that factor 1/4 is not include!
+  Rb_internal :=if use_Rb then Rb else 0.25*(R11 + 2*R12 + R13); // surprising that factor 1/4 is not include!
   Ra :=2*(R11 - R12);
 
   // ------ Calculation according to Bauer et al. (2010)
-  Rg :=(4*Rb_internal - RCondPipe)/hSeg;
+  Rg :=(4*Rb_internal - RCondPipe - RConv)/hSeg;
   Rar1 :=((2 + sqrt(2))*Rg*hSeg*(Ra - RCondPipe)/(Rg*hSeg + Ra - RCondPipe))/hSeg;
-  Rar2 :=sqrt(2)*Rar1;
+  Rar2 :=sqrt(2)*Rar1  * 100;
 
 //   1/2/Modelica.Constants.pi/kFil*(Modelica.Math.log(rBor/(rTub +
 //     eTub)) + 0.5*Modelica.Math.log(sqrt(2)*sha/(rTub + eTub)) - 0.25*
 //     Modelica.Math.log(2*sha/(rTub + eTub)) - 0.25*Modelica.Math.log(1 - sha^8/
 //     rBor^8)) + RCondPipe/4;
 
-  Modelica.Utilities.Streams.print(String(Rb_internal)  +  "  \n  "+String(Rg) +  "  \n  " + String(Ra));
-
    x :=1;
   // ********** Resistances and capacity location according to Bauer **********
    while test == false and i <= 10 loop
      // Capacity location (with correction factor in case that the test is negative)
-     x := Modelica.Math.log(sqrt(rBor^2 + 4*(rTub + eTub)^2)/(2*sqrt(2)*(rTub + eTub)))/
-       Modelica.Math.log(rBor/(2*(rTub + eTub)))*((15 - i + 1)/15);
+      x := Modelica.Math.log(sqrt(rBor^2 + 4*(rTub + eTub)^2)/(2*sqrt(2)*(rTub + eTub)))/
+        Modelica.Math.log(rBor/(2*(rTub + eTub)))*((15 - i + 1)/15);
+
+      Modelica.Utilities.Streams.print("i=" + String(i));
 
      //Thermal resistance between the grout zone and bore hole wall
      Rgb := (1 - x)*Rg;
@@ -82,7 +83,7 @@ algorithm
 
      // Thermodynamic test to check if negative R values make sense. If not, decrease x-value.
      // fixme: the implemented is only for single U-tube BHE's.
-     test := (((1/Rgg1 + 1/2/Rgb)^(-1) > 0) and ((1/Rgg2 + 1/2/Rgb)^(-1) > 0));
+    test := (((1/Rgg1 + 1/2/Rgb)^(-1) > 0) and ((1/Rgg2 + 1/2/Rgb)^(-1) > 0));
      i := i + 1;
    end while;
    assert(test,
@@ -105,8 +106,14 @@ algorithm
 
   //Conduction resistance in grout from pipe wall to capacity in grout
   RCondGro := x*Rg + RCondPipe/hSeg;
-  Modelica.Utilities.Streams.print(String(x));
 
+  Modelica.Utilities.Streams.print("Rb = " + String(Rb_internal) + " m K / W
+RCondPipe = "+ String(RCondPipe) + " m K / W
+RConv = "+String(RConv) +" mK/W
+hSeg = " + String(hSeg) + " m
+Rg = "+String(Rg) + " K / W
+Ra = " + String(Ra)  + " m K / W
+x = " + String(x));
   annotation (Diagram(graphics), Documentation(info="<html>
 <p>
 This model computes the different thermal resistances present in a single-U-tube borehole 

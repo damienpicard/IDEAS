@@ -1,77 +1,11 @@
 ﻿within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield;
 model MultipleBoreHoles2UTube
   "Calculates the average fluid temperature T_fts of the borefield for a given (time dependent) load Q_flow"
-  import Buildings;
 
   // Medium in borefield
-  extends IDEAS.Fluid.Interfaces.PartialTwoPortInterface(
-    m_flow_nominal=bfData.m_flow_nominal,
-    redeclare package Medium =
-        IDEAS.Media.Water.Simple,
-    final allowFlowReversal=false);
+  extends
+    IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.partial_multipleBoreHoles;
 
-  extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations(T_start = bfData.gen.T_start);
-  extends IDEAS.Fluid.Interfaces.TwoPortFlowResistanceParameters(final
-      computeFlowResistance=true, dp_nominal=0);
-
-  // General parameters of borefield
-  replaceable parameter Data.Records.BorefieldData bfData constrainedby
-    Data.Records.BorefieldData
-    "Record containing all the parameters of the borefield model" annotation (
-     choicesAllMatching=true, Placement(transformation(extent={{-90,-88},{-70,
-            -68}})));
-
-  //General parameters of aggregation
-  parameter Integer lenSim=3600*24*100
-    "Simulation length ([s]). By default = 100 days";
-
-  // Load of borefield
-  Modelica.SIunits.HeatFlowRate QAve_flow
-    "Average heat flux over a time period";
-
-  Modelica.SIunits.Temperature TWall "Average borehole wall temperature";
-
-  Modelica.Blocks.Sources.RealExpression TWall_val(y=TWall)
-    "Average borehole wall temperature"
-    annotation (Placement(transformation(extent={{-80,-54},{-58,-34}})));
-
-  Modelica.SIunits.Power Q_flow
-    "Thermal power extracted or injected in the borefield";
-
-  Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature TWallBou
-    "Borehole wall temperature"
-    annotation (Placement(transformation(extent={{-44,-54},{-24,-34}})));
-
-  // Parameters for the aggregation technic
-protected
-  final parameter Integer p_max=5
-    "Number of aggregation cells within one aggregation level";
-  final parameter Integer q_max=
-      BaseClasses.Aggregation.BaseClasses.nbOfLevelAgg(          n_max=integer(
-      lenSim/bfData.gen.tStep), p_max=p_max) "Number of aggregation levels";
-  final parameter Real[q_max,p_max] kappaMat(fixed=false)
-    "Transient thermal resistance of each aggregation cells";
-  final parameter Integer[q_max] rArr(fixed=false)
-    "Width of aggregation cell for each level";
-  final parameter Integer[q_max,p_max] nuMat(fixed=false)
-    "Number of aggregated pulses at end of each aggregation cell";
-
-  // Parameters for the calculation of the steady state resistance of the borefield
-  final parameter Modelica.SIunits.Temperature TSteSta(fixed=false)
-    "Quasi steady state temperature of the borefield for a constant heat flux";
-  final parameter Real R_ss(fixed=false) "Steady state resistance";
-
-  //Load
-  Modelica.SIunits.Power[q_max,p_max] QMat
-    "Aggregation of load vector. Updated every discrete time step.";
-
-  //Utilities
-  Modelica.SIunits.Energy UOld "Internal energy at the previous period";
-  Modelica.SIunits.Energy U
-    "Current internal energy, defined as U=0 for t=tStart";
-  Modelica.SIunits.Time startTime "Start time of the simulation";
-
-public
   BaseClasses.BoreHoles.BaseClasses.InternalHEX2UTube intHEX(
     redeclare final package Medium = Medium,
     final m1_flow_nominal=bfData.gen.m_flow_nominal_bh/2,
@@ -113,85 +47,9 @@ public
         extent={{-12,13},{12,-13}},
         rotation=270,
         origin={3,-8})));
-//     final p1_start=p_start,
-//     final T1_start=T_start,
-//     final X1_start=X_start,
-//     final C1_start=C_start,
-//     final C1_nominal=C_nominal,
-//     final p2_start=p_start,
-//     final T2_start=T_start,
-//     final X2_start=X_start,
-//     final C2_start=C_start,
-//     final C2_nominal=C_nominal,
-//     final p3_start=p_start,
-//     final T3_start=T_start,
-//     final X3_start=X_start,
-//     final C3_start=C_start,
-//     final C3_nominal=C_nominal,
-//     final p4_start=p_start,
-//     final T4_start=T_start,
-//     final X4_start=X_start,
-//     final C4_start=C_start,
-//     final C4_nominal=C_nominal
-initial algorithm
-  // Initialisation of the internal energy (zeros) and the load vector. Load vector have the same lenght as the number of aggregated pulse and cover lenSim
-  U := 0;
-  UOld := 0;
-
-  // Initialization of the aggregation matrix and check that the short-term response for the given bfData record has already been calculated
-  (kappaMat,rArr,nuMat,TSteSta) :=
-    IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.Scripts.saveAggregationMatrix(
-    p_max=p_max,
-    q_max=q_max,
-    lenSim=lenSim,
-    gen=bfData.gen,
-    soi=bfData.soi,
-    fil=bfData.fil);
-
-  R_ss := TSteSta/(bfData.gen.q_ste*bfData.gen.hBor*bfData.gen.nbBh)
-    "Steady state resistance";
 
 equation
-  assert(time < lenSim, "The chosen value for lenSim is too small. It cannot cover the whole simulation time!");
-
   Q_flow = intHEX.port_a1.m_flow*(actualStream(intHEX.port_a1.h_outflow) - actualStream(intHEX.port_b2.h_outflow)) + intHEX.port_a3.m_flow*(actualStream(intHEX.port_a3.h_outflow) - actualStream(intHEX.port_b4.h_outflow));
-
-  der(U) = Q_flow
-    "Integration of load to calculate below the average load/(discrete time step)";
-
-algorithm
-  // Set the start time for the sampling
-  when initial() then
-    startTime := time;
-  end when;
-
-  when initial() or sample(startTime, bfData.gen.tStep) then
-    QAve_flow := (U - UOld)/bfData.gen.tStep;
-    UOld := U;
-
-    // Update of aggregated load matrix.
-    QMat := BaseClasses.Aggregation.aggregateLoad(
-        q_max=q_max,
-        p_max=p_max,
-        rArr=rArr,
-        nuMat=nuMat,
-        QNew=QAve_flow,
-        QAggOld=QMat);
-
-    // Wall temperature of the borefield
-    TWall :=BaseClasses.deltaTWall(
-      q_max=q_max,
-      p_max=p_max,
-      QMat=QMat,
-      kappaMat=kappaMat,
-      R_ss=R_ss) + T_start;
-  end when;
-
-equation
-  connect(TWall_val.y, TWallBou.T) annotation (Line(
-      points={{-56.9,-44},{-46,-44}},
-      color={0,0,127},
-      smooth=Smooth.None));
 
   connect(port_a, intHEX.port_a1) annotation (Line(
       points={{-100,0},{-52,0},{-52,2.81818},{-6.45455,2.81818}},

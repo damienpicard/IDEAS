@@ -10,6 +10,11 @@ record General "General parameters of the borefield"
       "modelica://IDEAS/Fluid/HeatExchangers/GroundHeatExchangers/Borefield/Data/Records/General.mo")
     "Computer record path";
 
+  parameter Boolean singleUTube = true
+    "True if use single U-tube, false if use double U-tube";
+  parameter Boolean parallel2UTube = true
+    "True if the double u-tube is connected in parallel in each borehole.";
+
   parameter Boolean use_Rb = false
     "True if the value borehole thermal resistance Rb should be given and used";
   parameter Real Rb(unit="(m.K)/W") = 0.14

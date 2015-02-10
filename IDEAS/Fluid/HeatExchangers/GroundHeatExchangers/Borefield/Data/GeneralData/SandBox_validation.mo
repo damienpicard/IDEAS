@@ -4,6 +4,7 @@ record SandBox_validation
 extends Records.General(
     pathMod="IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.GeneralData.GeneralTrt",
     pathCom=Modelica.Utilities.Files.loadResource("modelica://IDEAS/Fluid/HeatExchangers/GroundHeatExchangers/Borefield/Data/GeneralData/GeneralTrt.mo"),
+    singleUTube = true,
     m_flow_nominal_bh=0.197/998*1000,
     rBor=0.063,
     hBor=18.3,

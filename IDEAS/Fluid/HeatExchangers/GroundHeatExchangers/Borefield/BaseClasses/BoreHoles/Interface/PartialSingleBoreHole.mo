@@ -12,7 +12,4 @@ partial model PartialSingleBoreHole "Single borehole heat exchanger"
   extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations;
 
   Modelica.SIunits.Temperature TWallAve "Average borehole temperature";
-
-  parameter Boolean use_parallel = true
-    "True if the 2U configuration is in parallel, False if in serie: FIXME: the Ra might be different for serie";
 end PartialSingleBoreHole;

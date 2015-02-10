@@ -1,37 +1,49 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses;
 model SingleBoreHole2UTube "Single 2U-tube borehole heat exchanger"
 
-  extends Interface.PartialSingleBoreHole(m_flow_nominal = gen.m_flow_nominal_bh,T_start=gen.T_start,dp_nominal=gen.dp_nominal);
+  extends Interface.PartialSingleBoreHole(
+    m_flow_nominal=gen.m_flow_nominal_bh,
+    T_start=gen.T_start,
+    dp_nominal=gen.dp_nominal);
 
-  BoreHoleSegmentHeightPort           borHolSeg[gen.nVer](
-    redeclare each final package Medium =   Medium,
-    each final    soi=soi,
-    each final    fil=fil,
-    each final    gen=gen,
-    final dp_nominal={if i == 1 and use_parallel then gen.dp_nominal elseif i == 1 and not use_parallel  then gen.dp_nominal/2 else 0 for i in 1:gen.nVer},
+  BoreHoleSegmentHeightPort borHolSeg[gen.nVer](
+    redeclare each final package Medium = Medium,
+    each final soi=soi,
+    each final fil=fil,
+    each final gen=gen,
+    final dp_nominal={if i == 1 and gen.parallel2UTube then gen.dp_nominal
+         elseif i == 1 and not gen.parallel2UTube then gen.dp_nominal/2 else 0
+        for i in 1:gen.nVer},
     each final TExt_start=T_start,
     each final TFil_start=T_start,
-    each final    show_T=show_T,
-    each final    computeFlowResistance=computeFlowResistance,
-    each final    from_dp=from_dp,
-    each final    linearizeFlowResistance=linearizeFlowResistance,
-    each final    deltaM=deltaM,
-    each final    energyDynamics=energyDynamics,
-    each final    massDynamics=massDynamics,
-    each final  p_start=p_start,
-    each final  T_start=T_start,
-    each final  X_start=X_start,
-    each final  C_start=C_start,
-    each final  C_nominal=C_nominal,
-    each final  m1_flow_nominal = if use_parallel then m_flow_nominal/2 else m_flow_nominal,
-    each final  m2_flow_nominal = if use_parallel then m_flow_nominal/2 else m_flow_nominal,
-    each final  m3_flow_nominal = if use_parallel then m_flow_nominal/2 else m_flow_nominal,
-    each final  m4_flow_nominal = if use_parallel then m_flow_nominal/2 else m_flow_nominal,
-    each final  m1_flow_small=if use_parallel then gen.m_flow_small/2 else gen.m_flow_small,
-    each final  m2_flow_small=if use_parallel then gen.m_flow_small/2 else gen.m_flow_small,
-    each final  m3_flow_small=if use_parallel then gen.m_flow_small/2 else gen.m_flow_small,
-    each final  m4_flow_small=if use_parallel then gen.m_flow_small/2 else gen.m_flow_small)
-    "Discretized borehole segments"
+    each final show_T=show_T,
+    each final computeFlowResistance=computeFlowResistance,
+    each final from_dp=from_dp,
+    each final linearizeFlowResistance=linearizeFlowResistance,
+    each final deltaM=deltaM,
+    each final energyDynamics=energyDynamics,
+    each final massDynamics=massDynamics,
+    each final p_start=p_start,
+    each final T_start=T_start,
+    each final X_start=X_start,
+    each final C_start=C_start,
+    each final C_nominal=C_nominal,
+    each final m1_flow_nominal=if gen.parallel2UTube then m_flow_nominal/2
+         else m_flow_nominal,
+    each final m2_flow_nominal=if gen.parallel2UTube then m_flow_nominal/2
+         else m_flow_nominal,
+    each final m3_flow_nominal=if gen.parallel2UTube then m_flow_nominal/2
+         else m_flow_nominal,
+    each final m4_flow_nominal=if gen.parallel2UTube then m_flow_nominal/2
+         else m_flow_nominal,
+    each final m1_flow_small=if gen.parallel2UTube then gen.m_flow_small/2
+         else gen.m_flow_small,
+    each final m2_flow_small=if gen.parallel2UTube then gen.m_flow_small/2
+         else gen.m_flow_small,
+    each final m3_flow_small=if gen.parallel2UTube then gen.m_flow_small/2
+         else gen.m_flow_small,
+    each final m4_flow_small=if gen.parallel2UTube then gen.m_flow_small/2
+         else gen.m_flow_small) "Discretized borehole segments"
     annotation (Placement(transformation(extent={{-18,-30},{2,10}})));
 
   Modelica.SIunits.Temperature TDown[gen.nVer] "Medium temperature in pipe 1";
@@ -51,51 +63,56 @@ equation
           {-18,-27}},
       color={0,127,255},
       smooth=Smooth.None));
-  if use_parallel then
+  if gen.parallel2UTube then
     connect(port_a, borHolSeg[1].port_a3) annotation (Line(
-      points={{-100,5.55112e-016},{-60,5.55112e-016},{-60,-16.4},{-18,-16.4}},
-      color={0,127,255},
-      smooth=Smooth.None));
+        points={{-100,5.55112e-016},{-60,5.55112e-016},{-60,-16.4},{-18,-16.4}},
+
+        color={0,127,255},
+        smooth=Smooth.None));
     connect(port_b, borHolSeg[gen.nVer].port_b2) annotation (Line(
-      points={{100,5.55112e-016},{20,5.55112e-016},{20,-40},{-40,-40},{-40,-4},{
-            -18,-4}},
-      color={0,127,255},
-      smooth=Smooth.None));
+        points={{100,5.55112e-016},{20,5.55112e-016},{20,-40},{-40,-40},{-40,-4},
+            {-18,-4}},
+        color={0,127,255},
+        smooth=Smooth.None));
   else
     connect(borHolSeg[1].port_b2, borHolSeg[1].port_a3) annotation (Line(
-      points={{-18,-4},{-32,-4},{-32,-16},{-26,-16},{-26,-16.4},{-18,-16.4}},
-      color={0,127,255},
-      smooth=Smooth.None));
-    connect(borHolSeg[gen.nVer].port_a3, borHolSeg[gen.nVer].port_b2) annotation (Line(
-      points={{100,5.55112e-016},{20,5.55112e-016},{20,-40},{-40,-40},{-40,-4},{
-            -18,-4}},
-      color={0,127,255},
-      smooth=Smooth.None));
+        points={{-18,-4},{-32,-4},{-32,-16},{-26,-16},{-26,-16.4},{-18,-16.4}},
+
+        color={0,127,255},
+        smooth=Smooth.None));
+    connect(borHolSeg[gen.nVer].port_a3, borHolSeg[gen.nVer].port_b2)
+      annotation (Line(
+        points={{100,5.55112e-016},{20,5.55112e-016},{20,-40},{-40,-40},{-40,-4},
+            {-18,-4}},
+        color={0,127,255},
+        smooth=Smooth.None));
   end if;
 
   for i in 1:gen.nVer - 1 loop
-    connect(borHolSeg[i].port_b1, borHolSeg[i+1].port_a1) annotation (Line(
-      points={{2,6},{2,10},{-18,10},{-18,6}},
-      color={0,127,255},
-      smooth=Smooth.None));
-    connect(borHolSeg[i].port_a2, borHolSeg[i+1].port_b2) annotation (Line(
+    connect(borHolSeg[i].port_b1, borHolSeg[i + 1].port_a1) annotation (Line(
+        points={{2,6},{2,10},{-18,10},{-18,6}},
+        color={0,127,255},
+        smooth=Smooth.None));
+    connect(borHolSeg[i].port_a2, borHolSeg[i + 1].port_b2) annotation (Line(
         points={{2,-4},{2,0},{-18,0},{-18,-4}},
         color={0,127,255},
         smooth=Smooth.None));
-    connect(borHolSeg[i].port_b3, borHolSeg[i+1].port_a3) annotation (Line(
+    connect(borHolSeg[i].port_b3, borHolSeg[i + 1].port_a3) annotation (Line(
         points={{2,-16.2},{2,-12},{-18,-12},{-18,-16.4}},
         color={0,127,255},
         smooth=Smooth.None));
-    connect(borHolSeg[i].port_a4, borHolSeg[i+1].port_b4) annotation (Line(
+    connect(borHolSeg[i].port_a4, borHolSeg[i + 1].port_b4) annotation (Line(
         points={{2,-26},{2,-22},{-18,-22},{-18,-27}},
         color={0,127,255},
         smooth=Smooth.None));
   end for;
-  connect(borHolSeg[gen.nVer].port_b1, borHolSeg[gen.nVer].port_a2) annotation (Line(
+  connect(borHolSeg[gen.nVer].port_b1, borHolSeg[gen.nVer].port_a2) annotation
+    (Line(
       points={{2,6},{8,6},{8,-4},{2,-4}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(borHolSeg[gen.nVer].port_b3, borHolSeg[gen.nVer].port_a4) annotation (Line(
+  connect(borHolSeg[gen.nVer].port_b3, borHolSeg[gen.nVer].port_a4) annotation
+    (Line(
       points={{2,-16.2},{6,-16.2},{6,-16},{10,-16},{10,-26},{2,-26}},
       color={0,127,255},
       smooth=Smooth.None));
@@ -162,7 +179,7 @@ equation
         initialScale=0.5), graphics={Text(
           extent={{60,72},{84,58}},
           lineColor={0,0,255},
-          textString=""),Text(
+          textString=""), Text(
           extent={{50,-32},{90,-38}},
           lineColor={0,0,255},
           textString="")}),

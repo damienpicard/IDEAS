@@ -4,6 +4,8 @@ record GeneralTrt
 extends Records.General(
     pathMod="IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.GeneralData.GeneralTrt",
     pathCom=Modelica.Utilities.Files.loadResource("modelica://IDEAS/Fluid/HeatExchangers/GroundHeatExchangers/Borefield/Data/GeneralData/GeneralTrt.mo"),
+    singleUTube = false,
+    parallel2UTube = true,
     m_flow_nominal_bh=1225/3600,
     rBor=0.15/2,
     hBor=40,

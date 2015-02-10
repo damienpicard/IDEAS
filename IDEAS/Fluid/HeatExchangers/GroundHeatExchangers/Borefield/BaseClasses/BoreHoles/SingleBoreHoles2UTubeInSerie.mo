@@ -4,7 +4,6 @@ model SingleBoreHoles2UTubeInSerie
 
   extends Interface.PartialSingleBoreHole(m_flow_nominal = gen.m_flow_nominal_bh,T_start=gen.T_start,dp_nominal=gen.dp_nominal);
   replaceable BaseClasses.SingleBoreHole2UTube[gen.nbSer] borHol(
-    each final use_parallel=use_parallel,
     each final m_flow_nominal=m_flow_nominal,
     each final T_start=T_start,
     each final dp_nominal=dp_nominal,
@@ -24,7 +23,6 @@ model SingleBoreHoles2UTubeInSerie
     redeclare each final package Medium = Medium,
     each final C_nominal=C_nominal) constrainedby
     Interface.PartialSingleBoreHole(
-    each use_parallel=use_parallel,
     each m_flow_nominal=m_flow_nominal,
     each T_start=T_start,
     each dp_nominal=dp_nominal,
@@ -49,6 +47,7 @@ model SingleBoreHoles2UTubeInSerie
   Modelica.SIunits.Temperature[gen.nbSer] TWallAveSeg
     "Average borehole wall temperature along the depth for borehole in serie";
 equation
+  assert(not gen.singleUTube, "This borefield model is for double U-Tube configuration but you chose single U-Tube configuration in the general borefield record.");
 
   for i in 1:gen.nbSer loop
     TWallAveSeg[i] = sum(borHol[i].borHolSeg[:].intHEX.port.T)/gen.nVer;

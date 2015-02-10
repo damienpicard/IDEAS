@@ -78,14 +78,7 @@ model InternalHEXUTube "Internal part of a borehole for a U-Tube configuration"
     "scaling factor used by Borefield.MultipleBoreHoles to represent the whole borefield by one single segment"
                                                                                                         annotation (Dialog(group="Advanced"));
 protected
-  final parameter Modelica.SIunits.SpecificHeatCapacity cpFil=fil.c
-    "Specific heat capacity of the filling material";
-  final parameter Modelica.SIunits.ThermalConductivity kFil=fil.k
-    "Thermal conductivity of the filling material";
-  final parameter Modelica.SIunits.Density dFil=fil.d
-    "Density of the filling material";
-
-  parameter Modelica.SIunits.HeatCapacity Co_fil=dFil*cpFil*gen.hSeg*Modelica.Constants.pi
+  parameter Modelica.SIunits.HeatCapacity Co_fil=fil.d*fil.c*gen.hSeg*Modelica.Constants.pi
       *(gen.rBor^2 - 2*(gen.rTub + gen.eTub)^2)
     "Heat capacity of the whole filling material";
 
@@ -146,7 +139,11 @@ initial equation
     kSoi=soi.k,
     kTub=gen.kTub,
     use_Rb=gen.use_Rb,
-    Rb=  gen.Rb);
+    Rb=  gen.Rb,
+    kMed=kMed,
+    mueMed=mueMed,
+    cpMed=cpMed,
+    m_flow_nominal=gen.m_flow_nominal_bh);
 
 equation
   connect(vol1.heatPort, RConv1.fluid) annotation (Line(

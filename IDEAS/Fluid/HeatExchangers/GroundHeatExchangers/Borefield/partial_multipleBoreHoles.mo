@@ -1,73 +1,133 @@
 ﻿within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield;
-model MultipleBoreHolesUTube
+partial model partial_multipleBoreHoles
   "Calculates the average fluid temperature T_fts of the borefield for a given (time dependent) load Q_flow"
 
   // Medium in borefield
-  extends
-    IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.partial_multipleBoreHoles;
+  extends IDEAS.Fluid.Interfaces.PartialTwoPortInterface(
+    m_flow_nominal=bfData.m_flow_nominal,
+    redeclare package Medium =
+        IDEAS.Media.Water.Simple,
+    final allowFlowReversal=false);
 
-  BaseClasses.BoreHoles.BaseClasses.InternalHEXUTube intHEX(
-    redeclare final package Medium = Medium,
-    final m1_flow_nominal=bfData.gen.m_flow_nominal_bh,
-    final m2_flow_nominal=bfData.gen.m_flow_nominal_bh,
-    final dp1_nominal=dp_nominal,
-    final dp2_nominal=0,
-    final from_dp1=from_dp,
-    final from_dp2=from_dp,
-    final linearizeFlowResistance1=linearizeFlowResistance,
-    final linearizeFlowResistance2=linearizeFlowResistance,
-    final deltaM1=deltaM,
-    final deltaM2=deltaM,
-    final m1_flow_small=bfData.gen.m_flow_small,
-    final m2_flow_small=bfData.gen.m_flow_small,
-    final soi=bfData.soi,
-    final fil=bfData.fil,
-    final gen=bfData.gen,
-    final allowFlowReversal1=bfData.gen.allowFlowReversal,
-    final allowFlowReversal2=bfData.gen.allowFlowReversal,
-    final energyDynamics=energyDynamics,
-    final massDynamics=massDynamics,
-    final p1_start=p_start,
-    final X1_start=X_start,
-    final C1_start=C_start,
-    final C1_nominal=C_nominal,
-    final p2_start=p_start,
-    final X2_start=X_start,
-    final C2_start=C_start,
-    final C2_nominal=C_nominal,
-    final scaSeg=bfData.gen.nbBh*bfData.gen.nVer,
-    final T1_start=T_start,
-    final T2_start=T_start,
-    final T_start=T_start)
-    "Internal part of the borehole including the pipes and the filling material"
-    annotation (Placement(transformation(
-        extent={{-12,13},{12,-13}},
-        rotation=270,
-        origin={3,-10})));
+  extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations(T_start = bfData.gen.T_start);
+  extends IDEAS.Fluid.Interfaces.TwoPortFlowResistanceParameters(final
+      computeFlowResistance=true, dp_nominal=0);
+
+  // General parameters of borefield
+  replaceable parameter Data.Records.BorefieldData bfData constrainedby
+    Data.Records.BorefieldData
+    "Record containing all the parameters of the borefield model" annotation (
+     choicesAllMatching=true, Placement(transformation(extent={{-90,-88},{-70,
+            -68}})));
+
+  //General parameters of aggregation
+  parameter Integer lenSim=3600*24*100
+    "Simulation length ([s]). By default = 100 days";
+
+  // Load of borefield
+  Modelica.SIunits.HeatFlowRate QAve_flow
+    "Average heat flux over a time period";
+
+  Modelica.SIunits.Temperature TWall "Average borehole wall temperature";
+
+  Modelica.Blocks.Sources.RealExpression TWall_val(y=TWall)
+    "Average borehole wall temperature"
+    annotation (Placement(transformation(extent={{-80,-54},{-58,-34}})));
+
+  Modelica.SIunits.Power Q_flow
+    "Thermal power extracted or injected in the borefield";
+
+  Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature TWallBou
+    "Borehole wall temperature"
+    annotation (Placement(transformation(extent={{-44,-54},{-24,-34}})));
+
+  // Parameters for the aggregation technic
+protected
+  final parameter Integer p_max=5
+    "Number of aggregation cells within one aggregation level";
+  final parameter Integer q_max=
+      BaseClasses.Aggregation.BaseClasses.nbOfLevelAgg(          n_max=integer(
+      lenSim/bfData.gen.tStep), p_max=p_max) "Number of aggregation levels";
+  final parameter Real[q_max,p_max] kappaMat(fixed=false)
+    "Transient thermal resistance of each aggregation cells";
+  final parameter Integer[q_max] rArr(fixed=false)
+    "Width of aggregation cell for each level";
+  final parameter Integer[q_max,p_max] nuMat(fixed=false)
+    "Number of aggregated pulses at end of each aggregation cell";
+
+  // Parameters for the calculation of the steady state resistance of the borefield
+  final parameter Modelica.SIunits.Temperature TSteSta(fixed=false)
+    "Quasi steady state temperature of the borefield for a constant heat flux";
+  final parameter Real R_ss(fixed=false) "Steady state resistance";
+
+  //Load
+  Modelica.SIunits.Power[q_max,p_max] QMat
+    "Aggregation of load vector. Updated every discrete time step.";
+
+  //Utilities
+  Modelica.SIunits.Energy UOld "Internal energy at the previous period";
+  Modelica.SIunits.Energy U
+    "Current internal energy, defined as U=0 for t=tStart";
+  Modelica.SIunits.Time startTime "Start time of the simulation";
+
+initial algorithm
+  // Initialisation of the internal energy (zeros) and the load vector. Load vector have the same lenght as the number of aggregated pulse and cover lenSim
+  U := 0;
+  UOld := 0;
+
+  // Initialization of the aggregation matrix and check that the short-term response for the given bfData record has already been calculated
+  (kappaMat,rArr,nuMat,TSteSta) :=
+    IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.Scripts.saveAggregationMatrix(
+    p_max=p_max,
+    q_max=q_max,
+    lenSim=lenSim,
+    gen=bfData.gen,
+    soi=bfData.soi,
+    fil=bfData.fil);
+
+  R_ss := TSteSta/(bfData.gen.q_ste*bfData.gen.hBor*bfData.gen.nbBh)
+    "Steady state resistance";
 
 equation
-  Q_flow = port_a.m_flow*(actualStream(port_a.h_outflow) - actualStream(port_b.h_outflow));
+  assert(time < lenSim, "The chosen value for lenSim is too small. It cannot cover the whole simulation time!");
 
-  connect(TWallBou.port, intHEX.port) annotation (Line(
-      points={{-24,-44},{-20,-44},{-20,-12},{-10,-12},{-10,-11.1818},{-8.81818,
-          -11.1818}},
-      color={191,0,0},
+  der(U) = Q_flow
+    "Integration of load to calculate below the average load/(discrete time step)";
+
+algorithm
+  // Set the start time for the sampling
+  when initial() then
+    startTime := time;
+  end when;
+
+  when initial() or sample(startTime, bfData.gen.tStep) then
+    QAve_flow := (U - UOld)/bfData.gen.tStep;
+    UOld := U;
+
+    // Update of aggregated load matrix.
+    QMat := BaseClasses.Aggregation.aggregateLoad(
+        q_max=q_max,
+        p_max=p_max,
+        rArr=rArr,
+        nuMat=nuMat,
+        QNew=QAve_flow,
+        QAggOld=QMat);
+
+    // Wall temperature of the borefield
+    TWall :=BaseClasses.deltaTWall(
+      q_max=q_max,
+      p_max=p_max,
+      QMat=QMat,
+      kappaMat=kappaMat,
+      R_ss=R_ss) + T_start;
+  end when;
+
+equation
+  connect(TWall_val.y, TWallBou.T) annotation (Line(
+      points={{-56.9,-44},{-46,-44}},
+      color={0,0,127},
       smooth=Smooth.None));
 
-  connect(intHEX.port_b1, intHEX.port_a2) annotation (Line(
-      points={{-4.09091,-23.1818},{-4.09091,-30},{10.0909,-30},{10.0909,
-          -23.1818}},
-      color={0,127,255},
-      smooth=Smooth.None));
-
-  connect(port_a, intHEX.port_a1) annotation (Line(
-      points={{-100,0},{-52,0},{-52,0.818182},{-4.09091,0.818182}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(port_b, intHEX.port_b2) annotation (Line(
-      points={{100,0},{54,0},{54,2},{10.0909,2},{10.0909,0.818182}},
-      color={0,127,255},
-      smooth=Smooth.None));
   annotation (
     experiment(StopTime=70000, __Dymola_NumberOfIntervals=50),
     __Dymola_experimentSetupOutput,
@@ -138,9 +198,8 @@ equation
           lineColor={0,0,0},
           fillColor={0,0,255},
           fillPattern=FillPattern.Forward)}),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
-            100,100}}),
-                    graphics),
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
+            100}}), graphics),
                     Documentation(info="<html>
   <p>The proposed model is a so-called hybrid step-response
 model (HSRM). This type of model uses the
@@ -185,4 +244,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end MultipleBoreHolesUTube;
+end partial_multipleBoreHoles;
