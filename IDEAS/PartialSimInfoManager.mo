@@ -1,7 +1,7 @@
 within IDEAS;
 partial model PartialSimInfoManager
   "Partial providing structure for SimInfoManager"
-  parameter String filDir = "E:\\work\\matlab\\Inputs\\"
+  parameter String filDir = "E:\\work\\modelica\\Inputs\\"
     "Directory containing the weather data file, default under IDEAS/Inputs/";
   parameter String filNam = "Uccle.TMY" "Name of weather data file"
     annotation(Dialog(enable=useTmy3Reader));
