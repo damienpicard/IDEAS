@@ -3,7 +3,8 @@ model SingleBoreHolesUTubeInSerie
   "Single U-tube borehole heat exchanger model. If more than one borehole is given, they are assumed to be connected in series"
 
   extends Interface.PartialSingleBoreHole(m_flow_nominal = gen.m_flow_nominal_bh,T_start=gen.T_start,dp_nominal=gen.dp_nominal);
-  replaceable BaseClasses.SingleBoreHoleUTube[gen.nbSer] borHol(
+
+  BaseClasses.SingleBoreHoleUTube[gen.nbSer] borHol(
     each final m_flow_nominal=m_flow_nominal,
     each final T_start=T_start,
     each final dp_nominal=dp_nominal,
@@ -21,28 +22,8 @@ model SingleBoreHolesUTubeInSerie
     each final X_start=X_start,
     each final C_start=C_start,
     redeclare each final package Medium = Medium,
-    each final C_nominal=C_nominal) constrainedby
-    Interface.PartialSingleBoreHole(
-    each m_flow_nominal=m_flow_nominal,
-    each T_start=T_start,
-    each dp_nominal=dp_nominal,
-    redeclare each package Medium = Medium,
-    each soi=soi,
-    each fil=fil,
-    each gen=gen,
-    each show_T=show_T,
-    each computeFlowResistance=computeFlowResistance,
-    each from_dp=from_dp,
-    each linearizeFlowResistance=linearizeFlowResistance,
-    each deltaM=deltaM,
-    each energyDynamics=energyDynamics,
-    each massDynamics=massDynamics,
-    each p_start=p_start,
-    each X_start=X_start,
-    each C_start=C_start,
-    each C_nominal=C_nominal) "Borehole heat exchanger" annotation (Placement(
-        transformation(extent={{-16,-16},{16,16}}, rotation=0)),
-      choicesAllMatching=true);
+    each final C_nominal=C_nominal) "Borehole heat exchanger" annotation (Placement(
+        transformation(extent={{-16,-16},{16,16}}, rotation=0)));
 
   Modelica.SIunits.Temperature[gen.nbSer] TWallAveSeg
     "Average borehole wall temperature along the depth for borehole in serie";

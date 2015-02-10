@@ -2,8 +2,7 @@ within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.Bor
 function singleUTubeResistances
   "Thermal resistances for single U-tube, according to Bauer et al. (2011)"
   extends
-    IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.partialBoreholeResistances(
-                                                      kSoi=2.19, kFil=2.32, kTub=0.38,sha=1.3*0.0343, rBor=0.15/2,rTub=0.032,eTub=0.0023,hSeg=1,use_Rb=false,Rb=0);
+    IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.partialBoreholeResistances;
 
   // Outputs
   output Modelica.SIunits.ThermalResistance Rgb
