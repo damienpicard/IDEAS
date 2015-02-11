@@ -1,6 +1,6 @@
 within IDEAS.Buildings.Components.Shading;
 model OverhangAndScreen "Roof overhangs and screen shading"
-  extends IDEAS.Buildings.Components.Interfaces.StateShading(final controled=true);
+  extends IDEAS.Buildings.Components.Interfaces.StateShading(final controlled=true);
 
   parameter SI.Length hWin "Window height";
   parameter SI.Length wWin "Window width";
