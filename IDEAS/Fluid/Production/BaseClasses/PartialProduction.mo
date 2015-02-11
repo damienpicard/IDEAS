@@ -6,6 +6,8 @@ partial model PartialProduction
     final computeFlowResistance=true, dp_nominal = 0);
   extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations(T_start=293.15);
   extends IDEAS.Fluid.Interfaces.OnOffInterface;
+
+  parameter Boolean allowFlowReversal = true annotation(Evaluate=true, Dialog(tab = "Advanced"));
   //Scalable parameters
   parameter Modelica.SIunits.Power QNom = heatSource.data.QNomRef
     "Nominal power: if it differs from data.QNomRef, the model will be scaled"
@@ -73,7 +75,7 @@ partial model PartialProduction
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-10,64})));
-  parameter SI.Frequency riseTime=120
+  parameter Modelica.SIunits.Time riseTime=120
     "The time it takes to reach full/zero power when switching"
     annotation(Dialog(tab="Advanced", group="Events", enable=avoidEvents));
   Modelica.Thermal.HeatTransfer.Components.ThermalConductor thermalLosses(G=
@@ -85,12 +87,16 @@ partial model PartialProduction
     "heatPort for thermal losses to environment" annotation (Placement(
         transformation(extent={{-50,-110},{-30,-90}}), iconTransformation(
           extent={{-50,-110},{-30,-90}})));
-  Modelica.Fluid.Interfaces.FluidPort_a port_a(redeclare package Medium =
-        Medium) "Fluid inlet"
+  Modelica.Fluid.Interfaces.FluidPort_a port_a(
+    redeclare each final package Medium = Medium,
+     each m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0))
+    "Fluid inlet"
     annotation (Placement(transformation(extent={{90,-50},{110,-30}}),
         iconTransformation(extent={{90,-50},{110,-30}})));
-  Modelica.Fluid.Interfaces.FluidPort_b port_b(redeclare package Medium =
-        Medium) "Fluid outlet"
+  Modelica.Fluid.Interfaces.FluidPort_b port_b(
+    redeclare each final package Medium = Medium,
+     each m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0))
+    "Fluid outlet"
     annotation (Placement(transformation(extent={{90,30},{110,50}}),
         iconTransformation(extent={{90,30},{110,50}})));
   IDEAS.Fluid.Sensors.TemperatureTwoPort Tin(redeclare package Medium = Medium,

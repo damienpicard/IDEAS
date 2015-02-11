@@ -8,7 +8,7 @@ partial model PartialHeatSource
     annotation(Dialog(group = "Nominal condition"));
   parameter Boolean useTSet = true
     "If true, use TSet as control input, else QSet";
-  parameter SI.Frequency riseTime=120
+  parameter Modelica.SIunits.Time riseTime=120
     "The time it takes to reach full/zero power when switching"
     annotation(Dialog(tab="Advanced", group="Events", enable=avoidEvents));
   //Data parameters
@@ -65,10 +65,10 @@ partial model PartialHeatSource
     annotation(Dialog(tab="Advanced", group="Events"));
   parameter Real modulationMin = data.modulationMin
     "Minimal modulation percentage";
-  parameter Real modulationStart(min=modulationMin + 5) = data.modulationStart
+  parameter Real modulationStart = data.modulationStart
     "Starting modulation percentage";
   //Modulation variables
-  Real modulationInit
+  Modelica.Blocks.Interfaces.RealInput modulationInit
     "Initial modulation, decides on start/stop of the production unit";
   Real modulation(min=0, max=100) "Current modulation percentage";
   Modelica.SIunits.Power QMax
@@ -77,8 +77,8 @@ partial model PartialHeatSource
   //Components
   Modelica.Blocks.Logical.Hysteresis hysteresis(
     uLow=modulationMin,
-    uHigh=modulationStart)
-    annotation (Placement(transformation(extent={{-54,60},{-34,80}})));
+    uHigh=modulationStart) if (modulationStart-modulationMin)>0.01
+    annotation (Placement(transformation(extent={{-56,72},{-36,92}})));
   Modelica.Blocks.Math.BooleanToReal booleanToReal if avoidEvents
     annotation (Placement(transformation(extent={{14,46},{34,66}})));
   Modelica.Blocks.Continuous.Filter modulationRate(f_cut=5/(2*Modelica.Constants.pi*riseTime),
@@ -112,10 +112,20 @@ public
     annotation (choicesAllMatching=true, Placement(transformation(extent={{70,-88},
             {90,-68}})));
 
+  Modelica.Blocks.Interfaces.BooleanOutput hysteresis_internal;
+  Modelica.Blocks.Sources.BooleanExpression booleanExpression1(y=
+        hysteresis_internal)
+    annotation (Placement(transformation(extent={{-56,52},{-36,72}})));
 equation
   // Compuation of QAsked, depends on which input is used
   connect(TSet, TSet_internal);
   connect(QSet, QSet_internal);
+  connect(hysteresis_internal,hysteresis.y);
+  connect(hysteresis.u,modulationInit);
+
+  if not (modulationStart-modulationMin)>0.01 then
+    hysteresis_internal = true;
+  end if;
 
   if useTSet then
     QAsked = IDEAS.Utilities.Math.Functions.smoothMax(0, m_flow*(Medium.specificEnthalpy(Medium.setState_pTX(Medium.p_default, TSet_internal, Medium.X_default)) -hIn), 10);
@@ -128,8 +138,7 @@ equation
   //Calculation of the modulation
   release = if noEvent(m_flow > Modelica.Constants.eps) then 0.0 else 1.0;
   modulationInit = QAsked/QMax*100;
-  hysteresis.u = modulationInit;
-  modulation =   if avoidEvents then onOff_internal_filtered * IDEAS.Utilities.Math.Functions.smoothMin(modulationInit, 100, deltaX=0.1) elseif hysteresis.y and noEvent(release<0.5) then IDEAS.Utilities.Math.Functions.smoothMin(modulationInit, 100, deltaX=0.1) else 0;
+  modulation =   if avoidEvents then onOff_internal_filtered * IDEAS.Utilities.Math.Functions.smoothMin(modulationInit, 100, deltaX=0.1) elseif hysteresis_internal and noEvent(release<0.5) then IDEAS.Utilities.Math.Functions.smoothMin(modulationInit, 100, deltaX=0.1) else 0;
   //Calcualation of the heat powers
   QLossesToCompensate = if noEvent(modulation > Modelica.Constants.eps) then UALoss*(heatPort.T - sim.Te) else 0;
   //Final heat power of the heat source
@@ -139,10 +148,6 @@ equation
     connect(onOff_internal_filtered,modulationRate.y);
     connect(and1.y, booleanToReal.u) annotation (Line(
         points={{1,56},{12,56}},
-        color={255,0,255},
-        smooth=Smooth.None));
-    connect(hysteresis.y, and1.u1) annotation (Line(
-        points={{-33,70},{-28,70},{-28,56},{-22,56}},
         color={255,0,255},
         smooth=Smooth.None));
     connect(booleanExpression.y, and1.u2) annotation (Line(
@@ -164,7 +169,12 @@ equation
   else
     onOff_internal_filtered = 1;
   end if;
-    annotation (Placement(transformation(extent={{66,74},{86,94}})),
+  connect(booleanExpression1.y, and1.u1) annotation (Line(
+      points={{-35,62},{-30,62},{-30,56},{-22,56}},
+      color={255,0,255},
+      smooth=Smooth.None));
+    annotation (Placement(transformation(extent={{-56,52},{-36,72}})),
+                Placement(transformation(extent={{66,74},{86,94}})),
               Icon(coordinateSystem(extent={{-100,-100},{100,100}},
           preserveAspectRatio=false),
                    graphics={
