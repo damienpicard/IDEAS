@@ -41,7 +41,8 @@ model MultipleBoreHoles2UTube
     final dp2_nominal=1,
     final dp3_nominal=1,
     final dp4_nominal=1,
-    final T_start = T_start)
+    final T_start = T_start,
+    final scaSeg=bfData.gen.nbBh*bfData.gen.nVer)
     "Internal part of the borehole including the pipes and the filling material"
     annotation (Placement(transformation(
         extent={{-12,13},{12,-13}},
