@@ -5,6 +5,8 @@ partial model HeatingSystem "Partial heating/cooling system"
   outer Modelica.Fluid.System system
     annotation (Placement(transformation(extent={{-180,80},{-160,100}})));
 
+  parameter Boolean allowFlowReversal = true;
+
   // *********** Building characteristics and  interface ***********
   // --- General
   parameter Integer nZones(min=1)

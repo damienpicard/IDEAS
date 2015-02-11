@@ -5,6 +5,7 @@ partial model VentilationSystem
 
   outer Modelica.Fluid.System system
   annotation (Placement(transformation(extent={{-180,80},{-160,100}})));
+  parameter Boolean allowFlowReversal = true;
 
   replaceable package Medium = IDEAS.Media.Air
     constrainedby Modelica.Media.Interfaces.PartialMedium
@@ -28,9 +29,13 @@ partial model VentilationSystem
         extent={{10,-10},{-10,10}},
         rotation=180,
         origin={-204,-60})));
-  Fluid.Interfaces.FlowPort_b[nZones] flowPort_Out(redeclare package Medium = Medium)
+  Fluid.Interfaces.FlowPort_b[nZones] flowPort_Out(
+    redeclare each final package Medium = Medium,
+     each m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0))
     annotation (Placement(transformation(extent={{-210,-30},{-190,-10}})));
-  Fluid.Interfaces.FlowPort_a[nZones] flowPort_In(redeclare package Medium = Medium)
+  Fluid.Interfaces.FlowPort_a[nZones] flowPort_In(
+    redeclare each final package Medium = Medium,
+     each m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0))
     annotation (Placement(transformation(extent={{-210,10},{-190,30}})));
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-200,

@@ -4,7 +4,7 @@ partial model Structure "Partial model for building structure models"
   outer IDEAS.SimInfoManager sim
     "Simulation information manager for climate data"
     annotation (Placement(transformation(extent={{130,-100},{150,-80}})));
-
+  parameter Boolean allowFlowReversal = true;
   replaceable package Medium = IDEAS.Media.Air
     constrainedby Modelica.Media.Interfaces.PartialMedium
     "Medium in the component"
@@ -47,9 +47,13 @@ partial model Structure "Partial model for building structure models"
   Modelica.Blocks.Interfaces.RealOutput[nZones] TSensor(final quantity="ThermodynamicTemperature",unit="K",displayUnit="degC", min=0)
     "Sensor temperature of the zones"
     annotation (Placement(transformation(extent={{146,-70},{166,-50}})));
-  Fluid.Interfaces.FlowPort_b[nZones] flowPort_Out(redeclare package Medium = Medium)
+  Fluid.Interfaces.FlowPort_b[nZones] flowPort_Out(
+    redeclare each final package Medium = Medium,
+    each m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0))
     annotation (Placement(transformation(extent={{-30,90},{-10,110}})));
-  Fluid.Interfaces.FlowPort_a[nZones] flowPort_In(redeclare package Medium = Medium)
+  Fluid.Interfaces.FlowPort_a[nZones] flowPort_In(
+    redeclare each final package Medium = Medium,
+     each m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0))
     annotation (Placement(transformation(extent={{10,90},{30,110}})));
   outer Modelica.Fluid.System system
   annotation (Placement(transformation(extent={{100,-100},{120,-80}})));

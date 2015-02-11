@@ -3,14 +3,20 @@ model Partial3WayValve "Partial for 3-way valves"
   extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations;
   parameter Modelica.SIunits.Mass m = 1 "Fluid content of the mixing valve";
 
-  Modelica.Fluid.Interfaces.FluidPort_a port_a1(redeclare package Medium =
-        Medium) "Hot fluid inlet"
+  Modelica.Fluid.Interfaces.FluidPort_a port_a1(
+    redeclare each final package Medium = Medium,
+     each m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0))
+    "Hot fluid inlet"
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-  Modelica.Fluid.Interfaces.FluidPort_a port_a2(redeclare package Medium =
-        Medium) "Cold fluid inlet"
+  Modelica.Fluid.Interfaces.FluidPort_a port_a2(
+    redeclare each final package Medium = Medium,
+     each m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0))
+    "Cold fluid inlet"
     annotation (Placement(transformation(extent={{-10,-110},{10,-90}})));
-  Modelica.Fluid.Interfaces.FluidPort_b port_b(redeclare package Medium =
-        Medium) "Fluid outlet"
+  Modelica.Fluid.Interfaces.FluidPort_b port_b(
+    redeclare each final package Medium = Medium,
+     each m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0))
+    "Fluid outlet"
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
   MixingVolumes.MixingVolume vol(nPorts=2,
