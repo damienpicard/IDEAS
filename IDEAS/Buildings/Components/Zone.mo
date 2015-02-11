@@ -2,9 +2,7 @@ within IDEAS.Buildings.Components;
 model Zone "thermal building zone"
 
   extends IDEAS.Buildings.Components.Interfaces.StateZone;
-  extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations(redeclare package
-      Medium =
-        IDEAS.Media.Air);
+  extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations(massDynamics=Modelica.Fluid.Types.Dynamics.SteadyState);
 
   outer Modelica.Fluid.System system
     annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
@@ -47,8 +45,8 @@ protected
     m_flow_nominal=V/3600*n50/20,
     V=V,
     n50=n50,
-    allowFlowReversal=allowFlowReversal,
-    show_T=false)
+    show_T=false,
+    allowFlowReversal=false)
     annotation (Placement(transformation(extent={{40,30},{60,50}})));
   IDEAS.Buildings.Components.BaseClasses.ZoneLwDistribution radDistrLw(final
       nSurf=nSurf, final linear=linear)
@@ -71,8 +69,8 @@ protected
     X_start=X_start,
     C_start=C_start,
     C_nominal=C_nominal,
-    allowFlowReversal=allowFlowReversal,
-    mFactor=corrCV)                            annotation (Placement(
+    mFactor=corrCV,
+    allowFlowReversal=true)                    annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
