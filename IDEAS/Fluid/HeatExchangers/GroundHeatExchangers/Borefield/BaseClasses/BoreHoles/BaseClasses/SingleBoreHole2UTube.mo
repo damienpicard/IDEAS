@@ -66,9 +66,9 @@ equation
   if gen.parallel2UTube then
     connect(port_a, borHolSeg[1].port_a3) annotation (Line(
         points={{-100,5.55112e-016},{-60,5.55112e-016},{-60,-16.4},{-18,-16.4}},
-
         color={0,127,255},
         smooth=Smooth.None));
+
     connect(port_b, borHolSeg[gen.nVer].port_b2) annotation (Line(
         points={{100,5.55112e-016},{20,5.55112e-016},{20,-40},{-40,-40},{-40,-4},
             {-18,-4}},
@@ -77,9 +77,9 @@ equation
   else
     connect(borHolSeg[1].port_b2, borHolSeg[1].port_a3) annotation (Line(
         points={{-18,-4},{-32,-4},{-32,-16},{-26,-16},{-26,-16.4},{-18,-16.4}},
-
         color={0,127,255},
         smooth=Smooth.None));
+
     connect(borHolSeg[gen.nVer].port_a3, borHolSeg[gen.nVer].port_b2)
       annotation (Line(
         points={{100,5.55112e-016},{20,5.55112e-016},{20,-40},{-40,-40},{-40,-4},
@@ -106,13 +106,13 @@ equation
         color={0,127,255},
         smooth=Smooth.None));
   end for;
-  connect(borHolSeg[gen.nVer].port_b1, borHolSeg[gen.nVer].port_a2) annotation
-    (Line(
+  connect(borHolSeg[gen.nVer].port_b1, borHolSeg[gen.nVer].port_a2) annotation (
+     Line(
       points={{2,6},{8,6},{8,-4},{2,-4}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(borHolSeg[gen.nVer].port_b3, borHolSeg[gen.nVer].port_a4) annotation
-    (Line(
+  connect(borHolSeg[gen.nVer].port_b3, borHolSeg[gen.nVer].port_a4) annotation (
+     Line(
       points={{2,-16.2},{6,-16.2},{6,-16},{10,-16},{10,-26},{2,-26}},
       color={0,127,255},
       smooth=Smooth.None));

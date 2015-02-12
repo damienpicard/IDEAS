@@ -1,7 +1,6 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Examples;
 model borefield8x1
   "Model of a borefield in a 8x1 boreholes line configuration and a constant heat injection rate"
-  import Buildings;
 
   extends Modelica.Icons.Example;
 

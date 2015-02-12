@@ -1,7 +1,6 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses;
 model InternalHEX2UTube
   "Internal part of a borehole for a double U-Tube configuration. In loop 1, fluid 1 streams from a1 to b1 and comes back from a3 to b3. In loop 2: fluid 2 streams from a2 to b2 and comes back from a4 to b4."
-  import Buildings;
   extends Interface.PartialBoreHoleInternalHEX;
 
   extends IDEAS.Fluid.Interfaces.HeightPortHeatMassExchanger(
@@ -519,7 +518,7 @@ IDEAS.Fluid.HeatExchangers.Boreholes.BaseClasses.convectionResistance</a>.
 The figure below shows the thermal network set up by Bauer et al. (2010).
 </p>
 <p align=\"center\">
-<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Fluid/HeatExchangers/Boreholes/BaseClasses/Bauer_singleUTube.png\"/>
+<img alt=\"image\" src=\"modelica://IDEAS/Resources/Images/Fluid/HeatExchangers/Boreholes/BaseClasses/Bauer_singleUTube.png\"/>
 </p>
 <h4>References</h4>
 <p>

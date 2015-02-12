@@ -1,6 +1,5 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses;
 model InternalHEXUTube "Internal part of a borehole for a U-Tube configuration"
-  import Buildings;
   extends Interface.PartialBoreHoleInternalHEX;
 
   extends IDEAS.Fluid.Interfaces.FourPortHeatMassExchanger(
@@ -247,7 +246,7 @@ IDEAS.Fluid.HeatExchangers.Boreholes.BaseClasses.convectionResistance</a>.
 The figure below shows the thermal network set up by Bauer et al. (2010).
 </p>
 <p align=\"center\">
-<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Fluid/HeatExchangers/Boreholes/BaseClasses/Bauer_singleUTube.png\"/>
+<img alt=\"image\" src=\"modelica://IDEAS/Resources/Images/Fluid/HeatExchangers/Boreholes/BaseClasses/Bauer_singleUTube.png\"/>
 </p>
 <h4>References</h4>
 <p>

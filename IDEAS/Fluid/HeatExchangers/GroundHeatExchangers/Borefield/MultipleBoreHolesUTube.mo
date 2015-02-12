@@ -55,8 +55,7 @@ equation
       smooth=Smooth.None));
 
   connect(intHEX.port_b1, intHEX.port_a2) annotation (Line(
-      points={{-4.09091,-23.1818},{-4.09091,-30},{10.0909,-30},{10.0909,
-          -23.1818}},
+      points={{-4.09091,-23.1818},{-4.09091,-30},{10.0909,-30},{10.0909,-23.1818}},
       color={0,127,255},
       smooth=Smooth.None));
 
@@ -168,7 +167,7 @@ abrut temperature changes, the aggregation method is used to calculate the avera
 temperature instead of the average fluid temperature. The calculated borehole wall temperature is then
 connected to the dynamic model of the borehole heat exchanger.</p>
 <p>More detailed documentation can be found in 
-<a href=\"modelica://Buildings/Resources/Images/Fluid/HeatExchangers/Borefield/UsersGuide/2014-10thModelicaConference-Picard.pdf\">Picard (2014)</a>.
+<a href=\"modelica://IDEAS/Resources/Images/Fluid/HeatExchangers/Borefield/UsersGuide/2014-10thModelicaConference-Picard.pdf\">Picard (2014)</a>.
 and in 
 <a href=\"modelica://IDEAS.Fluid.HeatExchangers.Borefield.UsersGuide\">IDEAS.Fluid.HeatExchangers.Borefield.UsersGuide</a>.
 </p>

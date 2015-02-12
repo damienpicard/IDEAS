@@ -1,7 +1,6 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Examples;
 model borefield8x8WithVariableLoad
   "Model of a borefield in a 8x8 boreholes with variable load."
-  import Buildings;
 
   extends Modelica.Icons.Example;
 
