@@ -2,6 +2,8 @@ within IDEAS.Fluid.Production.BaseClasses;
 partial model PartialHeatSource
   "Partial for a heat source production component"
   extends IDEAS.Fluid.Interfaces.OnOffInterface;
+  extends IDEAS.Fluid.Production.Interfaces.ModulationSecurity(T_max=data.TMax,T_min=data.TMin);
+
   replaceable package Medium =
       Modelica.Media.Interfaces.PartialMedium "Medium in the component";
   parameter SI.MassFlowRate m_flow_nominal "Nominal mass flow rate"
@@ -16,10 +18,7 @@ partial model PartialHeatSource
     "Nominal power of the production unit for which the data is given";
   parameter Real etaRef = data.etaRef
     "Nominal efficiency (higher heating value)of the xxx boiler at 50/30degC.  See datafile";
-  parameter Modelica.SIunits.Temperature TMax = data.TMax
-    "Maximum set point temperature";
-  parameter Modelica.SIunits.Temperature TMin = data.TMin
-    "Minimum set point temperature";
+
   //Scalable parameters
   parameter Modelica.SIunits.Power QNom = data.QNomRef
     "The power at nominal conditions";
@@ -28,7 +27,7 @@ partial model PartialHeatSource
     "UA of heat losses of the heat source to environment";
   //Variables
   Real eta "Final efficiency of the heat source";
-  Real release(min=0, max=1) "Stop heat production when the mass flow is zero";
+//  Real release(min=0, max=1) "Stop heat production when the mass flow is zero";
   Modelica.SIunits.Power QLossesToCompensate
     "Artificial heat losses to correct the heat balance";
     Modelica.Blocks.Interfaces.RealOutput PFuel(unit="W")
@@ -75,32 +74,7 @@ partial model PartialHeatSource
     "Maximum thermal power at 100% modulation for the given input conditions";
   Modelica.SIunits.Power QAsked(start=0) "Desired power of the heatsource";
   //Components
-  Modelica.Blocks.Logical.Hysteresis hysteresis(
-    uLow=modulationMin,
-    uHigh=modulationStart) if (modulationStart-modulationMin)>0.01
-    annotation (Placement(transformation(extent={{-56,72},{-36,92}})));
-  Modelica.Blocks.Math.BooleanToReal booleanToReal if avoidEvents
-    annotation (Placement(transformation(extent={{14,46},{34,66}})));
-  Modelica.Blocks.Continuous.Filter modulationRate(f_cut=5/(2*Modelica.Constants.pi*riseTime),
-    final analogFilter=Modelica.Blocks.Types.AnalogFilter.CriticalDamping,
-    final filterType=Modelica.Blocks.Types.FilterType.LowPass,
-    final order=2,
-    final gain=1.0) if                                                                                  avoidEvents
-    "Fictive modulation rate to avoid non-smooth on/off transitions causing events."
-    annotation (Placement(transformation(extent={{36,-30},{56,-10}})));
-  Modelica.Blocks.Logical.And and1 if avoidEvents
-    annotation (Placement(transformation(extent={{-20,46},{0,66}})));
-  Modelica.Blocks.Sources.BooleanExpression booleanExpression(y=on_internal) if avoidEvents
-    annotation (Placement(transformation(extent={{-54,38},{-34,58}})));
-  Modelica.Blocks.Math.Product product if avoidEvents
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
-        rotation=270,
-        origin={-2,-2})));
-  Modelica.Blocks.Sources.RealExpression realExpression(y=1 - release) if
-                                                                      avoidEvents
-    annotation (Placement(transformation(extent={{-40,12},{-20,32}})));
 protected
-  Modelica.Blocks.Interfaces.RealOutput onOff_internal_filtered;
   Modelica.Blocks.Interfaces.RealInput TSet_internal
     "Needed to connect to conditional connector";
   Modelica.Blocks.Interfaces.RealInput QSet_internal
@@ -112,20 +86,12 @@ public
     annotation (choicesAllMatching=true, Placement(transformation(extent={{70,-88},
             {90,-68}})));
 
-  Modelica.Blocks.Interfaces.BooleanOutput hysteresis_internal;
-  Modelica.Blocks.Sources.BooleanExpression booleanExpression1(y=
-        hysteresis_internal)
-    annotation (Placement(transformation(extent={{-56,52},{-36,72}})));
 equation
+  T_high = THxIn;
+  T_low = THxIn;
   // Compuation of QAsked, depends on which input is used
   connect(TSet, TSet_internal);
   connect(QSet, QSet_internal);
-  connect(hysteresis_internal,hysteresis.y);
-  connect(hysteresis.u,modulationInit);
-
-  if not (modulationStart-modulationMin)>0.01 then
-    hysteresis_internal = true;
-  end if;
 
   if useTSet then
     QAsked = IDEAS.Utilities.Math.Functions.smoothMax(0, m_flow*(Medium.specificEnthalpy(Medium.setState_pTX(Medium.p_default, TSet_internal, Medium.X_default)) -hIn), 10);
@@ -136,43 +102,15 @@ equation
   end if;
 
   //Calculation of the modulation
-  release = if noEvent(m_flow > Modelica.Constants.eps) then 0.0 else 1.0;
+  //release = if noEvent(m_flow > Modelica.Constants.eps) then 0.0 else 1.0;
   modulationInit = QAsked/QMax*100;
-  modulation =   if avoidEvents then onOff_internal_filtered * IDEAS.Utilities.Math.Functions.smoothMin(modulationInit, 100, deltaX=0.1) elseif hysteresis_internal and noEvent(release<0.5) then IDEAS.Utilities.Math.Functions.smoothMin(modulationInit, 100, deltaX=0.1) else 0;
+  modulation =   modulation_security_internal*IDEAS.Utilities.Math.Functions.smoothMin(modulationInit, 100, deltaX=0.1);
   //Calcualation of the heat powers
   QLossesToCompensate = if noEvent(modulation > Modelica.Constants.eps) then UALoss*(heatPort.T - sim.Te) else 0;
   //Final heat power of the heat source
   heatPort.Q_flow = -eta/etaRef*modulation/100*QNom - QLossesToCompensate;
-  PFuel = if noEvent(release < 0.5) and noEvent(eta>Modelica.Constants.eps) then -heatPort.Q_flow/eta else 0;
-  if avoidEvents then
-    connect(onOff_internal_filtered,modulationRate.y);
-    connect(and1.y, booleanToReal.u) annotation (Line(
-        points={{1,56},{12,56}},
-        color={255,0,255},
-        smooth=Smooth.None));
-    connect(booleanExpression.y, and1.u2) annotation (Line(
-        points={{-33,48},{-22,48}},
-        color={255,0,255},
-        smooth=Smooth.None));
-    connect(modulationRate.u, product.y) annotation (Line(
-        points={{34,-20},{-2,-20},{-2,-13}},
-        color={0,0,127},
-        smooth=Smooth.None));
-    connect(booleanToReal.y, product.u1) annotation (Line(
-        points={{35,56},{42,56},{42,16},{4,16},{4,10}},
-        color={0,0,127},
-        smooth=Smooth.None));
-    connect(realExpression.y, product.u2) annotation (Line(
-        points={{-19,22},{-8,22},{-8,10}},
-        color={0,0,127},
-        smooth=Smooth.None));
-  else
-    onOff_internal_filtered = 1;
-  end if;
-  connect(booleanExpression1.y, and1.u1) annotation (Line(
-      points={{-35,62},{-30,62},{-30,56},{-22,56}},
-      color={255,0,255},
-      smooth=Smooth.None));
+  PFuel = if noEvent(eta>Modelica.Constants.eps) then -heatPort.Q_flow/eta else 0;
+
     annotation (Placement(transformation(extent={{-56,52},{-36,72}})),
                 Placement(transformation(extent={{66,74},{86,94}})),
               Icon(coordinateSystem(extent={{-100,-100},{100,100}},
