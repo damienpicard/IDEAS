@@ -87,6 +87,14 @@ partial model PartialHeatPump "Heat pump partial"
         rotation=0,
         origin={108,28})));
 
+  Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor T_out_eva
+    annotation (Placement(transformation(extent={{-10,16},{10,36}})));
+  Modelica.Blocks.Interfaces.RealOutput T_eva
+    "Absolute temperature as output signal"
+    annotation (Placement(transformation(extent={{100,-10},{120,10}})));
+  Modelica.Blocks.Interfaces.RealOutput T_cond
+    "Absolute temperature as output signal"
+    annotation (Placement(transformation(extent={{100,-30},{120,-10}})));
 initial equation
   assert(energyDynamics <> Modelica.Fluid.Types.Dynamics.SteadyState, "Energy dynamics cannot be set to steady state!");
 
@@ -208,9 +216,22 @@ equation
       points={{-53.1,60},{-40,60}},
       color={0,0,127},
       smooth=Smooth.None));
+  connect(vol1.heatPort, T_out_eva.port) annotation (Line(
+      points={{-10,60},{-10,26}},
+      color={191,0,0},
+      smooth=Smooth.None));
+  connect(T_out_eva.T, T_eva) annotation (Line(
+      points={{10,26},{40,26},{40,0},{110,0}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(T_out_cond.T, T_cond) annotation (Line(
+      points={{-40,-40},{-40,-20},{110,-20}},
+      color={0,0,127},
+      smooth=Smooth.None));
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
-            100}}), graphics),
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
+            100,100}}),
+                    graphics),
     Icon(graphics={
         Line(
           points={{-20,0},{40,2.44929e-15}},
