@@ -25,7 +25,9 @@ extends IDEAS.Fluid.Interfaces.PartialTwoPortInterface;
     redeclare package Medium = Medium,
     allowFlowReversal=false,
     dynamicBalance=false,
-    m_flow_nominal=m_flow_nominal)
+    m_flow_nominal=m_flow_nominal,
+    energyDynamics=Modelica.Fluid.Types.Dynamics.SteadyState,
+    massDynamics=Modelica.Fluid.Types.Dynamics.SteadyState)
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature
     prescribedTemperature
