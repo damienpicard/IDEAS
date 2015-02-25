@@ -3,8 +3,9 @@ model ExteriorSolarAbsorption
   "shortwave radiation absorption on an exterior surface"
 
   parameter Modelica.SIunits.Area A "surface area";
-
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a(T(start=289.15))
+  parameter Modelica.SIunits.Temperature T_start=293.15
+    "Start temperature for each of the layers";
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a(T(start=T_start))
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
   Modelica.Blocks.Interfaces.RealInput solDir
     "direct solar illuminance on surface se"

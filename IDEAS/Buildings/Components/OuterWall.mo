@@ -38,7 +38,7 @@ public
     final nLay=constructionType.nLay,
     final mats=constructionType.mats,
     final locGain=constructionType.locGain,
-    T_start=ones(constructionType.nLay)*T_start)
+    T_start=T_start)
     "declaration of array of resistances and capacitances for wall simulation"
     annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
   IDEAS.Buildings.Components.BaseClasses.ExteriorConvection extCon(final A=
@@ -64,6 +64,10 @@ public
   IDEAS.Buildings.Components.BaseClasses.OuterWallParameters outWallPar(inc=inc,azi=azi,lat=sim.lat,A=AWall) if sim.use_lin;
   Modelica.Blocks.Interfaces.RealInput solDir if sim.use_lin;
   Modelica.Blocks.Interfaces.RealInput solDif if sim.use_lin;
+  Modelica.Blocks.Interfaces.RealInput Tenv_input(unit="K", displayUnit="degC") if  sim.use_lin
+    annotation (Placement(transformation(extent={{-120,-26},{-80,14}})));
+  Modelica.Blocks.Interfaces.RealInput TAmb if sim.use_lin
+    annotation (Placement(transformation(extent={{-120,-66},{-80,-26}})));
 equation
   connect(extCon.port_a, layMul.port_a) annotation (Line(
       points={{-20,-50},{-16,-50},{-16,-30},{-10,-30}},
@@ -136,6 +140,14 @@ equation
   else
     connect(solDir,solAbs.solDir);
     connect(solDif,solAbs.solDif);
+    connect(extRad.Tenv_input, Tenv_input) annotation (Line(
+      points={{-20,-7},{-60,-7},{-60,-6},{-100,-6}},
+      color={0,0,127},
+      smooth=Smooth.None));
+    connect(extCon.TAmb, TAmb) annotation (Line(
+      points={{-19.6,-46},{-100,-46}},
+      color={0,0,127},
+      smooth=Smooth.None));
   end if;
 
   annotation (

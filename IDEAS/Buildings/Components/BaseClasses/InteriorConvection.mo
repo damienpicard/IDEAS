@@ -6,10 +6,11 @@ model InteriorConvection "interior surface convection"
 
   parameter Boolean fixed = true
     "Fixed convective heat transfer coefficient or DT-dependent.";
-
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a(T(start=293.15))
+  parameter Modelica.SIunits.Temperature T_start=293.15
+    "Start temperature for each of the layers";
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a(T(start=T_start))
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b port_b(T(start=293.15))
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b port_b(T(start=T_start))
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
 protected

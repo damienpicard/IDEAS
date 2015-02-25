@@ -66,17 +66,17 @@ public
   Modelica.SIunits.Irradiance solGloHor "global irradiation on horizontal";
   Modelica.SIunits.Temperature Te = Te_conditional
     "ambient outdoor temperature for determination of sky radiation exchange";
-  Modelica.Blocks.Interfaces.RealInput Te_in(unit="K") = Te_conditional if use_lin
+  Modelica.Blocks.Interfaces.RealInput Te_in(unit="K") if use_lin
     "ambient outdoor temperature for determination of sky radiation exchange";
   Modelica.SIunits.Temperature Tsky =  Tsky_conditional
     "effective overall sky temperature";
-  Modelica.Blocks.Interfaces.RealInput Tsky_in(unit="K") = Tsky_conditional if use_lin
+  Modelica.Blocks.Interfaces.RealInput Tsky_in(unit="K") if use_lin
     "effective overall sky temperature";
   Modelica.SIunits.Temperature TeAv
     "running average of ambient outdoor temperature of the last 5 days, not yet implemented";
   Modelica.SIunits.Temperature Tground "ground temperature";
   Modelica.SIunits.Velocity Va = Va_conditional "air velocity";
-  Modelica.Blocks.Interfaces.RealInput Va_in(unit="m/s") = Va_conditional if use_lin
+  Modelica.Blocks.Interfaces.RealInput Va_in(unit="m/s") if use_lin
     "air velocity";
   Real Fc "cloud factor";
   Modelica.SIunits.Irradiance irr "Irradiance";
@@ -91,11 +91,12 @@ public
   Modelica.SIunits.Time timSol "Solar time";
   Modelica.SIunits.Time timCal "Calendar time";
 protected
-    Modelica.SIunits.Temperature Te_conditional
+    Modelica.Blocks.Interfaces.RealInput Te_conditional(unit="K")
     "ambient outdoor temperature for determination of sky radiation exchange";
-  Modelica.SIunits.Temperature Tsky_conditional
+  Modelica.Blocks.Interfaces.RealInput Tsky_conditional(unit="K")
     "effective overall sky temperature";
-  Modelica.SIunits.Velocity Va_conditional "air velocity";
+  Modelica.Blocks.Interfaces.RealInput Va_conditional(unit="m/s")
+    "air velocity";
 
 public
   Real hCon=IDEAS.Utilities.Math.Functions.spliceFunction(x=Va-5, pos= 7.1*abs(Va)^(0.78), neg=  4.0*Va + 5.6, deltax=0.5);
@@ -190,6 +191,23 @@ public
   Modelica.Blocks.Sources.RealExpression solDifHorIn(y=solDifHor)
     annotation (Placement(transformation(extent={{-110,62},{-90,82}})));
 equation
+  if use_lin then
+    connect(Te_conditional, Te_in);
+    connect(Tsky_conditional, Tsky_in);
+    connect(Va_conditional, Va_in);
+    Fc = 0.2;
+  else
+    Te_conditional = weaDat.cheTemDryBul.TOut;
+    if BesTest then
+      Tsky_conditional = Te - (23.8 - 0.2025*(Te - 273.15)*(1 - 0.87*Fc));
+      Va_conditional = 2.5;
+      Fc = 0.2;
+    else
+      Tsky_conditional = weaDat.TBlaSky.TBlaSky;
+      Va_conditional = weaDat.cheWinSpe.winSpeOut;
+      Fc = weaDat.cheOpaSkyCov.nOut*0.87;
+    end if;
+  end if;
 
   connect(timMan.timCal, tabQCon.u) annotation (Line(
       points={{-60,6},{-52,6},{-52,-27},{-41.4,-27}},

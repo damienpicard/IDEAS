@@ -4,7 +4,8 @@ model MonoLayerLucent "single non-opaque layer"
   parameter Modelica.SIunits.Area A "surface area";
   parameter IDEAS.Buildings.Data.Interfaces.Material mat "material";
   parameter Modelica.SIunits.Angle inc "inclination";
-
+  parameter Modelica.SIunits.Temperature T_start=293.15
+    "Start temperature for each of the layers";
   parameter Modelica.SIunits.Emissivity epsLw_a=mat.epsLw_a
     "longwave emissivity on exterior side";
   parameter Modelica.SIunits.Emissivity epsLw_b=mat.epsLw_b
@@ -15,9 +16,9 @@ model MonoLayerLucent "single non-opaque layer"
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_gain
     "port for gains by embedded active layers"
     annotation (Placement(transformation(extent={{-10,90},{10,110}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a(T(start=293.15))
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a(T(start=T_start))
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b port_b(T(start=293.15))
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b port_b(T(start=T_start))
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
   /*
@@ -36,7 +37,7 @@ model MonoLayerLucent "single non-opaque layer"
 */
 
 equation
-  port_gain.T = 293.15;
+  port_gain.T = T_start;
   port_a.Q_flow + port_b.Q_flow + port_gain.Q_flow = 0 "no heat is stored";
 
   if mat.gas then

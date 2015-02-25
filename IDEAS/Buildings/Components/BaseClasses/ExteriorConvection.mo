@@ -2,15 +2,26 @@ within IDEAS.Buildings.Components.BaseClasses;
 model ExteriorConvection "exterior surface convection"
 
   parameter Modelica.SIunits.Area A "surface area";
-
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a(T(start=289.15))
+  parameter Modelica.SIunits.Temperature T_start=293.15
+    "Start temperature for each of the layers";
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a(T(start=T_start))
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
   outer IDEAS.SimInfoManager sim "Simulation information manager"
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
 
+  Modelica.Blocks.Interfaces.RealInput TAmb if sim.use_lin
+    annotation (Placement(transformation(extent={{-124,20},{-84,60}})));
+
+protected
+  Modelica.Blocks.Interfaces.RealInput Te_internal;
 equation
+  if sim.use_lin then
+    connect(TAmb,Te_internal);
+  else
+    Te_internal = sim.Te;
+  end if;
   //port_a.Q_flow = sim.hCon*A*(port_a.T - sim.Te); --> value hCon is dependent of the time. values oscillate between 5 to 30 (approx)
-  port_a.Q_flow = 20*A*(port_a.T - sim.Te);
+  port_a.Q_flow = 20*A*(port_a.T - Te_internal);
 
   annotation (Icon(graphics={
         Rectangle(

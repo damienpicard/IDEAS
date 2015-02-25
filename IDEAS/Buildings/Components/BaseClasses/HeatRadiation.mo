@@ -4,10 +4,11 @@ model HeatRadiation "radiative heat exchange between two temperatures"
   input Real R "heat resistance for longwave radiative heat exchange";
 
   parameter Boolean linear=true;
-
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a(T(start=293.15))
+  parameter Modelica.SIunits.Temperature T_start=293.15
+    "Start temperature for each of the layers";
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a(T(start=T_start))
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b port_b(T(start=293.15))
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b port_b(T(start=T_start))
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
   Modelica.SIunits.TemperatureDifference dT=port_a.T - port_b.T;
 

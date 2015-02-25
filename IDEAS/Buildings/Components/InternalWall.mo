@@ -33,7 +33,7 @@ public
     final nLay=constructionType.nLay,
     final mats=constructionType.mats,
     final locGain=constructionType.locGain,
-    T_start=ones(constructionType.nLay)*T_start)
+    T_start=T_start)
     "declaration of array of resistances and capacitances for wall simulation"
     annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
 
@@ -170,8 +170,8 @@ equation
           smooth=Smooth.None,
           color={0,0,0},
           thickness=0.5)}),
-    Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-50,-100},{50,
-            100}}), graphics),
+    Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-50,-100},{50,100}}),
+                    graphics),
     Documentation(info="<html>
 <p><h4><font color=\"#008000\">General description</font></h4></p>
 <p><h5>Goal</h5></p>

@@ -21,7 +21,7 @@ model ZoneExample
   Fluid.Sources.Boundary_pT bou(nPorts=1, redeclare package Medium = Medium)
     annotation (Placement(transformation(extent={{-60,80},{-40,100}})));
 
-  inner SimInfoManager sim
+  inner SimInfoManager sim(use_lin=true)
     annotation (Placement(transformation(extent={{-96,76},{-76,96}})));
   InternalWall
              commonWall1(
@@ -69,6 +69,8 @@ model ZoneExample
          annotation (Placement(transformation(extent={{20,-70},{40,-50}})));
   Shading.ShadingControl shadingControl
     annotation (Placement(transformation(extent={{-80,-100},{-60,-80}})));
+  Modelica.Blocks.Sources.Constant const(k=293.15)
+    annotation (Placement(transformation(extent={{-100,-58},{-80,-38}})));
 equation
   connect(commonWall.propsBus_a, zone.propsBus[1]) annotation (Line(
       points={{-44,12},{-12,12},{-12,-4.5},{20,-4.5}},
@@ -110,6 +112,30 @@ equation
       smooth=Smooth.None));
   connect(shadingControl.y, window.Ctrl) annotation (Line(
       points={{-60,-84},{-58,-84},{-58,-86},{-52,-86},{-52,-82}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(const.y, outerWall.Tenv_input) annotation (Line(
+      points={{-79,-48},{-70,-48},{-70,-48.6},{-59,-48.6}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(const.y, outerWall.TAmb) annotation (Line(
+      points={{-79,-48},{-68,-48},{-68,-52.6},{-59,-52.6}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(const.y, window.Tenv_input) annotation (Line(
+      points={{-79,-48},{-68,-48},{-68,-62.8},{-59,-62.8}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(const.y, window.TAmb) annotation (Line(
+      points={{-79,-48},{-68,-48},{-68,-74.6},{-59.2,-74.6}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(const.y, zone.TAmb) annotation (Line(
+      points={{-79,-48},{-22,-48},{-22,0},{35,0}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(const.y, zone1.TAmb) annotation (Line(
+      points={{-79,-48},{-22,-48},{-22,-50},{35,-50}},
       color={0,0,127},
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,

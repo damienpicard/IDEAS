@@ -18,23 +18,6 @@ equation
   timSol = timMan.timSol;
   timCal = timMan.timCal;
 
-  if not use_lin then
-    Te_conditional = weaDat.cheTemDryBul.TOut;
-  end if;
-  if BesTest then
-    if not use_lin then
-      Tsky_conditional = Te - (23.8 - 0.2025*(Te - 273.15)*(1 - 0.87*Fc));
-      Va_conditional = 2.5;
-    end if;
-    Fc = 0.2;
-  else
-    if not use_lin then
-      Tsky_conditional = weaDat.TBlaSky.TBlaSky;
-      Va_conditional = weaDat.cheWinSpe.winSpeOut;
-    end if;
-    Fc = weaDat.cheOpaSkyCov.nOut*0.87;
-  end if;
-
   annotation (
     defaultComponentName="sim",
     defaultComponentPrefixes="inner",

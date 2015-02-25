@@ -52,11 +52,12 @@ annotation(Dialog(tab="Pressure drop"));
   //For low or zero mass flow rate an average convective heat transfer coefficient h = 200 for laminar flow is used.
   //based on [Koshenz, 2000] figure 4.5
   // for laminar flow Nu_D = 4 is assumed: between constant heat flow and constant wall temperature
-  Modelica.SIunits.ThermalInsulance R_w_val= Modelica.Fluid.Utilities.regStep(x=rey-(reyHi+reyLo)/2,
-    y1=RadSlaCha.T^0.13/8/Modelica.Constants.pi*abs((pipeDiaInt/(m_flowSp*L_r)))^0.87,
-    y2=RadSlaCha.T/(4*Medium.thermalConductivity(sta_default)*Modelica.Constants.pi),
-    x_small=(reyHi-reyLo)/2)
-    "Flow dependent resistance value of convective heat transfer inside pipe for both turbulent and laminar heat transfer.";
+  Modelica.SIunits.ThermalInsulance R_w_val= 0.022;
+//   Modelica.Fluid.Utilities.regStep(x=rey-(reyHi+reyLo)/2,
+//      y1=RadSlaCha.T^0.13/8/Modelica.Constants.pi*abs((pipeDiaInt/(m_flowSp*L_r)))^0.87,
+//      y2=RadSlaCha.T/(4*Medium.thermalConductivity(sta_default)*Modelica.Constants.pi),
+//      x_small=(reyHi-reyLo)/2)
+//     "Flow dependent resistance value of convective heat transfer inside pipe for both turbulent and laminar heat transfer.";
   final parameter Modelica.SIunits.ThermalInsulance R_w_val_min = Modelica.Fluid.Utilities.regStep(x=m_flow_nominal/nParCir/A_pipe*pipeDiaInt/mu_default-(reyHi+reyLo)/2,
     y1=RadSlaCha.T^0.13/8/Modelica.Constants.pi*abs((pipeDiaInt/(m_flow_nominal/A_floor*L_r)))^0.87,
     y2=RadSlaCha.T/(4*Medium.thermalConductivity(sta_default)*Modelica.Constants.pi),

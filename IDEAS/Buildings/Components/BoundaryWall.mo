@@ -25,7 +25,7 @@ model BoundaryWall "Opaque wall with boundary conditions"
     final nLay=constructionType.nLay,
     final mats=constructionType.mats,
     final locGain=constructionType.locGain,
-    T_start=ones(constructionType.nLay)*T_start)
+    T_start=T_start)
     "declaration of array of resistances and capacitances for wall simulation"
     annotation (Placement(transformation(extent={{-20,-40},{0,-20}})));
 protected
@@ -35,10 +35,10 @@ protected
     annotation (Placement(transformation(extent={{20,-40},{40,-20}})));
 public
   Modelica.Blocks.Interfaces.RealInput T if use_T_in annotation (Placement(transformation(
-          extent={{-60,50},{-40,70}}), iconTransformation(extent={{-60,50},{-40,
+          extent={{-30,50},{-50,70}}), iconTransformation(extent={{-60,50},{-40,
             70}})));
   Modelica.Blocks.Interfaces.RealInput Q_flow if use_Q_in annotation (Placement(
-        transformation(extent={{-60,10},{-40,30}}), iconTransformation(extent={{
+        transformation(extent={{-30,10},{-50,30}}), iconTransformation(extent={{
             -60,10},{-40,30}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow prescribedHeatFlow if use_Q_in
     annotation (Placement(transformation(extent={{-60,10},{-80,30}})));
@@ -86,7 +86,7 @@ equation
 
   if use_Q_in then
   connect(Q_flow, prescribedHeatFlow.Q_flow) annotation (Line(
-      points={{-50,20},{-60,20}},
+      points={{-40,20},{-60,20}},
       color={0,0,127},
       smooth=Smooth.None));
 
@@ -97,7 +97,7 @@ equation
   end if;
   if use_T_in then
   connect(T, prescribedTemperature.T) annotation (Line(
-      points={{-50,60},{-58,60}},
+      points={{-40,60},{-58,60}},
       color={0,0,127},
       smooth=Smooth.None));
 

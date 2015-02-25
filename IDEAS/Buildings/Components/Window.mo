@@ -2,7 +2,8 @@ within IDEAS.Buildings.Components;
 model Window "Multipane window"
 
   extends IDEAS.Buildings.Components.Interfaces.StateWall;
-
+  parameter Modelica.SIunits.Temperature T_start=293.15
+    "Start temperature for each of the layers";
   parameter Modelica.SIunits.Area A "Total window and windowframe area";
   parameter Real frac(
     min=0,
@@ -47,7 +48,8 @@ protected
     final A=A*(1 - frac),
     final inc=inc,
     final nLay=glazing.nLay,
-    final mats=glazing.mats)
+    final mats=glazing.mats,
+    T_start=T_start)
     "declaration of array of resistances and capacitances for wall simulation"
     annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
   IDEAS.Buildings.Components.BaseClasses.ExteriorConvection eCon(final A=A*(1
@@ -94,6 +96,10 @@ public
     lat=sim.lat,
     A=A,
     frac=frac) if                                                                                              sim.use_lin;
+  Modelica.Blocks.Interfaces.RealInput Tenv_input(unit="K", displayUnit="degC") if  sim.use_lin
+    annotation (Placement(transformation(extent={{-120,72},{-80,112}})));
+  Modelica.Blocks.Interfaces.RealInput TAmb if sim.use_lin
+    annotation (Placement(transformation(extent={{-122,-46},{-82,-6}})));
 equation
   connect(eCon.port_a, layMul.port_a) annotation (Line(
       points={{-20,-30},{-10,-30}},
@@ -215,7 +221,24 @@ equation
     connect(solWinSig.iSolAbs[:], layMul.port_gain[:]);
     connect(solWinSig.iSolDir, propsBus_a.iSolDir);
     connect(solWinSig.iSolDif, propsBus_a.iSolDif);
+      connect(skyRadFra.Tenv_input, Tenv_input) annotation (Line(
+      points={{-20,93},{-60,93},{-60,92},{-100,92}},
+      color={0,0,127},
+      smooth=Smooth.None));
+    connect(skyRad.Tenv_input, Tenv_input) annotation (Line(
+      points={{-20,-7},{-52,-7},{-52,-6},{-100,-6},{-100,92}},
+      color={0,0,127},
+      smooth=Smooth.None));
+        connect(eCon.TAmb, TAmb) annotation (Line(
+      points={{-19.6,-26},{-102,-26}},
+      color={0,0,127},
+      smooth=Smooth.None));
   end if;
+
+  connect(eConFra.TAmb, TAmb) annotation (Line(
+      points={{-19.6,74},{-52,74},{-52,72},{-102,72},{-102,-26}},
+      color={0,0,127},
+      smooth=Smooth.None));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=true, extent={{-50,-100},{50,100}}),
         graphics={
@@ -247,8 +270,9 @@ equation
           color={0,0,0},
           thickness=0.5,
           smooth=Smooth.None)}),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
-            100}}), graphics),
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
+            100,100}}),
+                    graphics),
     Documentation(info="<html>
 <p><h4><font color=\"#008000\">General description</font></h4></p>
 <p><h5>Goal</h5></p>

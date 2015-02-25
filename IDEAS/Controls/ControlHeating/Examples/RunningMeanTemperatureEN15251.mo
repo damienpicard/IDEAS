@@ -1,13 +1,13 @@
 within IDEAS.Controls.ControlHeating.Examples;
 model RunningMeanTemperatureEN15251
+  import IDEAS;
   extends Modelica.Icons.Example;
 
   inner IDEAS.SimInfoManager sim
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
-  RunningMeanTemperatureEN15251_continuous
-    runningMeanTemperatureEN15251_continuous
-    annotation (Placement(transformation(extent={{-20,20},{0,40}})));
-  RunningMeanTemperatureEN15251_discrete runningMeanTemperatureEN15251_discrete
+
+  IDEAS.Controls.ControlHeating.RunningMeanTemperatureEN15251
+    runningMeanTemperatureEN15251_discrete
     annotation (Placement(transformation(extent={{-20,-20},{0,0}})));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics),

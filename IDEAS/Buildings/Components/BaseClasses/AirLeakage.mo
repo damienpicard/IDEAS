@@ -33,19 +33,18 @@ extends IDEAS.Fluid.Interfaces.PartialTwoPortInterface;
     prescribedTemperature
     annotation (Placement(transformation(extent={{40,60},{60,80}})));
   Modelica.Blocks.Sources.RealExpression realExpression(y=sim.Te)
-    annotation (Placement(transformation(extent={{0,60},{20,80}})));
+    annotation (Placement(transformation(extent={{-2,52},{18,72}})));
   Modelica.Blocks.Sources.RealExpression realExpression1(y=V/3600*n50/20)
     annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
+  Modelica.Blocks.Interfaces.RealInput TAmb(unit="K", displayUnit="degC") if  sim.use_lin
+    annotation (Placement(transformation(extent={{-16,64},{16,96}})));
 equation
 
   connect(port_a, senTem.port_a) annotation (Line(
       points={{-100,0},{-90,0}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(realExpression.y, prescribedTemperature.T) annotation (Line(
-      points={{21,70},{38,70}},
-      color={0,0,127},
-      smooth=Smooth.None));
+
   connect(prescribedTemperature.port, pipe_HeatPort.heatPort) annotation (Line(
       points={{60,70},{70,70},{70,10}},
       color={191,0,0},
@@ -66,6 +65,17 @@ equation
       points={{-19,30},{4,30},{4,8}},
       color={0,0,127},
       smooth=Smooth.None));
+  if sim.use_lin then
+    connect(prescribedTemperature.T, TAmb) annotation (Line(
+      points={{38,70},{30,70},{30,80},{0,80}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  else
+      connect(realExpression.y, prescribedTemperature.T) annotation (Line(
+      points={{19,62},{30,62},{30,70},{38,70}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  end if;
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}),
                    graphics={Text(

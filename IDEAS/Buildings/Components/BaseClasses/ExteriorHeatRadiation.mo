@@ -4,8 +4,9 @@ model ExteriorHeatRadiation
 
   parameter Modelica.SIunits.Area A "surface area";
   parameter Modelica.SIunits.Angle inc "inclination";
-
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a(T(start=289.15))
+  parameter Modelica.SIunits.Temperature T_start=293.15
+    "Start temperature for each of the layers";
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a(T(start=T_start))
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
   outer IDEAS.SimInfoManager sim "Simulation information manager"
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
@@ -15,17 +16,23 @@ model ExteriorHeatRadiation
 protected
   final parameter Real Fssky=(1 + cos(inc))/2
     "radiant-interchange configuration factor between surface and sky";
-  Modelica.SIunits.Temperature Tenv
+  Modelica.Blocks.Interfaces.RealOutput Tenv(unit="K", displayUnit="degC")
     "Radiative temperature of the total environment";
 
 public
   Modelica.Blocks.Interfaces.RealInput epsLw
     "shortwave emissivity of the surface"
     annotation (Placement(transformation(extent={{-120,40},{-80,80}})));
-equation
+public
+  Modelica.Blocks.Interfaces.RealInput Tenv_input(unit="K", displayUnit="degC") if  sim.use_lin
+    annotation (Placement(transformation(extent={{-120,10},{-80,50}})));
 
-  // Tenv = (Fssky*sim.TskyPow4 + (1 - Fssky)*sim.TePow4)^0.25; --> This should be computed outside the model
-  Tenv = 293.15;
+equation
+  if sim.use_lin then
+    connect(Tenv,Tenv_input);
+  else
+    Tenv = (Fssky*sim.TskyPow4 + (1 - Fssky)*sim.TePow4)^0.25; //--> This should be computed outside the model
+  end if;
 
 //  port_a.Q_flow = A*Modelica.Constants.sigma*epsLw*(port_a.T - Tenv)*(port_a.T
 //     + Tenv)*(port_a.T^2 + Tenv^2);
@@ -67,5 +74,7 @@ equation
 <p>as derived from the Stefan-Boltzmann law wherefore <img src=\"modelica://IDEAS/Images/equations/equation-C6ZFvd5P.png\"/> the Stefan-Boltzmann constant <a href=\"IDEAS.Buildings.UsersGuide.References\">[Mohr 2008]</a>, <img src=\"modelica://IDEAS/Images/equations/equation-sLNH0zgx.png\"/> the longwave emissivity of the exterior surface, <img src=\"modelica://IDEAS/Images/equations/equation-Q5X4Yht9.png\"/> the radiant-interchange configuration factor between the surface and sky <a href=\"IDEAS.Buildings.UsersGuide.References\">[Hamilton 1952]</a>, and the surface and the environment respectively and <img src=\"modelica://IDEAS/Images/equations/equation-k2V39u5g.png\"/> and <img src=\"modelica://IDEAS/Images/equations/equation-GuSnzLxW.png\"/> are the exterior surface and sky temperature respectively. Shortwave solar irradiation absorbed by the exterior surface is determined as </p>
 <p align=\"center\"><img src=\"modelica://IDEAS/Images/equations/equation-cISf3Itz.png\"/></p>
 <p>where <img src=\"modelica://IDEAS/Images/equations/equation-IKuIUMef.png\"/> is the shortwave absorption of the surface and <img src=\"modelica://IDEAS/Images/equations/equation-Vuo4fgcb.png\"/> the total irradiation on the depicted surface. </p>
-</html>"));
+</html>"),
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
+            100}}), graphics));
 end ExteriorHeatRadiation;

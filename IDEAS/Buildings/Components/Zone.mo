@@ -7,7 +7,6 @@ model Zone "thermal building zone"
         IDEAS.Media.Air,
         energyDynamics = Modelica.Fluid.Types.Dynamics.SteadyState,
         massDynamics = Modelica.Fluid.Types.Dynamics.SteadyState);
-
   outer Modelica.Fluid.System system
     annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
 
@@ -78,6 +77,11 @@ public
   parameter Boolean allowFlowReversal=system.allowFlowReversal
     "= true to allow flow reversal in zone, false restricts to design direction (port_a -> port_b)."
     annotation(Dialog(tab="Assumptions"));
+  Modelica.Blocks.Interfaces.RealInput TAmb(unit="K", displayUnit="degC") if  sim.use_lin annotation (Placement(
+        transformation(
+        extent={{-20,-20},{20,20}},
+        rotation=270,
+        origin={50,100})));
 equation
 
   connect(radDistr.radGain, gainRad) annotation (Line(
@@ -191,6 +195,13 @@ end for;
       points={{-54,-34},{-54,-20}},
       color={191,0,0},
       smooth=Smooth.None));
+
+  if sim.use_lin then
+    connect(airLeakage.TAmb, TAmb) annotation (Line(
+      points={{50,48},{50,100}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  end if;
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
          graphics),

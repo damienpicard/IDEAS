@@ -4,7 +4,8 @@ model MixedAir "Mixed air capacity of the thermal zone"
   parameter Integer nSurf(min=1) "number of surfaces in contact with the zone";
   parameter Modelica.SIunits.Volume V "air volume of the zone";
   parameter Real corrCV=5 "correction factor on the zone air capacity";
-
+  parameter Modelica.SIunits.Temperature T_start=293.15
+    "Start temperature for each of the layers";
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a conGain
     "convective internal gains"
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
@@ -22,7 +23,7 @@ model MixedAir "Mixed air capacity of the thermal zone"
         rotation=-90,
         origin={0,-30})));
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor heatCap(C=1012*1.204*V
-        *corrCV, T(start=293.15)) "air capacity"
+        *corrCV, T(start=T_start)) "air capacity"
     annotation (Placement(transformation(extent={{-10,0},{10,20}})));
 equation
   for i in 1:nSurf loop
