@@ -2,7 +2,7 @@ within IDEAS.Buildings.Components.BaseClasses;
 model AirLeakage "air leakage due to limied air tightness"
 
 extends IDEAS.Fluid.Interfaces.PartialTwoPortInterface;
-
+  parameter Modelica.SIunits.Temperature T_start = 293.15;
   parameter Modelica.SIunits.Volume V "zone air volume";
   parameter Real n50(min=0.01)=0.4 "n50-value of airtightness";
 
@@ -27,7 +27,8 @@ extends IDEAS.Fluid.Interfaces.PartialTwoPortInterface;
     dynamicBalance=false,
     m_flow_nominal=m_flow_nominal,
     energyDynamics=Modelica.Fluid.Types.Dynamics.SteadyState,
-    massDynamics=Modelica.Fluid.Types.Dynamics.SteadyState)
+    massDynamics=Modelica.Fluid.Types.Dynamics.SteadyState,
+    T_start=T_start)
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature
     prescribedTemperature
