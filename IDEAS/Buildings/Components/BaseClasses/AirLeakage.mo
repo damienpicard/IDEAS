@@ -38,7 +38,12 @@ extends IDEAS.Fluid.Interfaces.PartialTwoPortInterface;
   Modelica.Blocks.Sources.RealExpression realExpression1(y=V/3600*n50/20)
     annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
   Modelica.Blocks.Interfaces.RealInput TAmb(unit="K", displayUnit="degC") if  sim.use_lin
-    annotation (Placement(transformation(extent={{-16,64},{16,96}})));
+    annotation (Placement(transformation(extent={{-16,-16},{16,16}},
+        rotation=270,
+        origin={0,106}), iconTransformation(
+        extent={{-16,-16},{16,16}},
+        rotation=270,
+        origin={0,98})));
 equation
 
   connect(port_a, senTem.port_a) annotation (Line(
@@ -68,7 +73,7 @@ equation
       smooth=Smooth.None));
   if sim.use_lin then
     connect(prescribedTemperature.T, TAmb) annotation (Line(
-      points={{38,70},{30,70},{30,80},{0,80}},
+      points={{38,70},{30,70},{30,106},{0,106}},
       color={0,0,127},
       smooth=Smooth.None));
   else
@@ -83,6 +88,7 @@ equation
           extent={{-60,60},{60,-60}},
           lineColor={0,128,255},
           textString="ACH")}),                                   Diagram(
-        coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
+        coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
+            100}}),
         graphics));
 end AirLeakage;

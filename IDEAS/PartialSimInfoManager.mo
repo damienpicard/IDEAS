@@ -166,11 +166,11 @@ public
 
   BoundaryConditions.WeatherData.ReaderTMY3 weaDat(filNam=filNamClim, lat=lat, lon=lon, timZon=timZonSta) if useTmy3Reader
     annotation (Placement(transformation(extent={{-38,10},{-18,30}})));
-  Utilities.Psychrometrics.X_pTphi XiEnv(use_p_in=false)
+  Utilities.Psychrometrics.X_pTphi XiEnv(use_p_in=false) if not use_lin
     annotation (Placement(transformation(extent={{-30,-96},{-10,-76}})));
-  Modelica.Blocks.Sources.RealExpression phiEnv(y=relHum)
+  Modelica.Blocks.Sources.RealExpression phiEnv(y=relHum) if not use_lin
     annotation (Placement(transformation(extent={{-70,-102},{-50,-82}})));
-  Modelica.Blocks.Sources.RealExpression TEnv(y=Te)
+  Modelica.Blocks.Sources.RealExpression TEnv(y=Te) if not use_lin
     annotation (Placement(transformation(extent={{-70,-86},{-50,-66}})));
   Climate.Meteo.Solar.BaseClasses.RelativeAirMass
                   relativeAirMass
@@ -233,14 +233,16 @@ equation
       points={{-60,10},{-50,10},{-50,12},{-38,12}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(TEnv.y,XiEnv. T) annotation (Line(
+  if not use_lin then
+    connect(TEnv.y,XiEnv. T) annotation (Line(
       points={{-49,-76},{-32,-76},{-32,-86}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(phiEnv.y,XiEnv. phi) annotation (Line(
+    connect(phiEnv.y,XiEnv. phi) annotation (Line(
       points={{-49,-92},{-32,-92}},
       color={0,0,127},
       smooth=Smooth.None));
+  end if;
   connect(skyClearness.skyCle,skyBrightnessCoefficients. skyCle) annotation (
       Line(
       points={{-59.46,79},{-56,79},{-56,70.8},{-18,70.8}},
