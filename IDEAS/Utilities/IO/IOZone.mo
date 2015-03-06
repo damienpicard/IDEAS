@@ -8,6 +8,30 @@ partial model IOZone
   parameter Integer nZones=1;
   parameter Integer nOut=1 "size of the general vector output of the structure";
 
+  Modelica.Blocks.Interfaces.RealInput QEmb[nEmb]
+    annotation (Placement(transformation(extent={{-146,62},{-100,108}}),
+        iconTransformation(extent={{-140,68},{-100,108}})));
+  Modelica.Blocks.Interfaces.RealInput QConv[nZones]
+    annotation (Placement(transformation(extent={{-144,26},{-100,70}}),
+        iconTransformation(extent={{-140,30},{-100,70}})));
+  Modelica.Blocks.Interfaces.RealInput QRad[nZones]
+    annotation (Placement(transformation(extent={{-142,-12},{-100,30}}),
+        iconTransformation(extent={{-140,-10},{-100,30}})));
+  Modelica.Blocks.Interfaces.RealInput Te "Ambient temperature"
+    annotation (Placement(transformation(extent={{-140,-80},{-100,-40}}),
+        iconTransformation(extent={{-140,-80},{-100,-40}})));
+  Modelica.Blocks.Interfaces.RealInput Tsky "Sky temperature"
+    annotation (Placement(transformation(extent={{-140,-120},{-100,-80}}),
+        iconTransformation(extent={{-140,-120},{-100,-80}})));
+  Modelica.Blocks.Interfaces.RealInput Va "Wind speed"
+    annotation (Placement(transformation(extent={{-140,-162},{-100,-122}}),
+        iconTransformation(extent={{-140,-162},{-100,-122}})));
+
+  Modelica.Blocks.Interfaces.RealInput outWallSolDir[nOutWall]
+    annotation (Placement(transformation(extent={{-140,-220},{-100,-180}})));
+  Modelica.Blocks.Interfaces.RealInput outWallSolDif[nOutWall]
+    annotation (Placement(transformation(extent={{-140,-260},{-100,-220}})));
+
   Modelica.Blocks.Interfaces.RealInput winISolAbsQL1[nWin]
     annotation (Placement(transformation(extent={{-140,-320},{-100,-280}})));
   Modelica.Blocks.Interfaces.RealInput winISolAbsQL2[nWin]
@@ -21,46 +45,29 @@ partial model IOZone
   Modelica.Blocks.Interfaces.RealInput winISolDifQ[nWin]
     annotation (Placement(transformation(extent={{-142,-474},{-102,-434}}),
         iconTransformation(extent={{-142,-474},{-102,-434}})));
-
-  Modelica.Blocks.Interfaces.RealInput outWallSolDir[nOutWall]
-    annotation (Placement(transformation(extent={{-140,-220},{-100,-180}})));
-  Modelica.Blocks.Interfaces.RealInput outWallSolDif[nOutWall]
-    annotation (Placement(transformation(extent={{-140,-260},{-100,-220}})));
-
-  Modelica.Blocks.Interfaces.RealInput QEmb[nEmb]
-    annotation (Placement(transformation(extent={{-146,62},{-100,108}}),
-        iconTransformation(extent={{-140,68},{-100,108}})));
-  Modelica.Blocks.Interfaces.RealInput QConv[nZones]
-    annotation (Placement(transformation(extent={{-144,26},{-100,70}}),
-        iconTransformation(extent={{-140,30},{-100,70}})));
-  Modelica.Blocks.Interfaces.RealInput QRad[nZones]
-    annotation (Placement(transformation(extent={{-142,-12},{-100,30}}),
-        iconTransformation(extent={{-140,-10},{-100,30}})));
-
-  Modelica.Blocks.Interfaces.RealOutput TRad[nZones]
-    annotation (Placement(transformation(extent={{100,-10},{140,30}})));
-  Modelica.Blocks.Interfaces.RealOutput TConv[nZones]
-    annotation (Placement(transformation(extent={{100,30},{140,70}})));
   Modelica.Blocks.Interfaces.RealOutput TEmb[nEmb]
     annotation (Placement(transformation(extent={{100,72},{138,110}})));
-  Modelica.Blocks.Interfaces.RealOutput genOut[nOut] "general outputs"
-    annotation (Placement(transformation(extent={{100,-110},{140,-70}})));
+                                                   //(unit="K", displayUnit="degC")
+
+  Modelica.Blocks.Interfaces.RealOutput TConv[nZones]
+    annotation (Placement(transformation(extent={{100,30},{140,70}})));
+                                                     //(unit="K", displayUnit="degC")
+  Modelica.Blocks.Interfaces.RealOutput TRad[nZones]
+    annotation (Placement(transformation(extent={{100,-10},{140,30}})));
+                                                    //(unit="K", displayUnit="degC")
   Modelica.Blocks.Interfaces.RealOutput TSensor[nZones]
     "Sensor temperature of the zones"
     annotation (Placement(transformation(extent={{100,-70},{140,-30}})));
+                                                       //(unit="K", displayUnit="degC")
+
+  Modelica.Blocks.Interfaces.RealOutput genOut[nOut] "general outputs"
+    annotation (Placement(transformation(extent={{100,-110},{140,-70}})));
+
   heatPortPrescribedHeatFlow[nZones] heatCon
     annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
   heatPortPrescribedHeatFlow[nZones] heatRad
     annotation (Placement(transformation(extent={{-60,0},{-40,20}})));
-  Modelica.Blocks.Interfaces.RealInput Te "Ambient temperature"
-    annotation (Placement(transformation(extent={{-140,-80},{-100,-40}}),
-        iconTransformation(extent={{-140,-80},{-100,-40}})));
-  Modelica.Blocks.Interfaces.RealInput Tsky "Sky temperature"
-    annotation (Placement(transformation(extent={{-140,-120},{-100,-80}}),
-        iconTransformation(extent={{-140,-120},{-100,-80}})));
-  Modelica.Blocks.Interfaces.RealInput Va "Wind speed"
-    annotation (Placement(transformation(extent={{-140,-162},{-100,-122}}),
-        iconTransformation(extent={{-140,-162},{-100,-122}})));
+
   inner SimInfoManager       sim(
     PV=false,
     redeclare IDEAS.Occupants.Extern.Interfaces.Occ_Files   occupants,
@@ -92,14 +99,17 @@ equation
   connect(Te,sim.Te_in);
   connect(Tsky,sim.Tsky_in);
   connect(Va,sim.Va_in);
-  connect(QEmb, heatEmb.Q_flow) annotation (Line(
-      points={{-123,85},{-92.5,85},{-92.5,89},{-60.8,89}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(heatEmb.T, TEmb) annotation (Line(
-      points={{-61.2,75},{-72,75},{-72,66},{70,66},{70,91},{119,91}},
-      color={0,0,127},
-      smooth=Smooth.None));
+
+  if nEmb > 0 then
+    connect(QEmb, heatEmb.Q_flow) annotation (Line(
+        points={{-123,85},{-92.5,85},{-92.5,89},{-60.8,89}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(heatEmb.T, TEmb) annotation (Line(
+        points={{-61.2,75},{-72,75},{-72,66},{70,66},{70,91},{119,91}},
+        color={0,0,127},
+        smooth=Smooth.None));
+  end if;
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -400},{100,100}}), graphics), Icon(coordinateSystem(extent={{-100,
             -400},{100,100}}, preserveAspectRatio=false), graphics={

@@ -22,7 +22,8 @@ model ZoneLwDistribution "internal longwave radiative heat exchange"
         origin={0,100})));
 
 protected
-  Real[nSurf] F=A ./ (ones(nSurf)*sum(A) - A) "view factor per surface";
+  Real[nSurf] F= if nSurf > 1 then A ./ (ones(nSurf)*sum(A) - A) else zeros(nSurf)
+    "view factor per surface";
   Real[nSurf] R=(ones(nSurf) - epsLw) ./ (A .* epsLw) + (ones(nSurf) - F) ./ A
     "heat resistance for logwave radiative heat exchange";
 
