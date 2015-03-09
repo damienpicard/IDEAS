@@ -191,8 +191,8 @@ package LinExamples
     OuterWall outerWall(
       insulationThickness=0.05,
       AWall=1,
-      inc=1.5707963267949,
-      azi=0)
+      azi=0,
+      inc=1.5707963267949)
       annotation (Placement(transformation(extent={{-30,-98},{-20,-78}})));
     Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature
       annotation (Placement(transformation(extent={{34,-94},{14,-74}})));
@@ -390,7 +390,223 @@ package LinExamples
           Line(
             points={{-88,12},{94,12}},
             color={0,0,0},
-            smooth=Smooth.None)}), __Dymola_Commands(file="modelica://IDEAS/IDEAS/Resources/Scripts/Dymola/Buildings/Components/BaseClasses/LinExamples/exteriorConvection.mos"
-          "Simulate and plot"));
+            smooth=Smooth.None)}), __Dymola_Commands(file="modelica://IDEAS/Resources/Scripts/Dymola/Buildings/Components/BaseClasses/LinExamples/exteriorConvection.mos"
+          "Simulate and plot"),
+      experiment(StopTime=100000),
+      __Dymola_experimentSetupOutput);
   end exteriorConvection_test;
+
+  model exteriorConvection_test2
+
+    ExteriorConvection extCon
+      annotation (Placement(transformation(extent={{-10,50},{10,70}})));
+    ExteriorConvection_lin extCon_lin
+      annotation (Placement(transformation(extent={{-10,20},{10,40}})));
+    inner SimInfoManager sim(numAzi=4)
+      annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
+    Modelica.Blocks.Sources.RealExpression realExpression(y=sim.weaBus.Te)
+      annotation (Placement(transformation(extent={{-80,50},{-60,70}})));
+    Modelica.Blocks.Sources.RealExpression realExpression1(y=sim.weaBus.hConExt)
+      annotation (Placement(transformation(extent={{-80,30},{-60,50}})));
+    Modelica.Blocks.Sources.Constant const(k=273.15 + 10.85 + 5)
+      annotation (Placement(transformation(extent={{8,78},{-12,98}})));
+    Modelica.Blocks.Math.Add absErr1(k2=-1)
+      annotation (Placement(transformation(extent={{40,36},{60,56}})));
+    Modelica.Blocks.Math.Add absErr2(k2=-1)
+      annotation (Placement(transformation(extent={{40,-50},{60,-30}})));
+    OuterWall outWall_lin(
+      insulationThickness=0.05,
+      AWall=1,
+      azi=0,
+      extCon(linearize=true),
+      inc=1.5707963267949)
+      annotation (Placement(transformation(extent={{-30,-74},{-20,-54}})));
+    Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature
+      annotation (Placement(transformation(extent={{34,-94},{14,-74}})));
+    Interfaces.ZoneBus
+            propsBus_a(numAzi=sim.numAzi) "Inner side (last layer)"
+                       annotation (Placement(transformation(
+          extent={{-6,-10},{6,10}},
+          rotation=-90,
+          origin={-4,-84}),iconTransformation(
+          extent={{-20,-20},{20,20}},
+          rotation=-90,
+          origin={50,40})));
+    Modelica.Blocks.Math.Product relErr1
+      annotation (Placement(transformation(extent={{72,72},{92,52}})));
+    Utilities.Math.InverseXRegularized inverseXRegularized(delta=1)
+      annotation (Placement(transformation(extent={{40,70},{60,90}})));
+    Utilities.Math.InverseXRegularized inverseXRegularized1(delta=1)
+      annotation (Placement(transformation(extent={{40,-20},{60,0}})));
+    Modelica.Blocks.Math.Product relErr2
+      annotation (Placement(transformation(extent={{72,-14},{92,-34}})));
+
+    Real cumErr(unit="J/m2");
+    Modelica.Blocks.Continuous.Filter filter1(
+                                             f_cut=5/3.14/2/60)
+      annotation (Placement(transformation(extent={{72,-70},{92,-50}})));
+    Modelica.Blocks.Sources.RealExpression cumulativeErr2(y=cumErr)
+      annotation (Placement(transformation(extent={{70,-100},{90,-80}})));
+    OuterWall outWall(
+      insulationThickness=0.05,
+      AWall=1,
+      azi=0,
+      inc=1.5707963267949)
+      annotation (Placement(transformation(extent={{-30,-38},{-20,-18}})));
+    Modelica.Blocks.Sources.RealExpression realExpression2(y=outWall.layMul.port_a.Q_flow)
+      annotation (Placement(transformation(extent={{0,-30},{20,-10}})));
+    Modelica.Blocks.Sources.RealExpression realExpression3(y=outWall_lin.layMul.port_a.Q_flow)
+      annotation (Placement(transformation(extent={{2,-56},{22,-36}})));
+  equation
+
+    der(cumErr)=filter1.y;
+
+    connect(realExpression.y, extCon.Te) annotation (Line(
+        points={{-59,60},{-10,60}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(realExpression1.y, extCon.hConExt) annotation (Line(
+        points={{-59,40},{-32,40},{-32,57.2},{-10,57.2}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(realExpression.y, extCon_lin.Te) annotation (Line(
+        points={{-59,60},{-20,60},{-20,30},{-10,30}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(realExpression1.y, extCon_lin.hConExt) annotation (Line(
+        points={{-59,40},{-32,40},{-32,27.2},{-10,27.2}},
+        color={0,0,127},
+        smooth=Smooth.None));
+
+    connect(const.y, extCon.T) annotation (Line(
+        points={{-13,88},{-16,88},{-16,64},{-10,64}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(extCon_lin.T, extCon.T) annotation (Line(
+        points={{-10,34},{-16,34},{-16,64},{-10,64}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(extCon.QFlow, absErr1.u1) annotation (Line(
+        points={{11,60},{20,60},{20,52},{38,52}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(extCon_lin.QFlow, absErr1.u2) annotation (Line(
+        points={{11,30},{20,30},{20,40},{38,40}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(propsBus_a.surfCon, fixedTemperature.port) annotation (Line(
+        points={{-4,-84},{14,-84}},
+        color={255,204,51},
+        thickness=0.5,
+        smooth=Smooth.None), Text(
+        string="%first",
+        index=-1,
+        extent={{-6,3},{-6,3}}));
+    connect(propsBus_a.surfRad, fixedTemperature.port) annotation (Line(
+        points={{-4,-84},{14,-84}},
+        color={255,204,51},
+        thickness=0.5,
+        smooth=Smooth.None), Text(
+        string="%first",
+        index=-1,
+        extent={{-6,3},{-6,3}}));
+    connect(propsBus_a.iSolDir, fixedTemperature.port) annotation (Line(
+        points={{-4,-84},{14,-84}},
+        color={255,204,51},
+        thickness=0.5,
+        smooth=Smooth.None), Text(
+        string="%first",
+        index=-1,
+        extent={{-6,3},{-6,3}}));
+    connect(propsBus_a.iSolDif, fixedTemperature.port) annotation (Line(
+        points={{-4,-84},{14,-84}},
+        color={255,204,51},
+        thickness=0.5,
+        smooth=Smooth.None), Text(
+        string="%first",
+        index=-1,
+        extent={{-6,3},{-6,3}}));
+    connect(propsBus_a, outWall_lin.propsBus_a) annotation (Line(
+        points={{-4,-84},{-12,-84},{-12,-60},{-20,-60}},
+        color={255,204,51},
+        thickness=0.5,
+        smooth=Smooth.None), Text(
+        string="%first",
+        index=-1,
+        extent={{-6,3},{-6,3}}));
+    connect(propsBus_a.weaBus, sim.weaBus) annotation (Line(
+        points={{-4,-84},{-4,-100},{-100,-100},{-100,102},{-88.6,102},{-88.6,
+            97.2}},
+        color={255,204,51},
+        thickness=0.5,
+        smooth=Smooth.None), Text(
+        string="%first",
+        index=-1,
+        extent={{-6,3},{-6,3}}));
+    connect(absErr1.y, relErr1.u1) annotation (Line(
+        points={{61,46},{70,46},{70,56}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(inverseXRegularized.y, relErr1.u2) annotation (Line(
+        points={{61,80},{66,80},{66,68},{70,68}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(extCon.QFlow, inverseXRegularized.u) annotation (Line(
+        points={{11,60},{20,60},{20,80},{38,80}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(inverseXRegularized1.y, relErr2.u2) annotation (Line(
+        points={{61,-10},{64,-10},{64,-18},{70,-18}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(absErr2.y, relErr2.u1) annotation (Line(
+        points={{61,-40},{64,-40},{64,-30},{70,-30}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(filter1.u, absErr2.y) annotation (Line(
+        points={{70,-60},{61,-60},{61,-40}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(propsBus_a, outWall.propsBus_a) annotation (Line(
+        points={{-4,-84},{-6,-84},{-6,-82},{-12,-82},{-12,-24},{-20,-24}},
+        color={255,204,51},
+        thickness=0.5,
+        smooth=Smooth.None), Text(
+        string="%first",
+        index=-1,
+        extent={{-6,3},{-6,3}}));
+    connect(realExpression2.y, inverseXRegularized1.u) annotation (Line(
+        points={{21,-20},{28,-20},{28,-10},{38,-10}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(realExpression2.y, absErr2.u1) annotation (Line(
+        points={{21,-20},{28,-20},{28,-34},{38,-34}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    connect(realExpression3.y, absErr2.u2) annotation (Line(
+        points={{23,-46},{38,-46}},
+        color={0,0,127},
+        smooth=Smooth.None));
+    annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+              -100},{100,100}}), graphics={
+          Text(
+            extent={{-66,92},{-24,78}},
+            lineColor={0,0,0},
+            textString="Perfectly linear"),
+          Text(
+            extent={{-86,4},{-44,-10}},
+            lineColor={0,0,0},
+            textString="\"Real\" boundary temperature for wall"),
+          Line(
+            points={{-88,14},{94,14}},
+            color={0,0,0},
+            smooth=Smooth.None),
+          Line(
+            points={{-88,12},{94,12}},
+            color={0,0,0},
+            smooth=Smooth.None)}), __Dymola_Commands(file="modelica://IDEAS/Resources/Scripts/Dymola/Buildings/Components/BaseClasses/LinExamples/exteriorConvection.mos"
+          "Simulate and plot"),
+      experiment(StopTime=100000),
+      __Dymola_experimentSetupOutput);
+  end exteriorConvection_test2;
 end LinExamples;

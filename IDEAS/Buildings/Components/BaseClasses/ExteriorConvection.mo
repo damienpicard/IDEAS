@@ -2,23 +2,27 @@ within IDEAS.Buildings.Components.BaseClasses;
 model ExteriorConvection "exterior surface convection"
 
   parameter Modelica.SIunits.Area A "surface area";
-  parameter Boolean linearise = false "Use constant convection coefficient"
+  parameter Boolean linearize = false "Use constant convection coefficient"
     annotation(Evaluate=true);
-  parameter Real hLin = 5
-    "Value for exterior convection coefficient when linearising"
-    annotation(Dialog(enable=linearise));
+  parameter Modelica.SIunits.CoefficientOfHeatTransfer hConExt_mean = 5.6
+    "Value for exterior convection coefficient around which the exterior convection is linearized"
+                                                                                                        annotation(Dialog(enable=linearize));
+  parameter Real T_mean(unit="K",displayUnit="degC") = 285
+    "Value for the wall temperature around which the exterior convection is linearized"
+                                                                                                        annotation(Dialog(enable=linearize));
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
 
-  Modelica.Blocks.Interfaces.RealInput Te
+  Modelica.Blocks.Interfaces.RealInput Te(unit="K",displayUnit="degC")
     annotation (Placement(transformation(extent={{-120,-68},{-80,-28}})));
-  Modelica.Blocks.Interfaces.RealInput hConExt
+  Modelica.Blocks.Interfaces.RealInput hConExt(unit="W/(m2.K)")
     "Exterior convective heat transfer coefficient"
     annotation (Placement(transformation(extent={{-120,-110},{-80,-70}})));
+
 equation
-  if linearise then
-    port_a.Q_flow = hLin*A*(port_a.T - Te);
+  if linearize then
+    port_a.Q_flow = A* ( hConExt * T_mean + hConExt_mean * port_a.T - 2*hConExt_mean*T_mean - hConExt*Te + hConExt_mean*T_mean);
   else
     port_a.Q_flow = hConExt*A*(port_a.T - Te);
   end if;
