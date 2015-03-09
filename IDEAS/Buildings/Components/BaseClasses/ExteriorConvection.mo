@@ -22,7 +22,8 @@ model ExteriorConvection "exterior surface convection"
 
 equation
   if linearize then
-    port_a.Q_flow = A* ( hConExt * T_mean + hConExt_mean * port_a.T - 2*hConExt_mean*T_mean - hConExt*Te + hConExt_mean*T_mean);
+    port_a.Q_flow = A* ( hConExt * T_mean + hConExt_mean * port_a.T);   //- hConExt*Te - 2*hConExt_mean*T_mean + hConExt_mean*T_mean
+    //port_a.Q_flow = 5*A*(port_a.T - Te);
   else
     port_a.Q_flow = hConExt*A*(port_a.T - Te);
   end if;
