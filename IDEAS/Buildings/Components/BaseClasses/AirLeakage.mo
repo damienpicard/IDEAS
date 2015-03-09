@@ -2,7 +2,7 @@ within IDEAS.Buildings.Components.BaseClasses;
 model AirLeakage "air leakage due to limied air tightness"
 
 extends IDEAS.Fluid.Interfaces.PartialTwoPortInterface;
-
+  parameter Modelica.SIunits.Temperature T_start = 293.15;
   parameter Modelica.SIunits.Volume V "zone air volume";
   parameter Real n50(min=0.01)=0.4 "n50-value of airtightness";
 
@@ -20,7 +20,8 @@ extends IDEAS.Fluid.Interfaces.PartialTwoPortInterface;
     redeclare package Medium = Medium,
     allowFlowReversal=false,
     dynamicBalance=false,
-    m_flow_nominal=m_flow_nominal)
+    m_flow_nominal=m_flow_nominal,
+    T_start=T_start)
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature
     prescribedTemperature
@@ -30,11 +31,10 @@ extends IDEAS.Fluid.Interfaces.PartialTwoPortInterface;
   Modelica.Blocks.Sources.RealExpression realExpression1(y=V/3600*n50/20)
     annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
 equation
-
   connect(realExpression.y, prescribedTemperature.T) annotation (Line(
-      points={{21,70},{38,70}},
-      color={0,0,127},
-      smooth=Smooth.None));
+          points={{21,70},{38,70}},
+          color={0,0,127},
+          smooth=Smooth.None));
   connect(prescribedTemperature.port, pipe_HeatPort.heatPort) annotation (Line(
       points={{60,70},{70,70},{70,10}},
       color={191,0,0},
@@ -55,13 +55,13 @@ equation
       points={{-100,0},{0,0}},
       color={0,127,255},
       smooth=Smooth.None));
+
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}),
                    graphics={Text(
           extent={{-60,60},{60,-60}},
           lineColor={0,128,255},
           textString="ACH")}),                                   Diagram(
-        coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
-            100}}),
+        coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
         graphics));
 end AirLeakage;

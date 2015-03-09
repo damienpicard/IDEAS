@@ -23,6 +23,11 @@ partial model PartialSimInfoManager
   final parameter Modelica.SIunits.Temperature TdesGround = 10 + 273.15
     "design ground temperature";
 
+  parameter Boolean use_lin=false "True if the model is linearized";
+
+  // Inputs
+  Modelica.Blocks.Interfaces.RealInput Te_in(unit="K", displayUnit="degC") if use_lin;
+
 protected
   final parameter Boolean DST = true
     "boolean to take into account daylight saving time";
@@ -39,7 +44,7 @@ public
   Modelica.SIunits.Irradiance solDifHor
     "difuse irradiation on horizontal surface";
   Modelica.SIunits.Irradiance solGloHor "global irradiation on horizontal";
-  Modelica.SIunits.Temperature Te
+  Modelica.Blocks.Interfaces.RealOutput  Te(unit="K", displayUnit="degC")
     "ambient outdoor temperature for determination of sky radiation exchange";
   Modelica.SIunits.Temperature Tsky "effective overall sky temperature";
   Modelica.SIunits.Temperature TeAv

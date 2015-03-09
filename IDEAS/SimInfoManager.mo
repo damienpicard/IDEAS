@@ -4,11 +4,15 @@ model SimInfoManager
   extends PartialSimInfoManager(final useTmy3Reader = true);
 
 equation
+  if use_lin then
+    connect(Te,Te_in);
+  else
+    Te = weaDat.cheTemDryBul.TOut;
+  end if;
   solDirPer=weaDat.cheDirNorRad.HOut;
   solDirHor = weaDat.cheGloHorRad.HOut - solDifHor;
   solDifHor = weaDat.cheDifHorRad.HOut;
   solGloHor = solDirHor + solDifHor;
-  Te = weaDat.cheTemDryBul.TOut;
   TeAv = Te;
   Tground=TdesGround;
   irr = weaDat.cheGloHorRad.HOut;
