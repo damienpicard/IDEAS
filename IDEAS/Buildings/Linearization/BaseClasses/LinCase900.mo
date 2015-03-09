@@ -5,12 +5,12 @@ model LinCase900
   Components.Zone gF(
     V=129.6,
     corrCV=0.822,
-    T_start=293.15,
     linear=true,
     redeclare package Medium = Medium,
     linearize=true,
     nSurf=9,
-    n50=0*0.5*20)
+    n50=0*0.5*20,
+    T_start=293.15)
     annotation (Placement(transformation(extent={{50,-2},{90,38}})));
   Components.OuterWall[4] wall(
     final AWall={21.6,16.2,9.6,16.2},
@@ -23,7 +23,7 @@ model LinCase900
     redeclare final parameter
       IDEAS.Buildings.Validation.Data.Insulation.foaminsulation insulationType,
     final insulationThickness={0.0615,0.0615,0.0615,0.0615},
-    each linearise=true) annotation (Placement(transformation(
+    each linearize=true) annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
         rotation=90,
         origin={-39,-16})));
@@ -64,7 +64,7 @@ model LinCase900
     final AWall=48,
     final inc=IDEAS.Constants.Ceiling,
     final azi=IDEAS.Constants.South,
-    linearise=true) annotation (Placement(transformation(
+    linearize=true) annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
         rotation=90,
         origin={-69,-16})));
