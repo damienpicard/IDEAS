@@ -38,11 +38,11 @@ model RadSolData "Selects or generates correct solar data for this surface"
     annotation (HideResults=true,Placement(transformation(extent={{90,70},{110,90}})));
 
   Modelica.Blocks.Interfaces.RealOutput angInc
-    annotation (Placement(transformation(extent={{96,-50},{116,-30}})));
+    annotation (Placement(transformation(extent={{96,-80},{116,-60}})));
   Modelica.Blocks.Interfaces.RealOutput angZen
-    annotation (Placement(transformation(extent={{96,-70},{116,-50}})));
+    annotation (Placement(transformation(extent={{96,-100},{116,-80}})));
   Modelica.Blocks.Interfaces.RealOutput angAzi
-    annotation (Placement(transformation(extent={{96,-90},{116,-70}})));
+    annotation (Placement(transformation(extent={{96,-120},{116,-100}})));
   Modelica.Blocks.Interfaces.RealOutput Tenv "Environment temperature"
     annotation (Placement(transformation(extent={{96,-30},{116,-10}})));
 protected
@@ -54,6 +54,11 @@ protected
     "Required for avoiding warnings?"
                                      annotation (HideResults=true, Placement(
         transformation(extent={{-78,10},{-38,50}})));
+public
+  Modelica.Blocks.Interfaces.RealOutput hTenvTe
+    annotation (Placement(transformation(extent={{96,-46},{116,-26}})));
+  Modelica.Blocks.Interfaces.RealOutput hSolTot
+    annotation (Placement(transformation(extent={{96,-62},{116,-42}})));
 equation
 
   connect(radSol.weaBus, weaBus) annotation (Line(
@@ -79,27 +84,41 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(solDif, solBusDummy1.iSolDif) annotation (Line(
-      points={{106,0},{30,0},{30,2},{-58,2},{-58,30}},
+      points={{106,0},{-58,0},{-58,30}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(Tenv, solBusDummy1.Tenv) annotation (Line(
-      points={{106,-20},{46,-20},{46,-16},{-58,-16},{-58,30}},
+      points={{106,-20},{-58,-20},{-58,30}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(angInc, solBusDummy1.angInc) annotation (Line(
-      points={{106,-40},{46,-40},{46,-42},{-58,-42},{-58,30}},
+      points={{106,-70},{-58,-70},{-58,30}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(angZen, solBusDummy1.angZen) annotation (Line(
-      points={{106,-60},{-58,-60},{-58,30}},
+      points={{106,-90},{-58,-90},{-58,30}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(angAzi, solBusDummy1.angAzi) annotation (Line(
-      points={{106,-80},{-58,-80},{-58,30}},
+      points={{106,-110},{-58,-110},{-58,30}},
       color={0,0,127},
       smooth=Smooth.None));
+  connect(hTenvTe, solBusDummy1.hTenvTe) annotation (Line(
+      points={{106,-36},{-58,-36},{-58,30}},
+      color={0,0,127},
+      smooth=Smooth.None), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}}));
+  connect(hSolTot, solBusDummy1.hSolTot) annotation (Line(
+      points={{106,-52},{-58,-52},{-58,30}},
+      color={0,0,127},
+      smooth=Smooth.None), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}}), graphics), Documentation(info="<html>
+            -120},{100,100}}), graphics), Documentation(info="<html>
 <p>This model usually takes the appropriate solar data from the bus. If the correct data is not contained by the bus, custom solar data is calculated.</p>
 </html>", revisions="<html>
 <ul>
@@ -108,5 +127,6 @@ February 10, 2015 by Filip Jorissen:<br/>
 First implementation.
 </li>
 </ul>
-</html>"));
+</html>"),
+    Icon(coordinateSystem(extent={{-100,-120},{100,100}})));
 end RadSolData;

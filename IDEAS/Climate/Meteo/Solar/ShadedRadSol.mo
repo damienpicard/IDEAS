@@ -10,9 +10,15 @@ model ShadedRadSol "Solar angle to surface"
     annotation (Placement(transformation(extent={{-78,42},{-64,56}})));
   Modelica.Blocks.Routing.RealPassThrough TePow4
     annotation (Placement(transformation(extent={{-78,22},{-64,36}})));
-  Modelica.Blocks.Sources.RealExpression TenvExpr(y=(Fssky*TskyPow4.y + (1 -
+  Modelica.Blocks.Sources.RealExpression TenvExp(y=(Fssky*TskyPow4.y + (1 -
         Fssky)*TePow4.y)^0.25) "Environment temperature"
-    annotation (Placement(transformation(extent={{-36,80},{52,100}})));
+    annotation (Placement(transformation(extent={{-2,80},{76,100}})));
+  Modelica.Blocks.Sources.RealExpression hTenvTeExp(y=weaBus.hConExt*(TenvExp.y
+         - weaBus.Te))
+    annotation (Placement(transformation(extent={{8,66},{76,86}})));
+  Modelica.Blocks.Sources.RealExpression hSolTot(y=weaBus.hConExt*(perez.solDifTil
+         + solDirTil.solDirTil))
+    annotation (Placement(transformation(extent={{-4,50},{76,70}})));
 equation
   connect(angleAzimuth.angDec, angSolar.angDec) annotation (Line(
       points={{-40,-24},{-52,-24},{-52,36},{-40,36}},
@@ -34,14 +40,28 @@ equation
       points={{-79.4,29},{-100,29},{-100,80}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(TenvExpr.y, solBus.Tenv) annotation (Line(
-      points={{56.4,90},{100,90},{100,0}},
+  connect(TenvExp.y, solBus.Tenv) annotation (Line(
+      points={{79.9,90},{100,90},{100,0}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(angleAzimuth.angAzi, solBus.angAzi) annotation (Line(
       points={{-20,-24},{100,-24},{100,0}},
       color={0,0,127},
       smooth=Smooth.None));
+  connect(hSolTot.y, solBus.hSolTot) annotation (Line(
+      points={{80,60},{100,60},{100,0}},
+      color={0,0,127},
+      smooth=Smooth.None), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}}));
+  connect(hTenvTeExp.y, solBus.hTenvTe) annotation (Line(
+      points={{79.4,76},{100,76},{100,0}},
+      color={0,0,127},
+      smooth=Smooth.None), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}),
                       graphics), Icon(coordinateSystem(preserveAspectRatio=false,

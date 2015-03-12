@@ -51,7 +51,7 @@ protected
   IDEAS.Buildings.Components.BaseClasses.ExteriorConvection eCon(final A=A*(1
          - frac))
     "convective surface heat transimission on the exterior side of the wall"
-    annotation (Placement(transformation(extent={{-20,-40},{-40,-20}})));
+    annotation (Placement(transformation(extent={{-20,-44},{-40,-24}})));
   IDEAS.Buildings.Components.BaseClasses.InteriorConvectionWindow iCon(final A=
         A*(1 - frac), final inc=inc)
     "convective surface heat transimission on the interior side of the wall"
@@ -79,7 +79,7 @@ protected
   IDEAS.Buildings.Components.BaseClasses.ExteriorConvection eConFra(final A=A*
         frac) if fraType.present
     "convective surface heat transimission on the exterior side of the wall"
-    annotation (Placement(transformation(extent={{-20,60},{-40,80}})));
+    annotation (Placement(transformation(extent={{-20,50},{-40,70}})));
   Modelica.Thermal.HeatTransfer.Components.ThermalConductor layFra(final G=
         fraType.U_value*A*frac) if fraType.present  annotation (Placement(transformation(extent={{-10,70},{10,90}})));
 
@@ -105,7 +105,7 @@ initial equation
 
 equation
   connect(eCon.port_a, layMul.port_a) annotation (Line(
-      points={{-20,-30},{-10,-30}},
+      points={{-20,-34},{-16,-34},{-16,-30},{-10,-30}},
       color={191,0,0},
       smooth=Smooth.None));
   connect(skyRad.port_a, layMul.port_a) annotation (Line(
@@ -170,7 +170,7 @@ equation
       color={191,0,0},
       smooth=Smooth.None));
   connect(eConFra.port_a, layFra.port_a) annotation (Line(
-      points={{-20,70},{-16,70},{-16,80},{-10,80}},
+      points={{-20,60},{-16,60},{-16,80},{-10,80}},
       color={191,0,0},
       smooth=Smooth.None));
   connect(layMul.iEpsLw_a, skyRadFra.epsLw) annotation (Line(
@@ -247,25 +247,39 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(eConFra.Te, eCon.Te) annotation (Line(
-      points={{-20,65.2},{-20,-34.8}},
+      points={{-20,55.2},{-20,-38.8}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(eCon.hConExt, eConFra.hConExt) annotation (Line(
-      points={{-20,-39},{-20,61}},
+      points={{-20,-43},{-20,51}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(eCon.Te, propsBus_a.weaBus.Te) annotation (Line(
-      points={{-20,-34.8},{50,-34.8},{50,40}},
+      points={{-20,-38.8},{50,-38.8},{50,40}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(eCon.hConExt, propsBus_a.weaBus.hConExt) annotation (Line(
-      points={{-20,-39},{50,-39},{50,40}},
+      points={{-20,-43},{50,-43},{50,40}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(Tdes.u, propsBus_a.weaBus.Tdes) annotation (Line(
       points={{58,80},{50,80},{50,40}},
       color={0,0,127},
       smooth=Smooth.None));
+  connect(eCon.hConExtTe, propsBus_a.weaBus.hConExtTe) annotation (Line(
+      points={{-20,-28},{50,-28},{50,40}},
+      color={0,0,127},
+      smooth=Smooth.None), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}}));
+  connect(eConFra.hConExtTe, propsBus_a.weaBus.hConExtTe) annotation (Line(
+      points={{-20,66},{50,66},{50,40}},
+      color={0,0,127},
+      smooth=Smooth.None), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=true, extent={{-50,-100},{50,100}}),
         graphics={

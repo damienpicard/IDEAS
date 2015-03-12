@@ -7,9 +7,9 @@ model LinCase900
     corrCV=0.822,
     linear=true,
     redeclare package Medium = Medium,
-    linearize=true,
     nSurf=9,
     n50=0*0.5*20,
+    linearize=true,
     T_start=293.15)
     annotation (Placement(transformation(extent={{50,-2},{90,38}})));
   Components.OuterWall[4] wall(
@@ -50,11 +50,13 @@ model LinCase900
     redeclare replaceable IDEAS.Buildings.Components.Shading.None shaType,
     redeclare final parameter IDEAS.Buildings.Data.Frames.None fraType,
     each frac=0,
-    each linearizeWindow=true,
-    each linOut=false) annotation (Placement(transformation(
+    each linearizeWindow=true)
+                       annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
         rotation=90,
         origin={21,-16})));
+    //    eCon(linearize=false),
+    //eConFra(linearize=true)
   Components.OuterWall roof(
     redeclare final parameter
       IDEAS.Buildings.Validation.Data.Constructions.LightRoof constructionType,
@@ -64,7 +66,8 @@ model LinCase900
     final AWall=48,
     final inc=IDEAS.Constants.Ceiling,
     final azi=IDEAS.Constants.South,
-    linearize=true) annotation (Placement(transformation(
+    linearize=false)
+                    annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
         rotation=90,
         origin={-69,-16})));

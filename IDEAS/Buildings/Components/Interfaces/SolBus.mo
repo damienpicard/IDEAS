@@ -11,4 +11,8 @@ expandable connector SolBus
   Modelica.SIunits.Angle angInc;
 
   Modelica.SIunits.Temperature Tenv(start=293.15);
+
+  Real hTenvTe(unit="W/m2") "Input for linearization = hConExt*(Tenv-Te)";
+  Real hSolTot(unit="W2/(m2.K)")
+    "Input for linearization = hConExt*(iSolDir + iSolDif)";
 end SolBus;

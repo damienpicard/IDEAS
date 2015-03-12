@@ -83,7 +83,7 @@ protected
         *(1 - frac)) if
       enableLin
     "determination of radiant heat exchange with the environment and sky"
-    annotation (Placement(transformation(extent={{-20,-20},{-40,0}})));
+    annotation (Placement(transformation(extent={{-20,-18},{-40,2}})));
   IDEAS.Buildings.Components.BaseClasses.SwWindowResponse solWin(
     final nLay=glazing.nLay,
     final SwAbs=glazing.SwAbs,
@@ -143,7 +143,7 @@ equation
       color={191,0,0},
       smooth=Smooth.None));
   connect(skyRad.port_a, layMul.port_a) annotation (Line(
-      points={{-20,-10},{-16,-10},{-16,-30},{-10,-30}},
+      points={{-20,-8},{-16,-8},{-16,-30},{-10,-30}},
       color={191,0,0},
       smooth=Smooth.None));
   if enableLin then
@@ -161,7 +161,7 @@ equation
       color={191,0,0},
       smooth=Smooth.None));
   connect(layMul.iEpsLw_a, skyRad.epsLw) annotation (Line(
-      points={{-10,-22},{-14,-22},{-14,-6.6},{-20,-6.6}},
+      points={{-10,-22},{-14,-22},{-14,-4.6},{-20,-4.6}},
       color={0,0,127},
       smooth=Smooth.None));
 
@@ -242,19 +242,19 @@ equation
       index=1,
       extent={{6,3},{6,3}}));
   connect(radSolData.angInc, shaType.angInc) annotation (Line(
-      points={{-79.4,-64},{-36,-64}},
+      points={{-79.4,-65.4545},{-58,-65.4545},{-58,-64},{-36,-64}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(radSolData.angAzi, shaType.angAzi) annotation (Line(
-      points={{-79.4,-68},{-36,-68}},
+      points={{-79.4,-69.0909},{-58,-69.0909},{-58,-68},{-36,-68}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(radSolData.angZen, shaType.angZen) annotation (Line(
-      points={{-79.4,-66},{-36,-66}},
+      points={{-79.4,-67.2727},{-58,-67.2727},{-58,-66},{-36,-66}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(radSolData.weaBus, propsBus_a.weaBus) annotation (Line(
-      points={{-80,-52},{-78,-52},{-78,40},{50,40}},
+      points={{-80,-51.8182},{-78,-51.8182},{-78,40},{50,40}},
       color={255,204,51},
       thickness=0.5,
       smooth=Smooth.None));
@@ -263,11 +263,11 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(gainDif.u, radSolData.solDif) annotation (Line(
-      points={{-70.8,-58},{-76,-58},{-76,-60},{-79.4,-60}},
+      points={{-70.8,-58},{-76,-58},{-76,-59.0909},{-79.4,-59.0909}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(radSolData.solDir, gainDir.u) annotation (Line(
-      points={{-79.4,-58},{-76,-58},{-76,-48},{-70.8,-48}},
+      points={{-79.4,-57.2727},{-76,-57.2727},{-76,-48},{-70.8,-48}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(gainDir.y, shaType.solDir) annotation (Line(
@@ -275,11 +275,11 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(radSolData.Tenv, skyRad.Tenv) annotation (Line(
-      points={{-79.4,-62},{-58,-62},{-58,0},{-20,0},{-20,-4}},
+      points={{-79.4,-60.9091},{-58,-60.9091},{-58,0},{-20,0},{-20,-2}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(skyRadFra.Tenv, skyRad.Tenv) annotation (Line(
-      points={{-20,96},{-12,96},{-12,-4},{-20,-4}},
+      points={{-20,96},{-12,96},{-12,-2},{-20,-2}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(eConFra.Te, eCon.Te) annotation (Line(
@@ -332,7 +332,7 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(radSolData.weaBus, weaBus) annotation (Line(
-      points={{-80,-52},{-80,100}},
+      points={{-80,-51.8182},{-80,100}},
       color={255,204,51},
       thickness=0.5,
       smooth=Smooth.None));
@@ -340,6 +340,7 @@ equation
       points={{58,80},{58,104},{-80,104},{-80,100}},
       color={0,0,127},
       smooth=Smooth.None));
+
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=true, extent={{-50,-100},{50,100}}),
         graphics={

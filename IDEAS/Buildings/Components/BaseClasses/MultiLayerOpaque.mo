@@ -43,6 +43,10 @@ model MultiLayerOpaque "multiple material layers in series"
         rotation=-90,
         origin={0,100})));
 
+  Modelica.Blocks.Interfaces.RealOutput C1(unit="J/K") = (A*mats[1].rho*mats[1].c*mats[1].d)/mats[1].nSta
+    annotation (Placement(transformation(extent={{-90,-50},{-110,-30}})));
+  Modelica.Blocks.Interfaces.RealOutput R1(unit="K/W") = mats[1].d/(A*mats[1].k*mats[1].nSta)
+    annotation (Placement(transformation(extent={{-90,-90},{-110,-70}})));
 equation
   connect(port_a, nMat[1].port_a);
 
@@ -59,7 +63,9 @@ equation
   iEpsSw_b = mats[nLay].epsSw;
 
   annotation (
-    Diagram(graphics),
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
+            100,100}}),
+            graphics),
     Icon(graphics={
         Rectangle(
           extent={{-90,80},{20,-80}},

@@ -5,7 +5,8 @@ expandable connector Bus "Data bus that stores weather data"
   IDEAS.Buildings.Components.Interfaces.SolBus[numSolBus] solBus;
   Modelica.SIunits.Temperature Te(start=293.15) "Ambient sensible temperature";
   Modelica.SIunits.Temperature Tdes(start=293.15) "Design temperature?";
-  Real hConExt(start=5) "Exterior convective heat transfer coefficient";
+  Modelica.SIunits.CoefficientOfHeatTransfer hConExt(start=5)
+    "Exterior convective heat transfer coefficient";
   annotation (
     defaultComponentName="weaBus",
     Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{100,

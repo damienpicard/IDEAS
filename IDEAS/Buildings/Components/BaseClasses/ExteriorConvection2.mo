@@ -1,5 +1,5 @@
 within IDEAS.Buildings.Components.BaseClasses;
-model ExteriorConvection "exterior surface convection"
+model ExteriorConvection2 "exterior surface convection"
 
   parameter Modelica.SIunits.Area A "surface area";
   parameter Boolean linearize = false "Use constant convection coefficient"
@@ -15,20 +15,62 @@ model ExteriorConvection "exterior surface convection"
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
 
   Modelica.Blocks.Interfaces.RealInput Te(unit="K",displayUnit="degC")
-    annotation (Placement(transformation(extent={{-120,-68},{-80,-28}})));
+    annotation (Placement(transformation(extent={{-120,-80},{-80,-40}})));
   Modelica.Blocks.Interfaces.RealInput hConExt(unit="W/(m2.K)")
     "Exterior convective heat transfer coefficient"
     annotation (Placement(transformation(extent={{-120,-110},{-80,-70}})));
 
   Modelica.SIunits.TemperatureDifference dT = port_a.T - Te;
   parameter Modelica.SIunits.TemperatureDifference dT_mean = 0;
+  Modelica.Blocks.Interfaces.RealInput hTenvTe(unit="W/m2") annotation (Placement(
+        transformation(
+        extent={{-20,-20},{20,20}},
+        rotation=270,
+        origin={10,100})));
+  Modelica.Blocks.Interfaces.RealInput hSolTot(unit="W2/(m4.K)") annotation (Placement(
+        transformation(
+        extent={{-20,-20},{20,20}},
+        rotation=270,
+        origin={50,100})));
+
+  Real corr;
+//   Modelica.SIunits.Temperature Ta;
+
+  //parameter Modelica.SIunits.ThermalResistance RConv = 1 / A / hConExt_mean;
+  Modelica.SIunits.ThermalResistance RConv = 1 / A / hConExt_mean;
+  Modelica.SIunits.ThermalResistance Rrad = 1 / A / 5.67 / epsLw;
+  Modelica.Blocks.Interfaces.RealInput TEnv(unit="K", displayUnit="degC")
+    annotation (Placement(transformation(extent={{-120,-50},{-80,-10}})));
+  Modelica.Blocks.Interfaces.RealInput solDif(unit="W/m2")
+    annotation (Placement(transformation(extent={{-120,20},{-80,60}})));
+  Modelica.Blocks.Interfaces.RealInput solDir(unit="W/m2")
+    annotation (Placement(transformation(extent={{-120,50},{-80,90}})));
+//   Modelica.SIunits.TemperatureDifference errTa;
+//   Real errQ;
+//   Real term1;
+//   Real term2;
+//
+//     Real QAbs;
+//     Real QConv;
+//     Real QRad;
+//     Real QC;
+  Modelica.Blocks.Interfaces.RealInput epsSw
+    annotation (Placement(transformation(extent={{-20,-20},{20,20}},
+        rotation=270,
+        origin={-30,100})));
+  Modelica.Blocks.Interfaces.RealInput epsLw
+    annotation (Placement(transformation(extent={{-20,-20},{20,20}},
+        rotation=270,
+        origin={-70,100})));
+
 equation
   if linearize then
-    //port_a.Q_flow = A* ( hConExt * T_mean + hConExt_mean * port_a.T - hConExtTe - hConExt_mean*T_mean*u_dummy); //
-    port_a.Q_flow = A* hConExt_mean *(port_a.T - Te);
+    corr = A*RConv/(RConv+Rrad)*(hTenvTe - hConExt_mean*(TEnv-Te)) - A*epsSw*RConv*Rrad/(RConv+Rrad)*(A*hSolTot - hConExt_mean*A*(solDir+solDif));
+    port_a.Q_flow = A* hConExt_mean*(port_a.T - Te) - corr/2;
     //port_a.Q_flow = A*( hConExt_mean*dT + hConExt*dT_mean - hConExt_mean*dT_mean*u_dummy);
-    //port_a.Q_flow = A*( hConExt_mean*dT) - (QSolAbs + QExtRad)/C1/R1;
+    //port_a.Q_flow = A*RConv/(RConv+Rrad)*(hTenvTe - hConExt_mean*(TEnv-Te)) - A*0.65*RConv*Rrad/(RConv+Rrad)*(A*hSolTot - hConExt_mean*A*(solDir+solDif));
   else
+    corr = 0;
     port_a.Q_flow = A*hConExt*(port_a.T - Te);
   end if;
 
@@ -70,4 +112,4 @@ equation
 </html>"),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
             100}}), graphics));
-end ExteriorConvection;
+end ExteriorConvection2;
