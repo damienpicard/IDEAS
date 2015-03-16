@@ -64,9 +64,9 @@ partial model IOZone
     annotation (Placement(transformation(extent={{100,-110},{140,-70}})));
 
   heatPortPrescribedHeatFlow[nZones] heatCon
-    annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
+    annotation (Placement(transformation(extent={{-14,40},{6,60}})));
   heatPortPrescribedHeatFlow[nZones] heatRad
-    annotation (Placement(transformation(extent={{-60,0},{-40,20}})));
+    annotation (Placement(transformation(extent={{-14,0},{6,20}})));
 
   inner SimInfoManager       sim(
     PV=false,
@@ -77,22 +77,26 @@ partial model IOZone
     DHW=false) "Simulation information manager for climate data"
     annotation (Placement(transformation(extent={{80,-360},{100,-340}})));
   heatPortPrescribedHeatFlow[nEmb] heatEmb
-    annotation (Placement(transformation(extent={{-60,72},{-40,92}})));
+    annotation (Placement(transformation(extent={{-14,72},{6,92}})));
+  Modelica.Blocks.Interfaces.RealInput QGainConv[nZones] annotation (Placement(
+        transformation(extent={{-144,-512},{-100,-468}}), iconTransformation(
+          extent={{-142,-532},{-102,-492}})));
+  Modelica.Blocks.Interfaces.RealInput QGainRad[nZones] annotation (Placement(
+        transformation(extent={{-142,-550},{-100,-508}}), iconTransformation(
+          extent={{-142,-572},{-102,-532}})));
+  Modelica.Blocks.Math.Add add[nZones]
+    annotation (Placement(transformation(extent={{-64,-2},{-46,16}})));
+  Modelica.Blocks.Math.Add add1[nZones]
+    annotation (Placement(transformation(extent={{-80,34},{-62,52}})));
 equation
-  connect(QConv, heatCon.Q_flow) annotation (Line(
-      points={{-122,48},{-88,48},{-88,57},{-60.8,57}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(QRad, heatRad.Q_flow) annotation (Line(
-      points={{-121,9},{-86,9},{-86,17},{-60.8,17}},
-      color={0,0,127},
-      smooth=Smooth.None));
   connect(heatCon.T, TConv) annotation (Line(
-      points={{-61.2,43},{-68,43},{-68,24},{86,24},{86,50},{120,50}},
+      points={{-15.2,43},{-20,43},{-20,44},{-26,44},{-26,24},{86,24},{86,50},{
+          120,50}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(heatRad.T, TRad) annotation (Line(
-      points={{-61.2,3},{-68,3},{-68,-12},{86,-12},{86,10},{120,10}},
+      points={{-15.2,3},{-20,3},{-20,4},{-24,4},{-24,-12},{86,-12},{86,10},{120,
+          10}},
       color={0,0,127},
       smooth=Smooth.None));
 
@@ -102,19 +106,44 @@ equation
 
   if nEmb > 0 then
     connect(QEmb, heatEmb.Q_flow) annotation (Line(
-        points={{-123,85},{-92.5,85},{-92.5,89},{-60.8,89}},
+        points={{-123,85},{-92.5,85},{-92.5,89},{-14.8,89}},
         color={0,0,127},
         smooth=Smooth.None));
     connect(heatEmb.T, TEmb) annotation (Line(
-        points={{-61.2,75},{-72,75},{-72,66},{70,66},{70,91},{119,91}},
+        points={{-15.2,75},{-22,75},{-22,76},{-28,76},{-28,66},{70,66},{70,91},
+            {119,91}},
         color={0,0,127},
         smooth=Smooth.None));
   end if;
+  connect(QRad, add.u1) annotation (Line(
+      points={{-121,9},{-109.5,9},{-109.5,12.4},{-65.8,12.4}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(add1.y, heatCon.Q_flow) annotation (Line(
+      points={{-61.1,43},{-29.55,43},{-29.55,57},{-14.8,57}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(add.y, heatRad.Q_flow) annotation (Line(
+      points={{-45.1,7},{-42.55,7},{-42.55,17},{-14.8,17}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(QConv, add1.u1) annotation (Line(
+      points={{-122,48},{-92,48},{-92,48.4},{-81.8,48.4}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(QGainConv, add1.u2) annotation (Line(
+      points={{-122,-490},{-81.8,-490},{-81.8,37.6}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(QGainRad, add.u2) annotation (Line(
+      points={{-121,-529},{-65.8,-529},{-65.8,1.6}},
+      color={0,0,127},
+      smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -400},{100,100}}), graphics), Icon(coordinateSystem(extent={{-100,
-            -400},{100,100}}, preserveAspectRatio=false), graphics={
+            -540},{100,100}}), graphics), Icon(coordinateSystem(extent={{-100,
+            -540},{100,100}}, preserveAspectRatio=false), graphics={
         Rectangle(
-          extent={{-100,102},{100,-474}},
+          extent={{-100,102},{100,-562}},
           lineColor={135,135,135},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid),
@@ -128,7 +157,7 @@ flows"),Text(
           textString="Solar gains 
 outerwalls"),
         Text(
-          extent={{-78,-326},{-26,-350}},
+          extent={{-80,-378},{-28,-402}},
           lineColor={0,0,0},
           textString="Solar gains 
 windows"),
@@ -142,11 +171,6 @@ temperatures"),
           lineColor={0,0,0},
           textString="Outputs from
 Structure"),
-        Text(
-          extent={{30,-174},{80,-200}},
-          lineColor={0,0,0},
-          textString="Temperatures 
-from windows"),
         Polygon(
           points={{-100,100},{102,100},{0,220},{-100,100}},
           lineColor={135,135,135},
@@ -180,5 +204,9 @@ Va"),   Polygon(
           lineColor={255,85,85},
           smooth=Smooth.None,
           fillColor={255,85,85},
-          fillPattern=FillPattern.Solid)}));
+          fillPattern=FillPattern.Solid),
+        Text(
+          extent={{-76,-518},{-24,-538}},
+          lineColor={0,0,0},
+          textString="Internal gains")}));
 end IOZone;
