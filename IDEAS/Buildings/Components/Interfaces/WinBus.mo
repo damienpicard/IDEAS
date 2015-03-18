@@ -4,7 +4,7 @@ expandable connector WinBus "Linearized window bus"
 
   parameter Integer nLay = 1 "Number of window layers";
 
-  Real[nLay] AbsQFlow(start=fill(1,nLay));
+  Real[nLay] AbsQFlow(start=fill(100,nLay));
   Real iSolDir(start=100);
   Real iSolDif(start=100);
 
