@@ -4,8 +4,9 @@ model MonoLayerOpaque "single material layer"
   parameter Modelica.SIunits.Area A "Layer area";
   parameter IDEAS.Buildings.Data.Interfaces.Material mat "Layer material";
   parameter Modelica.SIunits.Angle inc "Inclination";
-  parameter Modelica.SIunits.Temperature T_start=293.15
-    "Start temperature for each of the states";
+  parameter Modelica.SIunits.Temperature T_start = 293.15
+    "Start value of temperature"
+    annotation(Dialog(tab = "Initialization"));
 
   final parameter Real R = mat.R "Total specific thermal resistance";
 

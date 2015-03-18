@@ -4,8 +4,9 @@ model MonoLayerOpaqueNf "Non-fictive single material layer"
   parameter IDEAS.Buildings.Data.Interfaces.Material mat
     "Material type of the layer";
   parameter Modelica.SIunits.Angle inc "Inclination angle of the layer";
-  parameter Modelica.SIunits.Temperature T_start=293.15
-    "Start temperature for each of the states";
+  parameter Modelica.SIunits.Temperature T_start = 293.15
+    "Start value of temperature"
+    annotation(Dialog(tab = "Initialization"));
 
   final parameter Boolean present = mat.d <> 0;
   final parameter Integer nSta=mat.nSta;
@@ -18,11 +19,11 @@ model MonoLayerOpaqueNf "Non-fictive single material layer"
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b port_b
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
-  Modelica.SIunits.Temperature[nSta] T(start=ones(nSta)*T_start)
-    "Temperature at the states";
+  Modelica.SIunits.Temperature[nSta] T "Temperature at the states";
   Modelica.SIunits.HeatFlowRate[nFlo] Q_flow
     "Heat flow rate from state i to i+1";
-
+initial equation
+  T = ones(nSta)*T_start;
 equation
   // connectors
   port_a.Q_flow = +Q_flow[1];

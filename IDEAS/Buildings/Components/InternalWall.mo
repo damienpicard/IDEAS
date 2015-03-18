@@ -11,8 +11,9 @@ model InternalWall "interior opaque wall between two zones"
     "Inclination of the wall, i.e. 90deg denotes vertical";
   parameter Modelica.SIunits.Angle azi
     "Azimuth of the wall, i.e. 0deg denotes South";
-  parameter Modelica.SIunits.Temperature T_start=293.15
-    "Start temperature for each of the layers";
+  parameter Modelica.SIunits.Temperature T_start = 293.15
+    "Start value of temperature"
+    annotation(Dialog(tab = "Initialization"));
 
   parameter Modelica.SIunits.Temperature TRef_a=291.15
     "Reference temperature of zone on side of propsBus_a, for calculation of design heat loss"
@@ -47,7 +48,7 @@ protected
     final nLay=constructionType.nLay,
     final mats=constructionType.mats,
     final locGain=constructionType.locGain,
-    T_start=ones(constructionType.nLay)*T_start)
+    T_start=T_start)
     "declaration of array of resistances and capacitances for wall simulation"
     annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
   Modelica.Blocks.Sources.RealExpression QDesign_a(y=QTra_design)

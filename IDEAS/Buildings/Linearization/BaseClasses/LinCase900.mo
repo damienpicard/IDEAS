@@ -9,8 +9,7 @@ model LinCase900
     redeclare package Medium = Medium,
     nSurf=9,
     n50=0*0.5*20,
-    linearize=true,
-    T_start=293.15)
+    linearize=true)
     annotation (Placement(transformation(extent={{50,-2},{90,38}})));
   Components.OuterWall[4] wall(
     final AWall={21.6,16.2,9.6,16.2},
@@ -23,6 +22,7 @@ model LinCase900
     redeclare final parameter
       IDEAS.Buildings.Validation.Data.Insulation.foaminsulation insulationType,
     final insulationThickness={0.0615,0.0615,0.0615,0.0615},
+    T_start=293.15,
     each linearize=true) annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
         rotation=90,
@@ -36,7 +36,8 @@ model LinCase900
     final insulationThickness=1.003,
     final AWall=48,
     final inc=IDEAS.Constants.Floor,
-    final azi=IDEAS.Constants.South) annotation (Placement(transformation(
+    final azi=IDEAS.Constants.South,
+    T_start=293.15)                  annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
         rotation=90,
         origin={-9,-16})));
@@ -50,7 +51,7 @@ model LinCase900
     redeclare replaceable IDEAS.Buildings.Components.Shading.None shaType,
     redeclare final parameter IDEAS.Buildings.Data.Frames.None fraType,
     each frac=0,
-    each linearizeWindow=true)
+    each linearize=true)
                        annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
         rotation=90,
@@ -66,8 +67,8 @@ model LinCase900
     final AWall=48,
     final inc=IDEAS.Constants.Ceiling,
     final azi=IDEAS.Constants.South,
-    linearize=false)
-                    annotation (Placement(transformation(
+    T_start=293.15,
+    linearize=true) annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
         rotation=90,
         origin={-69,-16})));

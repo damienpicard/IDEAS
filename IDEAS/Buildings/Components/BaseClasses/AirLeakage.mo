@@ -2,7 +2,9 @@ within IDEAS.Buildings.Components.BaseClasses;
 model AirLeakage "air leakage due to limied air tightness"
 
 extends IDEAS.Fluid.Interfaces.PartialTwoPortInterface;
-  parameter Modelica.SIunits.Temperature T_start = 293.15;
+  parameter Modelica.SIunits.Temperature T_start = 293.15
+    "Start value of temperature"
+    annotation(Dialog(tab = "Initialization"));
   parameter Modelica.SIunits.Volume V "zone air volume";
   parameter Real n50(min=0.01)=0.4 "n50-value of airtightness";
 

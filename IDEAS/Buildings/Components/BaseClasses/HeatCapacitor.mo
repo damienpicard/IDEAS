@@ -1,8 +1,10 @@
 within IDEAS.Buildings.Components.BaseClasses;
 model HeatCapacitor "Lumped thermal element storing heat"
   parameter Modelica.SIunits.HeatCapacity C "Heat capacity of element (= cp*m)";
-  Modelica.SIunits.Temperature T(start=293.15, displayUnit="degC")
-    "Temperature of element";
+  parameter Modelica.SIunits.Temperature T_start = 293.15
+    "Start value of temperature"
+    annotation(Dialog(tab = "Initialization"));
+  Modelica.SIunits.Temperature T "Temperature of element";
   Modelica.SIunits.TemperatureSlope der_T(start=0)
     "Time derivative of temperature (= der(T))";
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port annotation (
@@ -10,6 +12,8 @@ model HeatCapacitor "Lumped thermal element storing heat"
         origin={0,-100},
         extent={{-10,-10},{10,10}},
         rotation=90)));
+initial equation
+  T = T_start;
 equation
   T = port.T;
   der_T = der(T);

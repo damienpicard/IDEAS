@@ -53,7 +53,8 @@ protected
     V=V,
     n50=n50,
     allowFlowReversal=allowFlowReversal,
-    show_T=false)
+    show_T=false,
+    T_start = T_start)
     annotation (Placement(transformation(extent={{40,30},{60,50}})));
   IDEAS.Buildings.Components.BaseClasses.ZoneLwDistribution radDistrLw(final
       nSurf=nSurf, final linear=linear)

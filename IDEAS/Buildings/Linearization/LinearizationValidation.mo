@@ -17,7 +17,7 @@ protected
     redeclare replaceable IDEAS.Buildings.Components.Shading.None shaType,
     redeclare final parameter IDEAS.Buildings.Data.Frames.None fraType,
     each frac=0,
-    each linearizeWindow=true,
+    each linearize=true,
     each linOut=true) annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
         rotation=90,
@@ -37,7 +37,7 @@ public
 initial equation
 
   //remove initial equation when only enabling one of the two cases
-  stateSpace.stateSpace.y[1] = linCase900_1.y;
+ stateSpace.stateSpace.y[1] = linCase900_1.y;
 
 equation
   connect(linCase900_1.weaBus1, sim.weaBus) annotation (Line(
@@ -93,15 +93,18 @@ First implementation
 </ul>
 </html>", info="<html>
 <p>Script for running validation:</p>
-<pre>re=Modelica_LinearSystems2.ModelAnalysis.Linearize(&QUOT;IDEAS.Buildings.Linearization.BaseClasses.LinCase900(roof(linearize=true))&QUOT;);
+<pre>re=Modelica_LinearSystems2.ModelAnalysis.Linearize(&QUOT;IDEAS.Buildings.Linearization.BaseClasses.LinCase900(
+    roof(linearize=true),
+    wall(each linearize=true), win(each linearize=true),gF(linearize=true))&QUOT;);
 writeMatrix(fileName=&QUOT;ss.mat&QUOT;,matrixName=&QUOT;A&QUOT;,matrix=re.A);
 writeMatrix(fileName=&QUOT;ss.mat&QUOT;,matrixName=&QUOT;B&QUOT;,matrix=re.B, append=true);
 writeMatrix(fileName=&QUOT;ss.mat&QUOT;,matrixName=&QUOT;C&QUOT;,matrix=re.C, append=true);
 writeMatrix(fileName=&QUOT;ss.mat&QUOT;,matrixName=&QUOT;D&QUOT;,matrix=re.D, append=true);
-simulateModel(&QUOT;IDEAS.Buildings.Linearization.LinearizationValidation(linCase900_1(roof(
+simulateModel(&QUOT;IDEAS.Buildings.Linearization.LinearizationValidation(linCase900_1(
     roof(linearize=false),
-    wall(linearize=false),
-    win(eCon(linearize=false), eConFra(linearize=false)))))&QUOT;, stopTime=1e+07, method=&QUOT;dassl&QUOT;, resultFile=&QUOT;LinearizationValidation&QUOT;);
+    wall(each linearize=false),
+    win(each linearize=false),
+    gF(linearize=false)))&QUOT;, stopTime=1e+07, method=&QUOT;dassl&QUOT;, resultFile=&QUOT;LinearizationValidation&QUOT;);
 createPlot(id=1, position={0, 0, 1596, 688}, y={&QUOT;stateSpace.y[1]&QUOT;, &QUOT;linCase900_1.y&QUOT;}, range={0.0, 10000000.0, 265.0, 320.0}, grid=true, filename=&QUOT;LinearizationValidation.mat&QUOT;, leftTitleType=1, bottomTitleType=1, colors={{0,0,255}, {255,0,0}});
 createPlot(id=1, position={0, 0, 1596, 341}, y={&QUOT;error.y&QUOT;}, range={0.0, 10000000.0, -1.0, 0.6000000000000001}, grid=true, subPlot=2, leftTitleType=1, bottomTitleType=1, colors={{0,0,255}});
 

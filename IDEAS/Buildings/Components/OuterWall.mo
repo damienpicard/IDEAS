@@ -14,8 +14,9 @@ model OuterWall "Opaque building envelope construction"
   final parameter Modelica.SIunits.Power QTra_design(fixed=false)
     "Design heat losses at reference outdoor temperature";
 
-  parameter Modelica.SIunits.Temperature T_start=293.15
-    "Start temperature for each of the layers";
+  parameter Modelica.SIunits.Temperature T_start = 293.15
+    "Start value of temperature"
+    annotation(Dialog(tab = "Initialization"));
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_emb
     "port for gains by embedded active layers"
@@ -31,7 +32,7 @@ model OuterWall "Opaque building envelope construction"
     final nLay=constructionType.nLay,
     final mats=constructionType.mats,
     final locGain=constructionType.locGain,
-    T_start=ones(constructionType.nLay)*T_start)
+    T_start=T_start)
     "declaration of array of resistances and capacitances for wall simulation"
     annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
   BaseClasses.ExteriorConvection2                           extCon(final A=
@@ -175,8 +176,6 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
 
-
-
   connect(extCon.solDir, gainDir.u) annotation (Line(
       points={{-20,-47},{-38,-47},{-38,-48},{-62,-48},{-62,-24},{-58.8,-24}},
       color={0,0,127},
@@ -196,9 +195,9 @@ equation
       smooth=Smooth.None));
   connect(extCon.TEnv, extRad.Tenv) annotation (Line(
       points={{-20,-57},{-46,-57},{-46,-56},{-68,-56},{-68,6},{-20,6},{-20,-4}},
-
       color={0,0,127},
       smooth=Smooth.None));
+
   connect(extCon.epsLw, extRad.epsLw) annotation (Line(
       points={{-23,-44},{-12,-44},{-12,-22},{-14,-22},{-14,-6.6},{-20,-6.6}},
       color={0,0,127},

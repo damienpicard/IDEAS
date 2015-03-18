@@ -3,6 +3,9 @@ model SlabOnGround "opaque floor on ground slab"
 
   extends IDEAS.Buildings.Components.Interfaces.StateWallNoSol;
 
+  parameter Modelica.SIunits.Temperature T_start = 293.15
+    "Start value of temperature"
+    annotation(Dialog(tab = "Initialization"));
   parameter Modelica.SIunits.Area AWall "Total wall area";
   parameter Modelica.SIunits.Length PWall "Total wall perimeter";
   parameter Modelica.SIunits.Angle inc
@@ -48,7 +51,8 @@ public
     final inc=inc,
     final nLay=constructionType.nLay,
     final mats=constructionType.mats,
-    final locGain=constructionType.locGain)
+    final locGain=constructionType.locGain,
+    T_start=T_start)
     "Declaration of array of resistances and capacitances for wall simulation"
     annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
   IDEAS.Buildings.Components.BaseClasses.InteriorConvection intCon(final A=
@@ -60,7 +64,8 @@ public
     final inc=inc,
     final nLay=3,
     final mats={ground1,ground2,ground3},
-    final locGain=1)
+    final locGain=1,
+    T_start = T_start)
     "Declaration of array of resistances and capacitances for ground simulation"
     annotation (Placement(transformation(extent={{-40,-40},{-20,-20}})));
   //    nMat(T(start={{273.15},{273.15},{273.15}} + {{11.5},{12.2},{12.7}})))

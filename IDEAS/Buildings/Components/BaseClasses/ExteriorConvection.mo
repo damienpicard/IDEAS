@@ -7,10 +7,6 @@ model ExteriorConvection "exterior surface convection"
   parameter Modelica.SIunits.CoefficientOfHeatTransfer hConExt_mean = 18.3
     "Value for exterior convection coefficient around which the exterior convection is linearized"
                                                                                                         annotation(Dialog(enable=linearize));
-  parameter Real T_mean(unit="K",displayUnit="degC") = 285
-    "Value for the wall temperature around which the exterior convection is linearized"
-                                                                                                        annotation(Dialog(enable=linearize));
-
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
 
@@ -20,14 +16,9 @@ model ExteriorConvection "exterior surface convection"
     "Exterior convective heat transfer coefficient"
     annotation (Placement(transformation(extent={{-120,-110},{-80,-70}})));
 
-  Modelica.SIunits.TemperatureDifference dT = port_a.T - Te;
-  parameter Modelica.SIunits.TemperatureDifference dT_mean = 0;
 equation
   if linearize then
-    //port_a.Q_flow = A* ( hConExt * T_mean + hConExt_mean * port_a.T - hConExtTe - hConExt_mean*T_mean*u_dummy); //
     port_a.Q_flow = A* hConExt_mean *(port_a.T - Te);
-    //port_a.Q_flow = A*( hConExt_mean*dT + hConExt*dT_mean - hConExt_mean*dT_mean*u_dummy);
-    //port_a.Q_flow = A*( hConExt_mean*dT) - (QSolAbs + QExtRad)/C1/R1;
   else
     port_a.Q_flow = A*hConExt*(port_a.T - Te);
   end if;
