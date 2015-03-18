@@ -78,7 +78,8 @@ equation
           textString=" y=Cx+Du"),
         Line(points={{-100,0},{-60,0}}, color={0,0,255}),
         Line(points={{60,0},{100,0}}, color={0,0,255})}), Diagram(
-        coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
+        coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
+            100}}),
         graphics),
     Documentation(revisions="<html>
 <ul>

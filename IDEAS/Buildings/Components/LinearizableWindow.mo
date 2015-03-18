@@ -4,7 +4,7 @@ model LinearizableWindow "Window with options for enabling linearization"
   outer IDEAS.SimInfoManager sim
     "Simulation information manager for climate data"
     annotation (Placement(transformation(extent={{30,-100},{50,-80}})));
-  IDEAS.Buildings.Components.Interfaces.ZoneBus propsBus_a(numAzi=sim.numAzi) if not linearizeWindow or not linOut
+  IDEAS.Buildings.Components.Interfaces.ZoneBus propsBus_a(numAzi=sim.numAzi) if not linearize or not linOut
     "Inner side (last layer)"
                      annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
@@ -14,8 +14,7 @@ model LinearizableWindow "Window with options for enabling linearization"
         rotation=-90,
         origin={50,40})));
 
-  parameter Boolean linearizeWindow = false
-    "Enable linearization inputs/outputs";
+  parameter Boolean linearize = false "Enable linearization inputs/outputs";
   parameter Boolean linOut = false "'Outer' window model when linearizing";
 
   parameter Modelica.SIunits.Area A "Total window and windowframe area";
@@ -56,9 +55,9 @@ model LinearizableWindow "Window with options for enabling linearization"
         origin={-30,-100})));
 
 protected
-  parameter Boolean enableNonLin = not linearizeWindow or linOut
+  parameter Boolean enableNonLin = not linearize or linOut
     "Disable nonlinear part when linearizing model unless it is the outer part.";
-  parameter Boolean enableLin = not linearizeWindow or not linOut
+  parameter Boolean enableLin = not linearize or not linOut
     "Disable linear part when linearizing model and in the outer part.";
 
   IDEAS.Buildings.Components.BaseClasses.MultiLayerLucent layMul(
@@ -70,7 +69,7 @@ protected
     "declaration of array of resistances and capacitances for wall simulation"
     annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
   IDEAS.Buildings.Components.BaseClasses.ExteriorConvection eCon(final A=A*(1
-         - frac), linearize=linearizeWindow) if
+         - frac), linearize=linearize) if
       enableLin
     "convective surface heat transimission on the exterior side of the wall"
     annotation (Placement(transformation(extent={{-20,-40},{-40,-20}})));
@@ -90,7 +89,7 @@ protected
     final SwTrans=glazing.SwTrans,
     final SwTransDif=glazing.SwTransDif,
     final SwAbsDif=glazing.SwAbsDif,
-    linearize=linearizeWindow,
+    linearize=linearize,
     createOutputs=linOut)
     annotation (Placement(transformation(extent={{-10,-70},{10,-50}})));
 
@@ -127,12 +126,12 @@ public
   Modelica.Blocks.Routing.RealPassThrough Tdes "Design temperature passthrough"
     annotation (Placement(transformation(extent={{60,70},{80,90}})));
   Interfaces.WinBus winBus(nLay=glazing.nLay) if
-                              linearizeWindow annotation (Placement(transformation(
+                              linearize annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={52,-60})));
   BoundaryConditions.WeatherData.Bus weaBus(numSolBus=sim.numAzi + 1) if
-                                               linearizeWindow and linOut
+                                               linearize and linOut
     annotation (Placement(transformation(extent={{-90,90},{-70,110}})));
 initial equation
   QTra_design =U_value*A*(273.15 + 21 - Tdes.y);
@@ -303,7 +302,7 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
  for i in 1:solWin.nLay loop
-   if linearizeWindow and not linOut then
+   if linearize and not linOut then
    end if;
  end for;
 

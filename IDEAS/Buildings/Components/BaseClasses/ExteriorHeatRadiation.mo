@@ -4,7 +4,7 @@ model ExteriorHeatRadiation
 
   parameter Modelica.SIunits.Area A "surface area";
 
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a(T(start=289.15))
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
 
   Modelica.Blocks.Interfaces.RealInput Tenv

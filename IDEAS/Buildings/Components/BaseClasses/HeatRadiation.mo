@@ -5,9 +5,9 @@ model HeatRadiation "radiative heat exchange between two temperatures"
 
   parameter Boolean linear=true;
 
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a(T(start=293.15))
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b port_b(T(start=293.15))
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b port_b
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
   Modelica.SIunits.TemperatureDifference dT=port_a.T - port_b.T;
 

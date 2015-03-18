@@ -12,8 +12,9 @@ model BoundaryWall "Opaque wall with boundary conditions"
     "Get the boundary temperature from the input connector";
   parameter Boolean use_Q_in = false
     "Get the boundary heat flux from the input connector";
-  parameter Modelica.SIunits.Temperature T_start=293.15
-    "Start temperature for each of the layers";
+  parameter Modelica.SIunits.Temperature T_start = 293.15
+    "Start value of temperature"
+    annotation(Dialog(tab = "Initialization"));
 
   parameter Modelica.SIunits.Temperature TRef=291.15
     "Reference temperature for calculation of design heat loss";
@@ -48,7 +49,7 @@ protected
     final nLay=constructionType.nLay,
     final mats=constructionType.mats,
     final locGain=constructionType.locGain,
-    T_start=ones(constructionType.nLay)*T_start)
+    T_start=T_start)
     "declaration of array of resistances and capacitances for wall simulation"
     annotation (Placement(transformation(extent={{-20,-40},{0,-20}})));
   IDEAS.Buildings.Components.BaseClasses.InteriorConvection intCon_b(final A=

@@ -206,19 +206,19 @@ equation
       index=1,
       extent={{6,3},{6,3}}));
   connect(radSolData.angInc, shaType.angInc) annotation (Line(
-      points={{-79.4,-64},{-36,-64}},
+      points={{-79.4,-65.4545},{-58,-65.4545},{-58,-64},{-36,-64}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(radSolData.angAzi, shaType.angAzi) annotation (Line(
-      points={{-79.4,-68},{-36,-68}},
+      points={{-79.4,-69.0909},{-58,-69.0909},{-58,-68},{-36,-68}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(radSolData.angZen, shaType.angZen) annotation (Line(
-      points={{-79.4,-66},{-36,-66}},
+      points={{-79.4,-67.2727},{-58,-67.2727},{-58,-66},{-36,-66}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(radSolData.weaBus, propsBus_a.weaBus) annotation (Line(
-      points={{-80,-52},{-78,-52},{-78,40},{50,40}},
+      points={{-80,-51.8182},{-78,-51.8182},{-78,40},{50,40}},
       color={255,204,51},
       thickness=0.5,
       smooth=Smooth.None));
@@ -227,11 +227,11 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(gainDif.u, radSolData.solDif) annotation (Line(
-      points={{-70.8,-58},{-76,-58},{-76,-60},{-79.4,-60}},
+      points={{-70.8,-58},{-76,-58},{-76,-59.0909},{-79.4,-59.0909}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(radSolData.solDir, gainDir.u) annotation (Line(
-      points={{-79.4,-58},{-76,-58},{-76,-48},{-70.8,-48}},
+      points={{-79.4,-57.2727},{-76,-57.2727},{-76,-48},{-70.8,-48}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(gainDir.y, shaType.solDir) annotation (Line(
@@ -239,7 +239,7 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(radSolData.Tenv, skyRad.Tenv) annotation (Line(
-      points={{-79.4,-62},{-58,-62},{-58,0},{-20,0},{-20,-4}},
+      points={{-79.4,-60.9091},{-58,-60.9091},{-58,0},{-20,0},{-20,-4}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(skyRadFra.Tenv, skyRad.Tenv) annotation (Line(
@@ -266,13 +266,6 @@ equation
       points={{58,80},{50,80},{50,40}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(eCon.hConExtTe, propsBus_a.weaBus.hConExtTe) annotation (Line(
-      points={{-20,-28},{50,-28},{50,40}},
-      color={0,0,127},
-      smooth=Smooth.None), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}}));
   connect(eConFra.hConExtTe, propsBus_a.weaBus.hConExtTe) annotation (Line(
       points={{-20,66},{50,66},{50,40}},
       color={0,0,127},
