@@ -112,7 +112,7 @@ Make sure to enable output of protected variables.</pre>
 </html>"),
     __Dymola_Commands,
     experiment(
-      StopTime=3e+007,
+      StopTime=3e+006,
       Tolerance=1e-006,
       __Dymola_Algorithm="Dassl"),
     __Dymola_experimentSetupOutput);

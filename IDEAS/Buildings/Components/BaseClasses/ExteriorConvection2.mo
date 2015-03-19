@@ -65,8 +65,9 @@ model ExteriorConvection2 "exterior surface convection"
 
 equation
   if linearize then
-    corr = A*RConv/(RConv+Rrad)*(hTenvTe - hConExt_mean*(TEnv-Te)) - A*epsSw*RConv*Rrad/(RConv+Rrad)*(A*hSolTot - hConExt_mean*A*(solDir+solDif));
-    port_a.Q_flow = A* hConExt_mean*(port_a.T - Te) - corr/2;
+    // corr = A*RConv/(RConv+Rrad)*(hTenvTe - hConExt_mean*(TEnv-Te)) - A*epsSw*RConv*Rrad/(RConv+Rrad)*(A*hSolTot - hConExt_mean*A*(solDir+solDif));
+    corr = 0;
+    port_a.Q_flow = A* hConExt_mean*(port_a.T - Te) - 0*corr/2;
     //port_a.Q_flow = A*( hConExt_mean*dT + hConExt*dT_mean - hConExt_mean*dT_mean*u_dummy);
     //port_a.Q_flow = A*RConv/(RConv+Rrad)*(hTenvTe - hConExt_mean*(TEnv-Te)) - A*0.65*RConv*Rrad/(RConv+Rrad)*(A*hSolTot - hConExt_mean*A*(solDir+solDif));
   else
