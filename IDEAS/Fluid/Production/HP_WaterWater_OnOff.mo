@@ -1,7 +1,9 @@
 within IDEAS.Fluid.Production;
 model HP_WaterWater_OnOff
   "A water (or brine) to water heat pump with on/off input"
-  extends IDEAS.Fluid.Production.BaseClasses.PartialHeatPump(final use_TSet = false);
+  extends IDEAS.Fluid.Production.BaseClasses.PartialHeatPump(final use_TSet = false,
+    vol1(massDynamics=Modelica.Fluid.Types.Dynamics.SteadyState),
+    vol2(massDynamics=Modelica.Fluid.Types.Dynamics.SteadyState));
 
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics), Icon(graphics={
