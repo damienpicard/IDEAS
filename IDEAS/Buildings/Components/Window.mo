@@ -266,13 +266,6 @@ equation
       points={{58,80},{50,80},{50,40}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(eConFra.hConExtTe, propsBus_a.weaBus.hConExtTe) annotation (Line(
-      points={{-20,66},{50,66},{50,40}},
-      color={0,0,127},
-      smooth=Smooth.None), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=true, extent={{-50,-100},{50,100}}),
         graphics={

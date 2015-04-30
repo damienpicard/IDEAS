@@ -10,7 +10,7 @@ model RadSolData "Selects or generates correct solar data for this surface"
 
   parameter Boolean solDataInBus=
    isRoof or
-    (inc==IDEAS.Constants.Wall
+    (abs(inc-IDEAS.Constants.Wall) < 0.0314
       and abs(sin((azi-offsetAzi)*numAzi))<0.05)
     "True if solBus contains correct data for this surface"
     annotation(Evaluate=true);
@@ -54,11 +54,10 @@ protected
     "Required for avoiding warnings?"
                                      annotation (HideResults=true, Placement(
         transformation(extent={{-78,10},{-38,50}})));
-public
-  Modelica.Blocks.Interfaces.RealOutput hTenvTe
-    annotation (Placement(transformation(extent={{96,-46},{116,-26}})));
-  Modelica.Blocks.Interfaces.RealOutput hSolTot
-    annotation (Placement(transformation(extent={{96,-62},{116,-42}})));
+//   Modelica.Blocks.Interfaces.RealOutput hTenvTe
+//     annotation (Placement(transformation(extent={{96,-46},{116,-26}})));
+//   Modelica.Blocks.Interfaces.RealOutput hSolTot
+//     annotation (Placement(transformation(extent={{96,-62},{116,-42}})));
 equation
 
   connect(radSol.weaBus, weaBus) annotation (Line(
@@ -103,20 +102,20 @@ equation
       points={{106,-110},{-58,-110},{-58,30}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(hTenvTe, solBusDummy1.hTenvTe) annotation (Line(
-      points={{106,-36},{-58,-36},{-58,30}},
-      color={0,0,127},
-      smooth=Smooth.None), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}}));
-  connect(hSolTot, solBusDummy1.hSolTot) annotation (Line(
-      points={{106,-52},{-58,-52},{-58,30}},
-      color={0,0,127},
-      smooth=Smooth.None), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}}));
+//   connect(hTenvTe, solBusDummy1.hTenvTe) annotation (Line(
+//       points={{106,-36},{-58,-36},{-58,30}},
+//       color={0,0,127},
+//       smooth=Smooth.None), Text(
+//       string="%second",
+//       index=1,
+//       extent={{6,3},{6,3}}));
+//   connect(hSolTot, solBusDummy1.hSolTot) annotation (Line(
+//       points={{106,-52},{-58,-52},{-58,30}},
+//       color={0,0,127},
+//       smooth=Smooth.None), Text(
+//       string="%second",
+//       index=1,
+//       extent={{6,3},{6,3}}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -120},{100,100}}), graphics), Documentation(info="<html>
 <p>This model usually takes the appropriate solar data from the bus. If the correct data is not contained by the bus, custom solar data is calculated.</p>

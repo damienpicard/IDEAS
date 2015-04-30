@@ -35,7 +35,7 @@ model OuterWall "Opaque building envelope construction"
     T_start=T_start)
     "declaration of array of resistances and capacitances for wall simulation"
     annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
-  BaseClasses.ExteriorConvection2                           extCon(final A=
+  BaseClasses.ExteriorConvection                            extCon(final A=
         AWall, linearize=linearize)
     "convective surface heat transimission on the exterior side of the wall"
     annotation (Placement(transformation(extent={{-20,-64},{-40,-44}})));
@@ -164,7 +164,7 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(extCon.Te, propsBus_a.weaBus.Te) annotation (Line(
-      points={{-20,-60},{50,-60},{50,40}},
+      points={{-20,-58.8},{50,-58.8},{50,40}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(extCon.hConExt, propsBus_a.weaBus.hConExt) annotation (Line(
@@ -176,36 +176,7 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
 
-  connect(extCon.solDir, gainDir.u) annotation (Line(
-      points={{-20,-47},{-38,-47},{-38,-48},{-62,-48},{-62,-24},{-58.8,-24}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(extCon.solDif, radSolData.solDif) annotation (Line(
-      points={{-20,-50},{-64,-50},{-64,-28},{-66,-28},{-66,-25.0909},{-71.4,
-          -25.0909}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(radSolData.hTenvTe, extCon.hTenvTe) annotation (Line(
-      points={{-71.4,-28.3636},{-66,-28.3636},{-66,-38},{-31,-38},{-31,-44}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(radSolData.hSolTot, extCon.hSolTot) annotation (Line(
-      points={{-71.4,-29.8182},{-68,-29.8182},{-68,-40},{-35,-40},{-35,-44}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(extCon.TEnv, extRad.Tenv) annotation (Line(
-      points={{-20,-57},{-46,-57},{-46,-56},{-68,-56},{-68,6},{-20,6},{-20,-4}},
-      color={0,0,127},
-      smooth=Smooth.None));
 
-  connect(extCon.epsLw, extRad.epsLw) annotation (Line(
-      points={{-23,-44},{-12,-44},{-12,-22},{-14,-22},{-14,-6.6},{-20,-6.6}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(extCon.epsSw, solAbs.epsSw) annotation (Line(
-      points={{-27,-44},{-26,-44},{-26,-42},{-14,-42},{-14,-24},{-20,-24}},
-      color={0,0,127},
-      smooth=Smooth.None));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=true, extent={{-50,-100},{50,100}}),
         graphics={
