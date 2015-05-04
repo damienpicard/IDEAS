@@ -13,10 +13,14 @@ To adapt in order to apply linearization
 7) add winBus[nWin] WITH KEYWORD INPUT and connect them to each windows with parameter nLay=winName.glazing.nLay.
 
 8) Make a new model in which you instantiate the model you want to linearize
-9) add a weaBus WITH KEYWORD INPUT and connect it to each zone. The parameter numSolBus has to be = sim.numAzi + 1.
-10) add output signal for your state space model
-11) add winBus[nWin] WITH KEYWORD INPUT with parameter nLay=winName.glazing.nLay.
-12) Add system and sim (make sure they are inner) and change sim.linearize to true.
-13) Make sure you do not have more than 4 orientations perpendicular to each other and that sim.offsetAzi equals one of the angle.
+9) add FIRSTLY input for convective heat flow, SECONDLY for radiative heat flow. For both of them, ADD START VALUE (of for example 100 W).
+10) THIRDLY, add a weaBus WITH KEYWORD INPUT and connect it to each zone. The parameter numSolBus has to be = sim.numAzi + 1.
+11) FINALLY add winBus[nWin] WITH KEYWORD INPUT with parameter nLay=winName.glazing.nLay. 
 
-14) Linearize the model
+NOTE: it is important that the inputs are in the right order in the code, as their index for the state space depends of their order.
+
+12) add output signal for your state space model
+13) Add system and sim (make sure they are inner) and change sim.linearize to true.
+14) Make sure you do not have more than 4 orientations perpendicular to each other and that sim.offsetAzi equals one of the angle.
+
+15) Linearize the model
