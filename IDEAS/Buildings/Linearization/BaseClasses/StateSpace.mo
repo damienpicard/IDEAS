@@ -23,7 +23,7 @@ protected
   final parameter Integer[2] Bsize = readMatrixSize(fileName=fileName, matrixName="B");
   final parameter Integer[2] Dsize = readMatrixSize(fileName=fileName, matrixName="D");
 
-  final parameter Integer nSolBus = (sim.numAzi+1)*8
+  final parameter Integer nSolBus = (sim.numAzi+1)*6
     "Total number of input signals in solBus";
   final parameter Integer[nWin] offWinCon = {nSolBus + 3 + sum(winNLay[1:i-1]) + 2*(i-1) for i in 1:nWin}
     "Offset of index for window connections";
@@ -37,14 +37,12 @@ public
 equation
 
   for i in 0:sim.numAzi loop
-    connect(weaBus.solBus[1+i].iSolDir, stateSpace.u[1+i*8]);
-    connect(weaBus.solBus[1+i].iSolDif, stateSpace.u[2+i*8]);
-    connect(weaBus.solBus[1+i].angZen, stateSpace.u[3+i*8]);
-    connect(weaBus.solBus[1+i].angAzi, stateSpace.u[4+i*8]);
-    connect(weaBus.solBus[1+i].angInc, stateSpace.u[5+i*8]);
-    connect(weaBus.solBus[1+i].Tenv,   stateSpace.u[6+i*8]);
-    connect(weaBus.solBus[1+i].hTenvTe,   stateSpace.u[7+i*8]);
-    connect(weaBus.solBus[1+i].hSolTot,   stateSpace.u[8+i*8]);
+    connect(weaBus.solBus[1+i].iSolDir, stateSpace.u[1+i*6]);
+    connect(weaBus.solBus[1+i].iSolDif, stateSpace.u[2+i*6]);
+    connect(weaBus.solBus[1+i].angZen, stateSpace.u[3+i*6]);
+    connect(weaBus.solBus[1+i].angAzi, stateSpace.u[4+i*6]);
+    connect(weaBus.solBus[1+i].angInc, stateSpace.u[5+i*6]);
+    connect(weaBus.solBus[1+i].Tenv,   stateSpace.u[6+i*6]);
   end for;
   connect(weaBus.Te, stateSpace.u[nSolBus+1]);
   connect(weaBus.Tdes, stateSpace.u[nSolBus+2]);

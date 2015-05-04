@@ -67,7 +67,7 @@ model OuterWall "Opaque building envelope construction"
     annotation (Placement(transformation(extent={{-92,-36},{-72,-16}})));
   Modelica.Blocks.Routing.RealPassThrough Tdes "Design temperature passthrough"
     annotation (Placement(transformation(extent={{20,60},{0,80}})));
-  parameter Boolean linearize=false "Use wall linearisation";
+  parameter Boolean linearize=sim.linearize "Use wall linearisation";
 initial equation
   QTra_design =U_value*AWall*(273.15 + 21 - Tdes.y);
 
@@ -175,7 +175,6 @@ equation
       points={{22,70},{22,56},{50,56},{50,40}},
       color={0,0,127},
       smooth=Smooth.None));
-
 
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=true, extent={{-50,-100},{50,100}}),

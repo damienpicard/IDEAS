@@ -12,6 +12,7 @@ partial model PartialSimInfoManager
     "standard time zone";
   parameter Integer numAzi=4 "Number of azimuth angles that are calculated"
     annotation(Dialog(tab="Incidence angles"));
+  parameter Boolean linearize = false annotation(Dialog(tab="Linearization"));
 
   final parameter String filNamClim=filDir + filNam;
 
@@ -23,10 +24,7 @@ partial model PartialSimInfoManager
   final parameter Modelica.SIunits.Temperature TdesGround = 10 + 273.15
     "design ground temperature";
 
-  parameter Boolean use_lin=false "True if the model is linearized";
-
   // Inputs
-  Modelica.Blocks.Interfaces.RealInput Te_in(unit="K", displayUnit="degC") if use_lin;
 
 protected
   final parameter Boolean DST = true

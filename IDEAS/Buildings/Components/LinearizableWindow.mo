@@ -14,8 +14,10 @@ model LinearizableWindow "Window with options for enabling linearization"
         rotation=-90,
         origin={50,40})));
 
-  parameter Boolean linearize = false "Enable linearization inputs/outputs";
+  parameter Boolean linearize = sim.linearize
+    "Enable linearization inputs/outputs";
   parameter Boolean linOut = false "'Outer' window model when linearizing";
+  parameter Boolean use_ctrl = not sim.linearize "True if use shading control";
 
   parameter Modelica.SIunits.Area A "Total window and windowframe area";
   parameter Real frac(
@@ -44,7 +46,7 @@ model LinearizableWindow "Window with options for enabling linearization"
     constrainedby Interfaces.StateShading(final azi=azi) "Shading type" annotation (Placement(transformation(extent={{-36,-70},{-26,-50}})),
       __Dymola_choicesAllMatching=true, Dialog(group="Construction details"));
 
-  Modelica.Blocks.Interfaces.RealInput Ctrl if enableNonLin
+  Modelica.Blocks.Interfaces.RealInput Ctrl if enableNonLin and use_ctrl
     "Control signal between 0 and 1, i.e. 1 is fully closed" annotation (
       Placement(transformation(
         extent={{20,-20},{-20,20}},

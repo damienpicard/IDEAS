@@ -1,7 +1,5 @@
 within IDEAS.Buildings.Components;
 model Zone "thermal building zone"
-  import Buildings;
-
   extends IDEAS.Buildings.Components.Interfaces.StateZone;
   extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations(redeclare
       replaceable package Medium =
@@ -19,7 +17,7 @@ model Zone "thermal building zone"
   parameter Real corrCV=5 "Multiplication factor for the zone air capacity";
 
   parameter Boolean linear=true "Linearized computation of long wave radiation";
-  parameter Boolean linearize=false "Add connections for linearization";
+  parameter Boolean linearize=sim.linearize "Add connections for linearization";
 
   final parameter Modelica.SIunits.Power QInf_design=1012*1.204*V/3600*n50/20*(273.15
        + 21 - sim.Tdes)
