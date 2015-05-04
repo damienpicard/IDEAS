@@ -229,6 +229,13 @@ for i in 1:nSurf loop
    end if;
 end for;
 
+  connect(airLeakage.Te, weaBus.Te) annotation (Line(
+      points={{40,47},{-22,47},{-22,48},{-82,48},{-82,-2},{-100,-2}},
+      color={0,0,127},
+      smooth=Smooth.None), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
             100}}),
