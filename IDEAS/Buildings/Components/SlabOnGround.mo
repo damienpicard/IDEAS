@@ -28,7 +28,7 @@ protected
   final parameter IDEAS.Buildings.Data.Materials.Ground ground2(final d=0.33);
   final parameter IDEAS.Buildings.Data.Materials.Ground ground3(final d=0.17);
 
-  Modelica.SIunits.HeatFlowRate Qm = UEqui*AWall*(22 - 9) - Lpi*4*cos(2*3.1415/12*(m- 1 + alfa)) + Lpe*9*cos(2*3.1415/12*(m - 1 - beta))
+  parameter Modelica.SIunits.HeatFlowRate Qm = UEqui*AWall*(22 - 9) - Lpi*4*cos(2*3.1415/12*(m- 1 + alfa)) + Lpe*9*cos(2*3.1415/12*(m - 1 - beta))
     "Two-dimensionl correction for edge flow";
 
   final parameter Modelica.SIunits.Length B=AWall/(0.5*PWall + 1E-10)
@@ -72,8 +72,8 @@ public
   Modelica.Blocks.Sources.RealExpression QDesign(y=QTra_design)
     annotation (Placement(transformation(extent={{-10,40},{10,60}})));
 public
-  Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow periodicFlow(T_ref=284.15)
-                annotation (Placement(transformation(
+  Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow periodicFlow(T_ref=
+        284.15) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={-30,-8})));

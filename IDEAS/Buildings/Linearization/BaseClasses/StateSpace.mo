@@ -2,6 +2,7 @@ within IDEAS.Buildings.Linearization.BaseClasses;
 model StateSpace "State space model with bus inputs"
 
   parameter String fileName = "ss.mat";
+  parameter Integer nEmb = 0;
   parameter Integer nQConv = 0 "Number of convective heat flow inputs";
   parameter Integer nQRad = nQConv "Number of convective heat flow inputs";
   parameter Integer[nWin] winNLay = fill(3,nWin) "Number of window layers";
@@ -25,7 +26,7 @@ protected
   final parameter Integer[2] Bsize = readMatrixSize(fileName=fileName, matrixName="B");
   final parameter Integer[2] Dsize = readMatrixSize(fileName=fileName, matrixName="D");
 
-  final parameter Integer offSolBus = nQConv + nQRad
+  final parameter Integer offSolBus = nQConv + nQRad + nEmb
     "Offset for index of solbus";
   final parameter Integer nSolBus = (sim.numAzi+1)*6 + offSolBus
     "Total number of input signals in solBus";
@@ -38,17 +39,23 @@ public
     annotation (Placement(transformation(extent={{94,-10},{114,10}})));
   parameter Real x_start[states]=zeros(states)
     "Initial or guess values of states";
+  Modelica.Blocks.Interfaces.RealInput Q_flowEmb[nEmb]
+    annotation (Placement(transformation(extent={{-130,0},{-90,40}})));
   Modelica.Blocks.Interfaces.RealInput Q_flowConv[nQConv]
-    annotation (Placement(transformation(extent={{-126,-20},{-86,20}})));
+    annotation (Placement(transformation(extent={{-128,-48},{-88,-8}})));
   Modelica.Blocks.Interfaces.RealInput Q_flowRad[nQRad] annotation (Placement(
-        transformation(extent={{-126,-80},{-86,-40}}), iconTransformation(
-          extent={{-126,-80},{-86,-40}})));
+        transformation(extent={{-128,-108},{-88,-68}}),iconTransformation(
+          extent={{-128,-108},{-88,-68}})));
+
 equation
+  for i in 1:nEmb loop
+     connect(Q_flowEmb[i],stateSpace.u[i]);
+  end for;
   for i in 1:nQConv loop
-     connect(Q_flowConv[i],stateSpace.u[i]);
+     connect(Q_flowConv[i],stateSpace.u[i+nEmb]);
   end for;
   for i in 1:nQRad loop
-     connect(Q_flowRad[i],stateSpace.u[nQConv+i]);
+     connect(Q_flowRad[i],stateSpace.u[nEmb+nQConv+i]);
   end for;
 
   for i in 0:sim.numAzi loop
