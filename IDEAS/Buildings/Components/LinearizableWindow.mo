@@ -71,7 +71,7 @@ protected
     "declaration of array of resistances and capacitances for wall simulation"
     annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
   IDEAS.Buildings.Components.BaseClasses.ExteriorConvection eCon(final A=A*(1
-         - frac), linearize=linearize) if
+         - frac), linearize=sim.linearize) if
       enableLin
     "convective surface heat transimission on the exterior side of the wall"
     annotation (Placement(transformation(extent={{-20,-40},{-40,-20}})));
@@ -104,7 +104,8 @@ protected
     "determination of radiant heat exchange with the environment and sky"
     annotation (Placement(transformation(extent={{-20,80},{-40,100}})));
   IDEAS.Buildings.Components.BaseClasses.ExteriorConvection eConFra(final A=A*
-        frac) if fraType.present and enableLin
+        frac, linearize=sim.linearize) if
+                 fraType.present and enableLin
     "convective surface heat transimission on the exterior side of the wall"
     annotation (Placement(transformation(extent={{-20,60},{-40,80}})));
   Modelica.Thermal.HeatTransfer.Components.ThermalConductor layFra(final G=
@@ -131,7 +132,7 @@ public
                               linearize annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
-        origin={52,-60})));
+        origin={64,-60})));
   BoundaryConditions.WeatherData.Bus weaBus(numSolBus=sim.numAzi + 1) if
                                                linearize and linOut
     annotation (Placement(transformation(extent={{-90,90},{-70,110}})));
@@ -309,27 +310,27 @@ equation
  end for;
 
   connect(solWin.AbsQFlowInput, winBus.AbsQFlow) annotation (Line(
-      points={{10.4,-51},{34.2,-51},{34.2,-60},{52,-60}},
+      points={{10.4,-51},{34.2,-51},{34.2,-60},{64,-60}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(solWin.iSolDirInput, winBus.iSolDir) annotation (Line(
-      points={{10.4,-55},{32.2,-55},{32.2,-60},{52,-60}},
+      points={{10.4,-55},{32.2,-55},{32.2,-60},{64,-60}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(solWin.iSolDifInput, winBus.iSolDif) annotation (Line(
-      points={{10.4,-59},{30.2,-59},{30.2,-60},{52,-60}},
+      points={{10.4,-59},{30.2,-59},{30.2,-60},{64,-60}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(solWin.iSolDirOutput, winBus.iSolDir) annotation (Line(
-      points={{10.6,-65},{32.3,-65},{32.3,-60},{52,-60}},
+      points={{10.6,-65},{32.3,-65},{32.3,-60},{64,-60}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(solWin.iSolDifOutput, winBus.iSolDif) annotation (Line(
-      points={{10.6,-68},{30,-68},{30,-60},{52,-60}},
+      points={{10.6,-68},{30,-68},{30,-60},{64,-60}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(solWin.AbsQFlowOutput, winBus.AbsQFlow) annotation (Line(
-      points={{10.6,-62},{32,-62},{32,-60},{52,-60}},
+      points={{10.6,-62},{32,-62},{32,-60},{64,-60}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(radSolData.weaBus, weaBus) annotation (Line(

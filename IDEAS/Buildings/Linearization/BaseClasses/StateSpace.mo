@@ -1,6 +1,12 @@
 within IDEAS.Buildings.Linearization.BaseClasses;
 model StateSpace "State space model with bus inputs"
 
+  parameter Boolean use_matrix = false;
+  parameter Real A[:,:]= zeros(1,1);
+  parameter Real B[:,:]= zeros(1,1);
+  parameter Real C[:,:]= zeros(1,1);
+  parameter Real D[:,:]= zeros(1,1);
+
   parameter String fileName = "ss.mat";
   parameter Integer nEmb = 0;
   parameter Integer nQConv = 0 "Number of convective heat flow inputs";
@@ -13,18 +19,18 @@ model StateSpace "State space model with bus inputs"
   Components.Interfaces.WinBus winBus[nWin](nLay=winNLay)
     annotation (Placement(transformation(extent={{-118,40},{-78,80}})));
   Modelica.Blocks.Continuous.StateSpace stateSpace(
-    A=readMatrix(fileName=fileName, matrixName="A", rows=states, columns=  states),
-    B=readMatrix(fileName=fileName, matrixName="B", rows=states, columns=  inputs),
-    C=readMatrix(fileName=fileName, matrixName="C", rows=outputs, columns=states),
-    D=readMatrix(fileName=fileName, matrixName="D", rows=outputs, columns=inputs),
+    A=if use_matrix then A else readMatrix(fileName=fileName, matrixName="A", rows=states, columns=  states),
+    B=if use_matrix then B else readMatrix(fileName=fileName, matrixName="B", rows=states, columns=  inputs),
+    C=if use_matrix then C else readMatrix(fileName=fileName, matrixName="C", rows=outputs, columns=states),
+    D=if use_matrix then D else readMatrix(fileName=fileName, matrixName="D", rows=outputs, columns=inputs),
     x_start=x_start)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   outer SimInfoManager sim
     annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
 
 protected
-  final parameter Integer[2] Bsize = readMatrixSize(fileName=fileName, matrixName="B");
-  final parameter Integer[2] Dsize = readMatrixSize(fileName=fileName, matrixName="D");
+  final parameter Integer[2] Bsize = if use_matrix then size(B) else readMatrixSize(fileName=fileName, matrixName="B");
+  final parameter Integer[2] Dsize = if use_matrix then size(D) else readMatrixSize(fileName=fileName, matrixName="D");
 
   final parameter Integer offSolBus = nQConv + nQRad + nEmb
     "Offset for index of solbus";
