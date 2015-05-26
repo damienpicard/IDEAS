@@ -2,7 +2,7 @@ within IDEAS.Buildings.Components.Interfaces;
 expandable connector WinBus "Linearized window bus"
   extends Modelica.Icons.SignalBus;
 
-  parameter Integer nLay = 1 "Number of window layers";
+  parameter Integer nLay = 3 "Number of window layers";
 
   Real[nLay] AbsQFlow(start=fill(100,nLay));
   Real iSolDir(start=100);
