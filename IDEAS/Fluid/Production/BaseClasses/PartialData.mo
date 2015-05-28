@@ -13,6 +13,9 @@ partial record PartialData "Partial for every production data file"
    parameter Modelica.SIunits.Temperature TMax "Maximum set point temperature";
    parameter Modelica.SIunits.Temperature TMin "Minimum set point temperature";
 
+   parameter Modelica.SIunits.MassFlowRate m_flow_nominal
+    "Nominal mass flow rate";
+
    parameter Boolean use_polynomial=false;
    parameter Boolean use_3DHeatSource=false;
    parameter Boolean use_2DHeatSource=false;

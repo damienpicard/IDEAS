@@ -6,8 +6,11 @@ partial model PartialHeatSource
 
   replaceable package Medium =
       Modelica.Media.Interfaces.PartialMedium "Medium in the component";
-  parameter SI.MassFlowRate m_flow_nominal "Nominal mass flow rate"
+  parameter SI.MassFlowRate m_flow_nominal = data.m_flow_nominal
+    "Nominal mass flow rate"
     annotation(Dialog(group = "Nominal condition"));
+
+  parameter Modelica.SIunits.Temperature TLoss = 293.15;
   parameter Boolean useTSet = true
     "If true, use TSet as control input, else QSet";
   parameter Modelica.SIunits.Time riseTime=120
@@ -106,7 +109,7 @@ equation
   modulationInit = QAsked/QMax*100;
   modulation =   modulation_security_internal*IDEAS.Utilities.Math.Functions.smoothMin(modulationInit, 100, deltaX=0.1);
   //Calcualation of the heat powers
-  QLossesToCompensate = if noEvent(modulation > Modelica.Constants.eps) then UALoss*(heatPort.T - sim.Te) else 0;
+  QLossesToCompensate = if noEvent(modulation > Modelica.Constants.eps) then UALoss*(heatPort.T - TLoss) else 0;
   //Final heat power of the heat source
   heatPort.Q_flow = -eta/etaRef*modulation/100*QNom - QLossesToCompensate;
   PFuel = if noEvent(eta>Modelica.Constants.eps) then -heatPort.Q_flow/eta else 0;

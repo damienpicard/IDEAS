@@ -53,7 +53,6 @@ partial model PartialProduction
   replaceable IDEAS.Fluid.Production.BaseClasses.PartialHeatSource   heatSource(
     UALoss=UALoss,
     QNom=QNom,
-    m_flow_nominal=m_flow_nominal,
     riseTime=riseTime,
     use_onOffSignal=use_onOffSignal,
     onOff=onOff,
