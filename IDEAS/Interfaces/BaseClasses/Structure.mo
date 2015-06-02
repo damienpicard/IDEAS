@@ -18,30 +18,30 @@ partial model Structure "Partial model for building structure models"
   parameter Modelica.SIunits.Area ATrans=100
     "Transmission heat loss area of the residential unit";
   parameter Modelica.SIunits.Area[nZones] AZones = ones(nZones)*100
-    "Conditioned floor area of the zones";
+    "Conditioned floor area of the zones" annotation(HideResult=true);
   parameter Modelica.SIunits.Volume[nZones] VZones = AZones .*3
-    "Conditioned volume of the zones based on external dimensions";
+    "Conditioned volume of the zones based on external dimensions" annotation(HideResult=true);
   final parameter Modelica.SIunits.Length C=sum(VZones)/ATrans
-    "Building compactness";
+    "Building compactness" annotation(HideResult=true);
 
   parameter Modelica.SIunits.Temperature[nZones] T_start
-    "Operative zonal start temperatures";
+    "Operative zonal start temperatures" annotation(HideResult=true);
 
   parameter Modelica.SIunits.Power[ nZones] Q_design=zeros(nZones)
-    "Design heat loss of zones";//must be filled in in the Building interface, e.g.: QDesign={building.zone1.Q_design,building.zone2.Q_design}
+    "Design heat loss of zones" annotation(HideResult=true);//must be filled in in the Building interface, e.g.: QDesign={building.zone1.Q_design,building.zone2.Q_design}
 
   // Interfaces  ///////////////////////////////////////////////////////////////////////////////////////
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a[nZones] heatPortCon
-    "Internal zone nodes for convective heat gains" annotation (Placement(
+    "Internal zone nodes for convective heat gains" annotation (HideResult=true,Placement(
         transformation(extent={{140,10},{160,30}}), iconTransformation(extent={
             {140,10},{160,30}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a[nZones] heatPortRad
-    "Internal zones node for radiative heat gains" annotation (Placement(
+    "Internal zones node for radiative heat gains" annotation (HideResult=true,Placement(
         transformation(extent={{140,-30},{160,-10}}), iconTransformation(extent=
            {{140,-30},{160,-10}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b[nEmb] heatPortEmb
-    "Construction nodes for heat gains by embedded layers" annotation (
+    "Construction nodes for heat gains by embedded layers" annotation (HideResult=true,
       Placement(transformation(extent={{140,50},{160,70}}), iconTransformation(
           extent={{140,50},{160,70}})));
   Modelica.Blocks.Interfaces.RealOutput[nZones] TSensor(final quantity="ThermodynamicTemperature",unit="K",displayUnit="degC", min=0)
@@ -50,13 +50,13 @@ partial model Structure "Partial model for building structure models"
   Fluid.Interfaces.FlowPort_b[nZones] flowPort_Out(
     redeclare each final package Medium = Medium,
     each m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0))
-    annotation (Placement(transformation(extent={{-30,90},{-10,110}})));
+    annotation (HideResult=true,Placement(transformation(extent={{-30,90},{-10,110}})));
   Fluid.Interfaces.FlowPort_a[nZones] flowPort_In(
     redeclare each final package Medium = Medium,
      each m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0))
-    annotation (Placement(transformation(extent={{10,90},{30,110}})));
+    annotation (HideResult=true,Placement(transformation(extent={{10,90},{30,110}})));
   outer Modelica.Fluid.System system
-  annotation (Placement(transformation(extent={{100,-100},{120,-80}})));
+  annotation (HideResult=true,Placement(transformation(extent={{100,-100},{120,-80}})));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-150,-100},
             {150,100}}), graphics={
         Rectangle(

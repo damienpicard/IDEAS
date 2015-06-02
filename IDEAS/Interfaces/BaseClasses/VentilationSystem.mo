@@ -17,26 +17,26 @@ partial model VentilationSystem
   parameter Integer nZones(min=1)
     "Number of conditioned thermal building zones";
   parameter Integer nLoads(min=0) = 1 "Number of electric loads";
-  parameter Real[nZones] VZones "Conditioned volumes of the zones";
+  parameter Real[nZones] VZones "Conditioned volumes of the zones" annotation(HideResult=true);
 
   parameter Modelica.SIunits.Power[ nZones] Q_design=zeros(nZones)
-    "Design heat loss due to ventilation";//must be calculated depending on the case
+    "Design heat loss due to ventilation" annotation(HideResult=true);//must be calculated depending on the case
 
   // Interfaces  ///////////////////////////////////////////////////////////////////////////////////////
 
   Modelica.Blocks.Interfaces.RealInput[nZones] TSensor(final quantity="ThermodynamicTemperature",unit="K",displayUnit="degC", min=0)
-    "Sensor temperature of the zones" annotation (Placement(transformation(
+    "Sensor temperature of the zones" annotation (HideResult=true,Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=180,
         origin={-204,-60})));
   Fluid.Interfaces.FlowPort_b[nZones] flowPort_Out(
     redeclare each final package Medium = Medium,
      each m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0))
-    annotation (Placement(transformation(extent={{-210,-30},{-190,-10}})));
+    annotation (HideResult=true,Placement(transformation(extent={{-210,-30},{-190,-10}})));
   Fluid.Interfaces.FlowPort_a[nZones] flowPort_In(
     redeclare each final package Medium = Medium,
      each m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0))
-    annotation (Placement(transformation(extent={{-210,10},{-190,30}})));
+    annotation (HideResult=true,Placement(transformation(extent={{-210,10},{-190,30}})));
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-200,
             -100},{200,100}}), graphics={

@@ -18,7 +18,7 @@ partial model HeatingSystem "Partial heating/cooling system"
   parameter Boolean InInterface = false;
 
   parameter Modelica.SIunits.Power[nZones] Q_design
-    "Total design heat load for heating system based on heat losses" annotation(Dialog(enable=InInterface));
+    "Total design heat load for heating system based on heat losses" annotation(HideResult=true,Dialog(enable=InInterface));
 
   // --- Ports
   parameter Integer nConvPorts(min=0) = nZones
@@ -55,7 +55,7 @@ partial model HeatingSystem "Partial heating/cooling system"
     final quantity="ThermodynamicTemperature",
     unit="K",
     displayUnit="degC",
-    min=0) "Sensor temperature" annotation (Placement(transformation(
+    min=0) "Sensor temperature" annotation (HideResult=true,Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=180,
         origin={-204,-60})));
@@ -73,7 +73,7 @@ partial model HeatingSystem "Partial heating/cooling system"
     final quantity="ThermodynamicTemperature",
     unit="K",
     displayUnit="degC",
-    min=0) "Setpoint temperature for the zones" annotation (Placement(
+    min=0) "Setpoint temperature for the zones" annotation (HideResult=true,Placement(
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,

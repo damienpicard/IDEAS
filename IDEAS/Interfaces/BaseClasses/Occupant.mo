@@ -20,7 +20,7 @@ partial model Occupant
     final quantity="ThermodynamicTemperature",
     unit="K",
     displayUnit="degC",
-    min=0) "Setpoint temperature for the zones" annotation (Placement(
+    min=0) "Setpoint temperature for the zones" annotation (HideResult=true,Placement(
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
