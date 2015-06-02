@@ -9,8 +9,7 @@ model OuterWall "Opaque building envelope construction"
   parameter Modelica.SIunits.Angle azi
     "Azimuth of the wall, i.e. 0deg denotes South";
 
-  final parameter Real U_value=1/(1/8 + sum(constructionType.mats.R) + 1/25)
-    "Wall U-value";
+  final parameter Real U_value=1/(1/8 + layMul.R + 1/25) "Wall U-value";
   final parameter Modelica.SIunits.Power QTra_design=U_value*AWall*(273.15 + 21 - sim.Tdes)
     "Design heat losses at reference outdoor temperature";
 
