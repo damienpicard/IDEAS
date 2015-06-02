@@ -34,9 +34,6 @@ partial model partial_multipleBoreHoles
     "Average borehole wall temperature"
     annotation (Placement(transformation(extent={{-80,-54},{-58,-34}})));
 
-  Modelica.SIunits.Power Q_flow
-    "Thermal power extracted or injected in the borefield";
-
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature TWallBou
     "Borehole wall temperature"
     annotation (Placement(transformation(extent={{-44,-54},{-24,-34}})));
@@ -70,6 +67,10 @@ protected
     "Current internal energy, defined as U=0 for t=tStart";
   Modelica.SIunits.Time startTime "Start time of the simulation";
 
+public
+  Modelica.Blocks.Interfaces.RealOutput Q_flow(unit="W")
+    "Thermal power extracted or injected in the borefield"
+    annotation (Placement(transformation(extent={{100,42},{120,62}})));
 initial algorithm
   // Initialisation of the internal energy (zeros) and the load vector. Load vector have the same lenght as the number of aggregated pulse and cover lenSim
   U := 0;
