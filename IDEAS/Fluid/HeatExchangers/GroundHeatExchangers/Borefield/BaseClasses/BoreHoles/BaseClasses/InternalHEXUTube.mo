@@ -56,7 +56,7 @@ model InternalHEXUTube "Internal part of a borehole for a U-Tube configuration"
 
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil1(C=Co_fil/2*scaSeg, T(
         start=T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
-        der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)))
+        der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial))) if dynFil
     "Heat capacity of the filling material"
                                          annotation (
       Placement(transformation(
@@ -66,16 +66,13 @@ model InternalHEXUTube "Internal part of a borehole for a U-Tube configuration"
 
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil2(C=Co_fil/2*scaSeg, T(
         start=T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
-        der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)))
+        der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial))) if   dynFil
     "Heat capacity of the filling material"                                                                                        annotation (
       Placement(transformation(
         extent={{-90,-36},{-70,-16}},
         rotation=0,
-        origin={80,6})));
+        origin={80,12})));
 
-  parameter Real scaSeg = 1
-    "scaling factor used by Borefield.MultipleBoreHoles to represent the whole borefield by one single segment"
-                                                                                                        annotation (Dialog(group="Advanced"));
 protected
   parameter Modelica.SIunits.HeatCapacity Co_fil=fil.d*fil.c*gen.hSeg*Modelica.Constants.pi
       *(gen.rBor^2 - 2*(gen.rTub + gen.eTub)^2)
@@ -142,7 +139,8 @@ initial equation
     kMed=kMed,
     mueMed=mueMed,
     cpMed=cpMed,
-    m_flow_nominal=gen.m_flow_nominal_bh);
+    m_flow_nominal=gen.m_flow_nominal_bh,
+    printDebug=true);
 
 equation
   connect(vol1.heatPort, RConv1.fluid) annotation (Line(
@@ -153,18 +151,16 @@ equation
       points={{-58,28},{-50,28}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(Rpg1.port_b, capFil1.port) annotation (Line(
-      points={{-26,28},{-20,28},{-20,36},{0,36}},
+  if dynFil then
+    connect(capFil1.port, Rgb1.port_a) annotation (Line(
+      points={{0,36},{0,38},{52,38}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(capFil1.port, Rgb1.port_a) annotation (Line(
-      points={{0,36},{26,36},{26,38},{52,38}},
+    connect(capFil2.port, Rgb2.port_a) annotation (Line(
+      points={{0,-24},{0,-28},{52,-28}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(capFil1.port, Rgg.port_a) annotation (Line(
-      points={{0,36},{20,36},{20,14}},
-      color={191,0,0},
-      smooth=Smooth.None));
+  end if;
   connect(Rgb1.port_b, port) annotation (Line(
       points={{76,38},{86,38},{86,100},{0,100}},
       color={191,0,0},
@@ -173,20 +169,8 @@ equation
       points={{-56,-28},{-48,-28}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(Rpg2.port_b, capFil2.port) annotation (Line(
-      points={{-24,-28},{-12,-28},{-12,-30},{0,-30}},
-      color={191,0,0},
-      smooth=Smooth.None));
   connect(RConv2.fluid, vol2.heatPort) annotation (Line(
       points={{-80,-28},{-86,-28},{-86,-46},{20,-46},{20,-60},{12,-60}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(capFil2.port, Rgb2.port_a) annotation (Line(
-      points={{0,-30},{26,-30},{26,-28},{52,-28}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg.port_b, capFil2.port) annotation (Line(
-      points={{20,-10},{20,-30},{0,-30}},
       color={191,0,0},
       smooth=Smooth.None));
   connect(Rgb2.port_b, port) annotation (Line(
@@ -202,10 +186,25 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
 
+  connect(Rpg1.port_b, Rgb1.port_a) annotation (Line(
+      points={{-26,28},{-16,28},{-16,38},{52,38}},
+      color={191,0,0},
+      smooth=Smooth.None));
+  connect(Rgg.port_a, Rgb1.port_a) annotation (Line(
+      points={{20,14},{20,38},{52,38}},
+      color={191,0,0},
+      smooth=Smooth.None));
+  connect(Rpg2.port_b, Rgb2.port_a) annotation (Line(
+      points={{-24,-28},{52,-28}},
+      color={191,0,0},
+      smooth=Smooth.None));
+  connect(Rgg.port_b, Rgb2.port_a) annotation (Line(
+      points={{20,-10},{20,-28},{52,-28}},
+      color={191,0,0},
+      smooth=Smooth.None));
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -120},{100,100}}),
-                        graphics),
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-120},{100,
+            100}}),     graphics),
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-120},{100,
             100}}), graphics={Rectangle(
           extent={{88,54},{-88,64}},

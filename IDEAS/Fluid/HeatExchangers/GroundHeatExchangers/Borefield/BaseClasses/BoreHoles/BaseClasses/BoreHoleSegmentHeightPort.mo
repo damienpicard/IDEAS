@@ -72,7 +72,8 @@ model BoreHoleSegmentHeightPort "Vertical segment of a borehole"
     final X4_start=X_start,
     final C4_start=C_start,
     final C4_nominal=C_nominal,
-    final T_start=T_start)
+    final T_start=T_start,
+    dynFil=dynFil)
     "Internal part of the borehole including the pipes and the filling material"
     annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
 
@@ -98,6 +99,9 @@ protected
   Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor heaFlo
     annotation (Placement(transformation(extent={{-30,-10},{-10,10}})));
 
+public
+  parameter Boolean dynFil=true
+    "Set to false to remove the dynamics of the filling material." annotation (Dialog(tab="Dynamics"));
 equation
   connect(intHEX.port, heaFlo.port_a) annotation (Line(
       points={{-60,10},{-45,10},{-45,1.22125e-015},{-40,1.22125e-015},{-40,0},{

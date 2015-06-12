@@ -33,23 +33,20 @@ model InternalHEX2UTube
       final massDynamics=massDynamics,
       final prescribedHeatFlowRate=false,
       final m_flow_small=m2_flow_small,
-      final V=gen.volOneLegSeg*scaSeg,
-      nPorts=2),
+      final V=gen.volOneLegSeg*scaSeg),
     vol3(
       final energyDynamics=energyDynamics,
       final massDynamics=massDynamics,
       final prescribedHeatFlowRate=false,
       final allowFlowReversal=allowFlowReversal3,
       final m_flow_small=m3_flow_small,
-      final V=gen.volOneLegSeg*scaSeg,
-      nPorts=2),
+      final V=gen.volOneLegSeg*scaSeg),
     vol4(
       final energyDynamics=energyDynamics,
       final massDynamics=massDynamics,
       final prescribedHeatFlowRate=false,
       final m_flow_small=m4_flow_small,
-      final V=gen.volOneLegSeg*scaSeg,
-      nPorts=2));
+      final V=gen.volOneLegSeg*scaSeg));
 
   parameter Modelica.SIunits.Temperature T_start
     "Initial temperature of the filling material"
@@ -73,83 +70,83 @@ model InternalHEX2UTube
         extent={{-4,4},{4,-4}},
         rotation=180,
         origin={-42,10})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rpg1(R=RCondGro_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rpg1(R=RCondGro_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{7,-7},{-7,7}},
         rotation=90,
         origin={-1,45})));
 
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgb1(R=Rgb_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgb1(R=Rgb_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{7,-7},{-7,7}},
         rotation=90,
         origin={-1,21})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rpg2(R=RCondGro_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rpg2(R=RCondGro_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{-7,7},{7,-7}},
         rotation=180,
         origin={33,-1})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgb2(R=Rgb_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgb2(R=Rgb_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{7,-7},{-7,7}},
         rotation=0,
         origin={15,-1})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rpg3(R=RCondGro_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rpg3(R=RCondGro_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{-7,-7},{7,7}},
         rotation=90,
         origin={-1,-35})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgb3(R=Rgb_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgb3(R=Rgb_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{-7,-7},{7,7}},
         rotation=90,
         origin={-1,-15})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rpg4(R=RCondGro_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rpg4(R=RCondGro_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{7,-7},{-7,7}},
         rotation=180,
         origin={-31,1})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgb4(R=Rgb_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgb4(R=Rgb_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{7,-7},{-7,7}},
         rotation=180,
         origin={-13,1})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg11(R=Rgg1_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg11(R=Rgg1_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{7,-7},{-7,7}},
         rotation=90,
         origin={21,21})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg21(R=Rgg2_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg21(R=Rgg2_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{7,-7},{-7,7}},
         rotation=180,
         origin={43,45})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg12(R=Rgg1_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg12(R=Rgg1_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{7,-7},{-7,7}},
         rotation=90,
         origin={21,-19})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg22(R=Rgg2_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg22(R=Rgg2_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{7,-7},{-7,7}},
         rotation=90,
         origin={49,-21})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg14(R=Rgg1_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg14(R=Rgg1_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{7,-7},{-7,7}},
         rotation=90,
         origin={-21,19})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg24(R=Rgg2_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg24(R=Rgg2_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{-7,-7},{7,7}},
         rotation=90,
         origin={-39,23})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg13(R=Rgg1_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg13(R=Rgg1_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{7,-7},{-7,7}},
         rotation=90,
         origin={-19,-19})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg23(R=Rgg2_val)
+  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg23(R=Rgg2_val/scaSeg)
     "Grout thermal resistance" annotation (Placement(transformation(
         extent={{7,-7},{-7,7}},
         rotation=180,
@@ -158,7 +155,7 @@ model InternalHEX2UTube
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil1(T(start=
           T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
       der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)),
-    C=Co_fil/4*scaSeg) "Heat capacity of the filling material"
+    C=Co_fil/4*scaSeg) if  dynFil "Heat capacity of the filling material"
                                             annotation (Placement(
         transformation(
         extent={{-54,21.6},{-42,9.6}},
@@ -168,7 +165,7 @@ model InternalHEX2UTube
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil2(T(start=
           T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
       der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)),
-    C=Co_fil/4*scaSeg) "Heat capacity of the filling material"
+    C=Co_fil/4*scaSeg) if   dynFil "Heat capacity of the filling material"
                                             annotation (Placement(
         transformation(
         extent={{54,-21.6},{42,-9.6}},
@@ -177,7 +174,7 @@ model InternalHEX2UTube
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil3(T(start=
           T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
       der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)),
-    C=Co_fil/4*scaSeg) "Heat capacity of the filling material"
+    C=Co_fil/4*scaSeg) if  dynFil "Heat capacity of the filling material"
                                             annotation (Placement(
         transformation(
         extent={{54,-21.6},{42,-9.6}},
@@ -186,16 +183,13 @@ model InternalHEX2UTube
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil4(T(start=
           T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
       der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)),
-    C=Co_fil/4*scaSeg) "Heat capacity of the filling material"
+    C=Co_fil/4*scaSeg) if  dynFil "Heat capacity of the filling material"
                                             annotation (Placement(
         transformation(
         extent={{54,-21.6},{42,-9.6}},
         rotation=180,
         origin={15.6,-30})));
 
-  parameter Real scaSeg=1
-    "scaling factor used by Borefield.MultipleBoreHoles to represent the whole borefield by one single segment"
-    annotation (Dialog(group="Advanced"));
 protected
   parameter Modelica.SIunits.HeatCapacity Co_fil=fil.d*fil.c*gen.hSeg*Modelica.Constants.pi
       *(gen.rBor^2 - 4*(gen.rTub + gen.eTub)^2)
@@ -232,7 +226,7 @@ public
         mueMed=mueMed,
         cpMed=cpMed,
         m_flow=m1_flow,
-        m_flow_nominal=gen.m_flow_nominal_bh)/scaSeg)
+        m_flow_nominal=if gen.parallel2UTube then gen.m_flow_nominal_bh/2 else gen.m_flow_nominal_bh)/scaSeg)
     "Convective and thermal resistance at fluid 1"
     annotation (Placement(transformation(extent={{-56,56},{-42,72}})));
   Modelica.Blocks.Sources.RealExpression RVol2(y=convectionResistance(
@@ -243,7 +237,7 @@ public
         mueMed=mueMed,
         cpMed=cpMed,
         m_flow=m2_flow,
-        m_flow_nominal=gen.m_flow_nominal_bh)/scaSeg)
+        m_flow_nominal=if gen.parallel2UTube then gen.m_flow_nominal_bh/2 else gen.m_flow_nominal_bh)/scaSeg)
     "Convective and thermal resistance at fluid 2"
     annotation (Placement(transformation(extent={{88,18},{72,0}})));
   Modelica.Blocks.Sources.RealExpression RVol3(y=convectionResistance(
@@ -254,7 +248,7 @@ public
         mueMed=mueMed,
         cpMed=cpMed,
         m_flow=m3_flow,
-        m_flow_nominal=gen.m_flow_nominal_bh)/scaSeg)
+        m_flow_nominal=if gen.parallel2UTube then gen.m_flow_nominal_bh/2 else gen.m_flow_nominal_bh)/scaSeg)
     "Convective and thermal resistance at fluid 1"
     annotation (Placement(transformation(extent={{-12,-60},{-26,-76}})));
 
@@ -266,7 +260,7 @@ public
         mueMed=mueMed,
         cpMed=cpMed,
         m_flow=m1_flow,
-        m_flow_nominal=gen.m_flow_nominal_bh)/scaSeg)
+        m_flow_nominal=if gen.parallel2UTube then gen.m_flow_nominal_bh/2 else gen.m_flow_nominal_bh)/scaSeg)
     "Convective and thermal resistance at fluid 1"
     annotation (Placement(transformation(extent={{-68,12},{-54,28}})));
 
@@ -285,7 +279,8 @@ initial equation
     kMed=kMed,
     mueMed=mueMed,
     cpMed=cpMed,
-    m_flow_nominal=if gen.parallel2UTube then gen.m_flow_nominal_bh/2 else gen.m_flow_nominal_bh);
+    m_flow_nominal=if gen.parallel2UTube then gen.m_flow_nominal_bh/2 else gen.m_flow_nominal_bh,
+    printDebug=true);
 
 equation
   connect(RVol1.y, RConv1.Rc) annotation (Line(
@@ -313,10 +308,7 @@ equation
       points={{-18,58},{-18,52},{-1,52}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(capFil1.port, Rpg1.port_b) annotation (Line(
-      points={{10,44},{8,44},{8,34},{-1,34},{-1,38}},
-      color={191,0,0},
-      smooth=Smooth.None));
+
   connect(Rpg1.port_b, Rgb1.port_a) annotation (Line(
       points={{-1,38},{-1,28}},
       color={191,0,0},
@@ -361,18 +353,44 @@ equation
       points={{-6,1},{-4,1},{-4,0},{6,0},{6,60},{20,60},{20,100},{0,100}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(capFil2.port, Rpg2.port_b) annotation (Line(
+ if dynFil then
+     connect(capFil1.port, Rpg1.port_b) annotation (Line(
+      points={{10,44},{10,34},{0,34},{0,38},{-1,38}},
+      color={191,0,0},
+      smooth=Smooth.None));
+    connect(capFil2.port, Rpg2.port_b) annotation (Line(
       points={{33.6,-10.4},{26,-10.4},{26,-1}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(capFil3.port, Rpg3.port_b) annotation (Line(
+    connect(capFil3.port, Rpg3.port_b) annotation (Line(
       points={{13.6,-30.4},{13.6,-28},{-1,-28}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(capFil4.port, Rpg4.port_b) annotation (Line(
+    connect(capFil4.port, Rpg4.port_b) annotation (Line(
       points={{-32.4,-8.4},{-24,-8.4},{-24,1}},
       color={191,0,0},
       smooth=Smooth.None));
+    connect(Rgg21.port_b, capFil3.port) annotation (Line(
+      points={{50,45},{80,45},{80,44},{112,44},{112,-30.4},{13.6,-30.4}},
+      color={191,0,0},
+      smooth=Smooth.None));
+    connect(Rgg22.port_a, capFil2.port) annotation (Line(
+      points={{49,-14},{48,-14},{48,-10.4},{33.6,-10.4}},
+      color={191,0,0},
+      smooth=Smooth.None));
+    connect(Rgg22.port_b, capFil4.port) annotation (Line(
+      points={{49,-28},{50,-28},{50,-90},{-42,-90},{-42,-8.4},{-32.4,-8.4}},
+      color={191,0,0},
+      smooth=Smooth.None));
+ else
+    connect(Rgg11.port_a, Rpg1.port_b);
+    connect(Rgg12.port_a, Rpg2.port_b);
+    connect(Rgg13.port_b, Rpg3.port_b);
+    connect(Rgg14.port_b, Rpg4.port_b);
+    connect(Rgg21.port_b, Rpg1.port_b);
+    connect(Rgg22.port_a, Rpg2.port_b);
+    connect(Rgg22.port_b, Rpg4.port_b);
+ end if;
   connect(Rgg11.port_a, Rpg1.port_b) annotation (Line(
       points={{21,28},{22,28},{22,34},{-1,34},{-1,38}},
       color={191,0,0},
@@ -409,18 +427,7 @@ equation
       points={{36,45},{30,45},{30,34},{-1,34},{-1,38}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(Rgg21.port_b, capFil3.port) annotation (Line(
-      points={{50,45},{80,45},{80,44},{112,44},{112,-30.4},{13.6,-30.4}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg22.port_a, capFil2.port) annotation (Line(
-      points={{49,-14},{48,-14},{48,-10.4},{33.6,-10.4}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg22.port_b, capFil4.port) annotation (Line(
-      points={{49,-28},{50,-28},{50,-90},{-42,-90},{-42,-8.4},{-32.4,-8.4}},
-      color={191,0,0},
-      smooth=Smooth.None));
+
   connect(Rgg23.port_b, Rpg3.port_b) annotation (Line(
       points={{-22,-39},{-18,-39},{-18,-40},{-12,-40},{-12,-26},{-2,-26},{-1,-28}},
       color={191,0,0},
@@ -451,6 +458,7 @@ equation
       points={{-53.3,20},{-50,20},{-50,14},{-42,14}},
       color={0,0,127},
       smooth=Smooth.None));
+
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-120},{100,
             100}}), graphics={Text(

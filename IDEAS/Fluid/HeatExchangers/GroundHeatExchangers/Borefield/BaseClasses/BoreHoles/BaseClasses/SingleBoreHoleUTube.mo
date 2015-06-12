@@ -22,10 +22,14 @@ model SingleBoreHoleUTube "Single U-tube borehole heat exchanger"
     each final T_start=T_start,
     each final X_start=X_start,
     each final C_start=C_start,
-    each final C_nominal=C_nominal) "Discretized borehole segments"
+    each final C_nominal=C_nominal,
+    dynFil=dynFil) "Discretized borehole segments"
     annotation (Placement(transformation(extent={{-18,-10},{2,10}})));
   Modelica.SIunits.Temperature TDown[gen.nVer] "Medium temperature in pipe 1";
   Modelica.SIunits.Temperature TUp[gen.nVer] "Medium temperature in pipe 2";
+  parameter Boolean dynFil=true
+    "Set to false to remove the dynamics of the filling material."
+    annotation (Dialog(tab="Dynamics"));
 equation
   TWallAve = sum(borHolSeg[:].intHEX.port.T)/gen.nVer;
 

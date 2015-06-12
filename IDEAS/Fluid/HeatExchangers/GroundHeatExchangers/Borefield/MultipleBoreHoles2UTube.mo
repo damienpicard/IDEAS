@@ -42,13 +42,17 @@ model MultipleBoreHoles2UTube
     final dp3_nominal=1,
     final dp4_nominal=1,
     final T_start = T_start,
-    final scaSeg=bfData.gen.nbBh*bfData.gen.nVer)
+    final scaSeg=bfData.gen.nbBh*bfData.gen.nVer,
+    dynFil=dynFil)
     "Internal part of the borehole including the pipes and the filling material"
     annotation (Placement(transformation(
         extent={{-12,13},{12,-13}},
         rotation=270,
         origin={3,-8})));
 
+  parameter Boolean dynFil=true
+    "Set to false to remove the dynamics of the filling material."
+    annotation (Dialog(tab="Dynamics"));
 equation
   Q_flow = intHEX.port_a1.m_flow*(actualStream(intHEX.port_a1.h_outflow) - actualStream(intHEX.port_b2.h_outflow)) + intHEX.port_a3.m_flow*(actualStream(intHEX.port_a3.h_outflow) - actualStream(intHEX.port_b4.h_outflow));
 
@@ -73,7 +77,8 @@ equation
       color={191,0,0},
       smooth=Smooth.None));
   connect(intHEX.port_b1, intHEX.port_a2) annotation (Line(
-      points={{-6.45455,-21.1818},{-6.45455,-30},{-0.545455,-30},{-0.545455,-21.1818}},
+      points={{-6.45455,-21.1818},{-6.45455,-30},{-0.545455,-30},{-0.545455,
+          -21.1818}},
       color={0,127,255},
       smooth=Smooth.None));
 
