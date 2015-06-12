@@ -42,25 +42,24 @@ protected
   Modelica.SIunits.ThermalResistance Rg;
   Modelica.SIunits.ThermalResistance Rar1;
   Modelica.SIunits.ThermalResistance Rar2;
-algorithm
-  R11 :=RCondPipe + RConv + 1/2/Modelica.Constants.pi/kFil*( Modelica.Math.log(rBor/
-    (rTub + eTub)) - (kFil - kSoi)/(kFil + kSoi)*Modelica.Math.log((rBor^2 -
-    sha^2)/rBor^2));
-  R12 :=1/2/Modelica.Constants.pi/kFil*(Modelica.Math.log(rBor/(sqrt(2)*
-    sha)) - (kFil - kSoi)/(2*kFil + 2*kSoi)*Modelica.Math.log((rBor^4 + sha^4)/
-    rBor^4));
-  R13 :=1/2/Modelica.Constants.pi/kFil*(Modelica.Math.log(rBor/(2*sha)) - (
-    kFil - kSoi)/(kFil + kSoi)*Modelica.Math.log((rBor^2 - sha^2)/rBor^2));
 
-  Rb_internal :=if use_Rb then Rb else 0.25*(R11 + 2*R12 + R13); // surprising that factor 1/4 is not include!
-  Ra :=2*(R11 - R12);
+algorithm
+R11 :=RCondPipe + RConv + 1/2/pi/kFil*(log(rBor/rTub) - (
+    kFil - kSoi)/(kFil + kSoi)*log((rBor^2 - sha^2)/rBor^2));
+R12 :=1/2/pi/kFil*(log(rBor/(sqrt(2)*sha)) - (kFil - kSoi)
+    /(2*kFil + 2*kSoi)*log((rBor^4 + sha^4)/rBor^4));
+R13 :=1/2/pi/kFil*(log(rBor/(2*sha)) - (kFil - kSoi)/(kFil +
+    kSoi)*log((rBor^2 + sha^2)/rBor^2));
+
+  Rb_internal :=if use_Rb then Rb else 0.25*(R11 + 2*R12 + R13);
+  Ra :=(R11 - R12);
 
   // ------ Calculation according to Bauer et al. (2010)
   Rg :=(4*Rb_internal - RCondPipe - RConv)/hSeg;
   Rar1 :=((2 + sqrt(2))*Rg*hSeg*(Ra - RCondPipe)/(Rg*hSeg + Ra - RCondPipe))/hSeg;
   Rar2 :=sqrt(2)*Rar1  * 100;
 
-//   1/2/Modelica.Constants.pi/kFil*(Modelica.Math.log(rBor/(rTub +
+//   1/2/pi/kFil*(Modelica.Math.log(rBor/(rTub +
 //     eTub)) + 0.5*Modelica.Math.log(sqrt(2)*sha/(rTub + eTub)) - 0.25*
 //     Modelica.Math.log(2*sha/(rTub + eTub)) - 0.25*Modelica.Math.log(1 - sha^8/
 //     rBor^8)) + RCondPipe/4;
@@ -90,12 +89,13 @@ algorithm
    "Maximum number of iterations exceeded. Check the borehole geometry.
    The tubes may be too close to the borehole wall.
    Input to the function
-   IDEAS.Fluid.HeatExchangers.Boreholes.BaseClasses.singleUTubeResistances
+   IDEAS.Fluid.HeatExchangers.Boreholes.BaseClasses.doubleUTubeResistances
    is
             hSeg = " + String(hSeg) + " m
             rBor = " + String(rBor) + " m
             rTub = " + String(rTub) + " m
             eTub = " + String(eTub) + " m
+            sha = " + String(sha) + " m
             kSoi = " + String(kSoi) + " W/m/K
             kFil = " + String(kFil) + " W/m/K
             kTub = " + String(kTub) + " W/m/K
@@ -107,13 +107,16 @@ algorithm
   //Conduction resistance in grout from pipe wall to capacity in grout
   RCondGro := x*Rg + RCondPipe/hSeg;
 
-  Modelica.Utilities.Streams.print("Rb = " + String(Rb_internal) + " m K / W
+    if printDebug then
+    Modelica.Utilities.Streams.print("
+Rb = " + String(Rb_internal) + " m K / W
 RCondPipe = "+ String(RCondPipe) + " m K / W
-RConv = "+String(RConv) +" mK/W
+RConv = " +String(RConv) +"m K / W
 hSeg = " + String(hSeg) + " m
 Rg = "+String(Rg) + " K / W
 Ra = " + String(Ra)  + " m K / W
 x = " + String(x));
+  end if;
   annotation (Diagram(graphics), Documentation(info="<html>
 <p>
 This model computes the different thermal resistances present in a single-U-tube borehole 

@@ -1,6 +1,6 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.Validation;
 model SandBoxExperiment
-  "Comparison of the borehole model with the sandbox experiment."
+  "Comparison of the borehole model with the sandbox experiment. Notice, the temperature difference is due to the fin-effect present in the experiment."
   extends Examples.SingleBoreHoleUTubeSerStepLoad(
     redeclare Data.SoilData.WetSand_validation soi,
     redeclare Data.FillingData.Bentonite_validation fil,

@@ -13,7 +13,7 @@ model borefield8x1
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
   parameter Integer lenSim=3600*24*366 "length of the simulation";
 
-  replaceable MultipleBoreHolesUTube multipleBoreholes(
+  replaceable MultipleBoreHolesUTube borFie(
     lenSim=lenSim,
     redeclare package Medium = Medium,
     bfData=bfData,
@@ -67,7 +67,7 @@ equation
       points={{30,12},{70,12},{70,-40},{58,-40}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(senTem_out.port_a, multipleBoreholes.port_b) annotation (Line(
+  connect(senTem_out.port_a, borFie.port_b) annotation (Line(
       points={{38,-40},{20,-40}},
       color={0,127,255},
       smooth=Smooth.None));
@@ -87,7 +87,7 @@ equation
       points={{-36,12},{-78,12},{-78,-40},{-60,-40}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(senTem_in.port_b, multipleBoreholes.port_a) annotation (Line(
+  connect(senTem_in.port_b, borFie.port_a) annotation (Line(
       points={{-40,-40},{-20,-40}},
       color={0,127,255},
       smooth=Smooth.None));

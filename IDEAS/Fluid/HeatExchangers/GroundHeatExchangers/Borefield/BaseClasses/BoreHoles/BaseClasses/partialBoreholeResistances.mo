@@ -31,14 +31,28 @@ partial function partialBoreholeResistances
     "Specific heat capacity of the fluid";
   input Modelica.SIunits.MassFlowRate m_flow_nominal "Nominal mass flow rate";
 
+  input Boolean printDebug
+    "Print resistances values in log for debug purposes.";
   // Outputs
 
   output Real x "Capacity location";
 
+  Real RConv(unit="(m.K)/W") = convectionResistance(
+    hSeg=hSeg,
+    rBor=rBor,
+    rTub=rTub_in,
+    kMed=kMed,
+    mueMed=mueMed,
+    cpMed=cpMed,
+    m_flow=m_flow_nominal,
+    m_flow_nominal=m_flow_nominal)*hSeg;
 protected
+  parameter Real pi = 3.141592653589793;
+
+  parameter Real rTub_in = rTub-eTub "Inner radius of tube";
   Boolean test=false "thermodynamic test for R and x value";
 
-  Real RCondPipe(unit="(m.K)/W") =  Modelica.Math.log((rTub + eTub)/rTub)/(2*Modelica.Constants.pi*kTub)
+  Real RCondPipe(unit="(m.K)/W") =  Modelica.Math.log((rTub)/rTub_in)/(2*Modelica.Constants.pi*kTub)
     "Thermal resistance of the pipe wall";
 
   Real Rb_internal(unit="(m.K)/W")
@@ -46,15 +60,6 @@ protected
 
   Integer i=1 "Loop counter";
 
-  Real RConv(unit="(m.K)/W") = convectionResistance(
-    hSeg=hSeg,
-    rBor=rBor,
-    rTub=rTub,
-    kMed=kMed,
-    mueMed=mueMed,
-    cpMed=cpMed,
-    m_flow=m_flow_nominal,
-    m_flow_nominal=m_flow_nominal)*hSeg;
   annotation (Diagram(graphics), Documentation(info="<html>
 <p>
 This model computes the different thermal resistances present in a single-U-tube borehole 

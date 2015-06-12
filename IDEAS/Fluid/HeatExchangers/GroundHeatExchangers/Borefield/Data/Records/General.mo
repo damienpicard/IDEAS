@@ -45,7 +45,7 @@ record General "General parameters of the borefield"
     annotation (Dialog(group="Borehole"));
 
   // -- Tube
-  parameter SI.Radius rTub=0.02 "Radius of the tubes"
+  parameter SI.Radius rTub=0.02 "Outer radius of the tubes"
     annotation (Dialog(group="Tubes"));
   parameter SI.ThermalConductivity kTub=0.5 "Thermal conductivity of the tube"
     annotation (Dialog(group="Tubes"));

@@ -21,7 +21,8 @@ model SingleBoreHoles2UTubeInSerie
     each final X_start=X_start,
     each final C_start=C_start,
     redeclare each final package Medium = Medium,
-    each final C_nominal=C_nominal) constrainedby
+    each final C_nominal=C_nominal,
+    dynFil=dynFil)                  constrainedby
     Interface.PartialSingleBoreHole(
     each m_flow_nominal=m_flow_nominal,
     each T_start=T_start,
@@ -46,6 +47,9 @@ model SingleBoreHoles2UTubeInSerie
 
   Modelica.SIunits.Temperature[gen.nbSer] TWallAveSeg
     "Average borehole wall temperature along the depth for borehole in serie";
+  parameter Boolean dynFil=true
+    "Set to false to remove the dynamics of the filling material."
+    annotation (Dialog(tab="Dynamics"));
 equation
   assert(not gen.singleUTube, "This borefield model is for double U-Tube configuration but you chose single U-Tube configuration in the general borefield record.");
 

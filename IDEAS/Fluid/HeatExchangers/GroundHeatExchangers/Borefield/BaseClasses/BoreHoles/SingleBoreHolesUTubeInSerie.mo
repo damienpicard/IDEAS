@@ -22,11 +22,15 @@ model SingleBoreHolesUTubeInSerie
     each final X_start=X_start,
     each final C_start=C_start,
     redeclare each final package Medium = Medium,
-    each final C_nominal=C_nominal) "Borehole heat exchanger" annotation (Placement(
+    each final C_nominal=C_nominal,
+    dynFil=dynFil) "Borehole heat exchanger"                  annotation (Placement(
         transformation(extent={{-16,-16},{16,16}}, rotation=0)));
 
   Modelica.SIunits.Temperature[gen.nbSer] TWallAveSeg
     "Average borehole wall temperature along the depth for borehole in serie";
+  parameter Boolean dynFil=true
+    "Set to false to remove the dynamics of the filling material."
+    annotation (Dialog(tab="Dynamics"));
 equation
   assert(gen.singleUTube, "This borefield model is for single U-Tube configuration but you chose double U-Tube configuration in the general borefield record.");
 

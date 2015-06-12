@@ -1,6 +1,7 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses;
 function singleUTubeResistances
   "Thermal resistances for single U-tube, according to Bauer et al. (2011)"
+  // FIXME: if python is used, the results are slightly different. I guess the Dymola resultion is quite low.
   extends
     IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.partialBoreholeResistances;
 
@@ -34,16 +35,21 @@ algorithm
   // ********** Rb and Ra from multipole **********
   // Help variables
   sigma :=(kFil - kSoi)/(kFil + kSoi);
-  R_1delta_LS :=1/(2*Modelica.Constants.pi*kFil)*(log(rBor/(rTub + eTub)) + log(rBor/(2*sha)) +
+  R_1delta_LS :=1/(2*pi*kFil)*(log(rBor/rTub) + log(rBor/(2*sha)) +
     sigma*log(rBor^4/(rBor^4 - sha^4))) + RCondPipe + RConv;
-  R_1delta_MP :=R_1delta_LS - 1/(2*Modelica.Constants.pi*kFil)*((rTub + eTub)^2/
-    (4*sha^2)*(1 - sigma*4*sha^4/(rBor^4 - sha^4))^2)/((1 + beta)/(1 - beta) + (
-    rTub + eTub)^2/(4*sha^2)*(1 + sigma*16*sha^4*rBor^4/(rBor^4 - sha^4)^2));
-  Ra_LS      :=1/(Modelica.Constants.pi*kFil)*(log(2*sha/rTub) + sigma*log((
-    rBor^2 + sha^2)/(rBor^2 - sha^2)));
+
+  R_1delta_LS :=1/(2*Modelica.Constants.pi*kFil)*(log(rBor/rTub) + log(rBor/(2*
+    sha)) + sigma*log(rBor^4/(rBor^4 - sha^4))) + RCondPipe + RConv;
+
+  R_1delta_MP :=R_1delta_LS - 1/(2*pi*kFil)*(rTub^2/
+    (4*sha^2)*(1 - sigma*4*sha^4/(rBor^4 - sha^4))^2)/((1 + beta)/(1 - beta) +
+    rTub^2/(4*sha^2)*(1 + sigma*16*sha^4*rBor^4/(rBor^4 - sha^4)^2));
+
+  Ra_LS      :=1/(pi*kFil)*(log(2*sha/rTub) + sigma*log((
+    rBor^2 + sha^2)/(rBor^2 - sha^2)))  + 2*(RCondPipe + RConv);
 
   //Rb and Ra
-  beta :=2*Modelica.Constants.pi*kFil*RCondPipe;
+  beta :=2*Modelica.Constants.pi*kFil*(RCondPipe+RConv);
   Rb_internal :=if use_Rb then Rb else R_1delta_MP/2;
   Ra :=Ra_LS - 1/(Modelica.Constants.pi*kFil)*(rTub^2/(4*sha^2)*(1 + sigma*
     4*rBor^4*sha^2/(rBor^4 - sha^4))/((1 + beta)/(1 - beta) - rTub^2/(4*sha^2) +
@@ -66,8 +72,8 @@ algorithm
   // ********** Resistances and capacity location according to Bauer **********
   while test == false and i <= 10 loop
     // Capacity location (with correction factor in case that the test is negative)
-    x := Modelica.Math.log(sqrt(rBor^2 + 2*(rTub + eTub)^2)/(2*(rTub + eTub)))/
-      Modelica.Math.log(rBor/(sqrt(2)*(rTub + eTub)))*((15 - i + 1)/15);
+    x := Modelica.Math.log(sqrt(rBor^2 + 2*rTub^2)/(2*rTub))/
+      Modelica.Math.log(rBor/(sqrt(2)*rTub))*((15 - i + 1)/15);
 
     //Thermal resistance between the grout zone and bore hole wall
     Rgb := (1 - x)*Rg;
@@ -100,12 +106,16 @@ algorithm
   //Conduction resistance in grout from pipe wall to capacity in grout
   RCondGro := x*Rg + RCondPipe/hSeg;
 
-  Modelica.Utilities.Streams.print("Rb = " + String(Rb_internal) + " m K / W
+  if printDebug then
+    Modelica.Utilities.Streams.print("
+Rb = " + String(Rb_internal) + " m K / W
 RCondPipe = "+ String(RCondPipe) + " m K / W
+RConv = " +String(RConv) +"m K / W
 hSeg = " + String(hSeg) + " m
 Rg = "+String(Rg) + " K / W
 Ra = " + String(Ra)  + " m K / W
 x = " + String(x));
+  end if;
                                                         annotation (Diagram(graphics), Documentation(info="<html>
 <p>
 This model computes the different thermal resistances present in a single-U-tube borehole 

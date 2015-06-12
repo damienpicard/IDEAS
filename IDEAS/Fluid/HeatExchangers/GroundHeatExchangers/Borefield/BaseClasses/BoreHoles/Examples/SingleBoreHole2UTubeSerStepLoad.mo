@@ -2,7 +2,8 @@ within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.Bor
 model SingleBoreHole2UTubeSerStepLoad "SingleBoreHoleSer with step input load "
   extends
     IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.Examples.SingleBoreHoleUTubeSerStepLoad(
-      redeclare SingleBoreHoles2UTubeInSerie borHolSer);
+      redeclare SingleBoreHoles2UTubeInSerie borHolSer, gen(singleUTube=false,
+        parallel2UTube=true));
 
   annotation (
     __Dymola_Commands(file=

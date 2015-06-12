@@ -2,7 +2,7 @@ within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.Bor
 model SingleBoreHole2UTubeSerStepLoadScript
   extends SingleBoreHoleUTubeSerStepLoadScript(
     redeclare SingleBoreHoles2UTubeInSerie borHolSer,
-    redeclare Data.GeneralData.GeneralTrt gen,
+    redeclare Data.GeneralData.GeneralTrt gen(singleUTube=false),
     redeclare Data.FillingData.FillingTrt fil,
     redeclare Data.SoilData.SoilTrt soi);
 
