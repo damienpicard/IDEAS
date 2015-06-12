@@ -72,7 +72,7 @@ public
     "Thermal power extracted or injected in the borefield"
     annotation (Placement(transformation(extent={{100,42},{120,62}})));
 initial algorithm
-  // Initialisation of the internal energy (zeros) and the load vector. Load vector have the same lenght as the number of aggregated pulse and cover lenSim
+  // Initialisation of the internal energy (zeros) and the load vector. Load vector have the same length as the number of aggregated pulse and cover lenSim
   U := 0;
   UOld := 0;
 

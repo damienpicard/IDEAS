@@ -15,9 +15,9 @@ function initializeModel
 protected
   String pathSave "Path of the saving folder";
 algorithm
-  // --------------- Generate SHA-code and path
-  //translateModel("IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.Scripts.shaBorefieldRecords");
+  translateModel("IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.Scripts.shaBorefieldRecords");
 
+  // --------------- Generate SHA-code and path
   sha := shaBorefieldRecords(
     soiPath=Modelica.Utilities.Strings.replace(
       soi.pathCom,
@@ -64,7 +64,7 @@ algorithm
     <li> simulation of model</li>
     <li> writing the data </li>
     </ul>
-    <p> If not, an error has occured!
+    <p> If not, an error has occurred!
     </p>
 </html>", revisions="<html>
 <ul>
