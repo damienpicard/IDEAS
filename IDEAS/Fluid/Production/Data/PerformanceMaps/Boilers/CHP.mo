@@ -4,7 +4,7 @@ record CHP
 //Extensions
   extends IDEAS.Fluid.Production.BaseClasses.PartialNonModulatingRecord(
     useTin2=false,
-    efficiencyData=true,
+    copData=true,
     QNomRef=10100,
     etaRef=0.96,
     heat={
