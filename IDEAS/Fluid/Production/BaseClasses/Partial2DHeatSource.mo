@@ -44,25 +44,24 @@ partial model Partial2DHeatSource
   Modelica.Blocks.Sources.RealExpression tableInput2
     "Name of the second independent variable of the performance table"
     annotation (Placement(transformation(extent={{-80,-30},{-40,-10}})));
-  Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow P1
+  Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow P1 if heatPumpWaterWater
     annotation (Placement(transformation(extent={{66,-50},{86,-30}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow P2
     annotation (Placement(transformation(extent={{66,-10},{86,10}})));
-  Modelica.Blocks.Sources.RealExpression realExpression1(y=Q1)
+  Modelica.Blocks.Sources.RealExpression realExpression1(y=Q1) if heatPumpWaterWater
     annotation (Placement(transformation(extent={{30,-50},{50,-30}})));
   Modelica.Blocks.Sources.RealExpression realExpression2(y=Q2)
     annotation (Placement(transformation(extent={{30,-10},{50,10}})));
 
-  Modelica.Blocks.Math.Gain gain(k=1)
+  Modelica.Blocks.Math.Gain gain(k=1) if heatPumpWaterWater
     annotation (Placement(transformation(extent={{54,-44},{62,-36}})));
   Modelica.Blocks.Math.Gain gain1(k=1)
     annotation (Placement(transformation(extent={{54,-4},{62,4}})));
-  Modelica.Blocks.Math.Gain gain2(k=scaler)
+  Modelica.Blocks.Math.Gain gain2(k=1)
     annotation (Placement(transformation(extent={{84,36},{92,44}})));
   Modelica.Blocks.Sources.RealExpression realExpression3(y=P)
     annotation (Placement(transformation(extent={{56,30},{76,50}})));
 
-  Boolean doIGenerateEvents = on_internal;
   Modelica.Blocks.Interfaces.BooleanInput rev if reversible
     annotation (Placement(transformation(extent={{-130,-60},{-90,-20}}),
         iconTransformation(extent={{-110,-40},{-90,-20}})));
@@ -116,9 +115,9 @@ equation
 
   //Heat powers
   if copData then
-    Q2 = if rev_internal then modulation*(-EER*powerTable.y*scaler + QLossesToCompensate) else modulation*(heatTable.y*powerTable.y*scaler + QLossesToCompensate);
+    Q2 = if rev_internal then modulation*(-EER*powerTable.y*scaler) + QLossesToCompensate else modulation*(heatTable.y*powerTable.y*scaler) + QLossesToCompensate;
   else
-    Q2 = modulation*(heatTable.y*scaler + QLossesToCompensate);
+    Q2 = modulation*(heatTable.y*scaler)  + QLossesToCompensate;
   end if;
 
   if heatPumpWaterWater then
@@ -128,7 +127,7 @@ equation
   end if;
 
   //Fuel or electricity power
-  P = modulation*powerTable.y;
+  P = modulation*powerTable.y*scaler;
 
   //Connections
   connect(tableInput1.y, heatTable.u1) annotation (Line(

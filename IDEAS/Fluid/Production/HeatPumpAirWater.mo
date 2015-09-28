@@ -3,7 +3,7 @@ model HeatPumpAirWater
   //Extensions
   extends Interfaces.PartialHeaterTwoPort(
     m2 = heatSource.data.m2,
-    QNom = heatSource.data.QNomRef,
+    final QNom = heatSource.data.QNomRef,
     m_flow_nominal = heatSource.data.m2_flow_nominal,
     redeclare HeatSources.HeatPumpAirWater heatSource);
 

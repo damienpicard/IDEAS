@@ -32,8 +32,8 @@ package HeatSources
     extends IDEAS.Fluid.Production.BaseClasses.Partial2DHeatSource(
       redeclare replaceable
         Data.PerformanceMaps.HeatPumps.VitoCal300GBWS301dotA45 data,
-      tableInput1(y=Tin1),
-      tableInput2(y=Tout2));
+      tableInput1(y=Tout2),
+      tableInput2(y=Tin1));
 
     annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
               -100},{100,100}}), graphics));

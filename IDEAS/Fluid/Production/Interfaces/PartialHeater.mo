@@ -138,7 +138,7 @@ equation
       color={191,0,0},
       smooth=Smooth.None));
   connect(TEnvironment.T, heatSource.TEnvironment) annotation (Line(
-      points={{6,-28},{6,28},{-4,28}},
+      points={{6,-28},{6,26},{-4,26}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(Tout2.T, heatSource.Tout2) annotation (Line(

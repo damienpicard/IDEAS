@@ -162,10 +162,10 @@ equation
     QFinal = QInit*onOff.y;
   end if;
 
-  Q2 = QFinal + QLossesToCompensate2;
+  Q2 = QFinal + QLossesToCompensate;
 
   if heatPumpWaterWater then
-    Q1 = -(-power + Q2 + QLossesToCompensate1);
+    Q1 = -(-power + Q2);
   else
     Q1 = 0;
   end if;
