@@ -2,11 +2,11 @@ within IDEAS.Fluid.Production;
 model HeatPumpWaterWater
   //Extensions
   extends Interfaces.PartialHeaterFourPort(
-    m2 = heatSource.data.m2,
-    m1 = heatSource.data.m1,
+    m2 = heatSource.scaler*heatSource.data.m2,
+    m1 = heatSource.scaler*heatSource.data.m1,
     QNom = heatSource.data.QNomRef,
-    m1_flow_nominal = heatSource.data.m1_flow_nominal,
-    m2_flow_nominal = heatSource.data.m2_flow_nominal,
+    m1_flow_nominal = heatSource.scaler*heatSource.data.m1_flow_nominal,
+    m2_flow_nominal = heatSource.scaler*heatSource.data.m2_flow_nominal,
     dp1_nominal = heatSource.data.dp1_nominal,
     dp2_nominal = heatSource.data.dp2_nominal,
     redeclare HeatSources.HeatPumpWaterWater heatSource(

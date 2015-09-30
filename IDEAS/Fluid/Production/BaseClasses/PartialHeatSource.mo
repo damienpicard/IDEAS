@@ -79,7 +79,7 @@ partial model PartialHeatSource "Partial model for a heatsource"
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-80,-102})));
-  Modelica.Blocks.Interfaces.RealInput QAsked annotation (Placement(
+  Modelica.Blocks.Interfaces.RealInput QAsked if modulating annotation (Placement(
         transformation(extent={{-130,10},{-90,50}}),  iconTransformation(extent={{-10,-10},
             {10,10}},
         rotation=0,
@@ -148,9 +148,17 @@ partial model PartialHeatSource "Partial model for a heatsource"
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatPort1Mock;
 
-  Boolean on_internal = on; //and on_security.y;
+  Boolean on_internal = on and on_security_internal;
+protected
+  Modelica.Blocks.Interfaces.RealOutput QAsked_internal;
+
 equation
   T_high = heatPort2.T;
+  if modulating then
+    connect(QAsked_internal,QAsked);
+  else
+    QAsked_internal = 0;
+  end if;
 
   //Conditional inputs
   if not useTin1 then

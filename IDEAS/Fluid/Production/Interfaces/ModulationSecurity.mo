@@ -1,5 +1,6 @@
 within IDEAS.Fluid.Production.Interfaces;
-partial model ModulationSecurity "Non physical down modulation of the power of a heat production when the fluid temperature approach its boundaries temperature 
+partial model ModulationSecurity "Security control which ensure that the heat production system do not exceed its temperature boundaries. This is either down
+by means of onOff hysteresis or by a non physical down modulation of the power of a heat production when the fluid temperature approach its boundaries temperature 
   in order to reduce the number of events"
   parameter Boolean use_modulation_security=false
     "Set to true if power modulation should be used to avoid exceeding temperature."
@@ -35,20 +36,24 @@ protected
   Modelica.Blocks.Logical.Hysteresis hysteresis(
     pre_y_start=true,
     uLow=0,
-    uHigh=deltaT_security)
+    uHigh=deltaT_security) if not use_modulation_security
     annotation (Placement(transformation(extent={{72,84},{84,96}})));
   Modelica.Blocks.Logical.Hysteresis hysteresis1(
     pre_y_start=true,
     uLow=0,
-    uHigh=deltaT_security)
+    uHigh=deltaT_security) if not use_modulation_security
     annotation (Placement(transformation(extent={{72,70},{84,82}})));
-  Modelica.Blocks.Logical.And on_security
+  Modelica.Blocks.Logical.And on_security if not use_modulation_security
     annotation (Placement(transformation(extent={{90,80},{98,88}})));
+  Modelica.Blocks.Interfaces.BooleanOutput on_security_internal;
 equation
   if not use_modulation_security then
     modulation_security_internal = 1;
+  else
+    on_security_internal = true;
   end if;
   connect(modulation_security, modulation_security_internal);
+  connect(on_security_internal, on_security.y);
 
   connect(hysteresis.y, on_security.u1) annotation (Line(
       points={{84.6,90},{86,90},{86,84},{89.2,84}},

@@ -96,7 +96,7 @@ equation
   end if;
 
   QInit = IDEAS.Utilities.Math.Functions.smoothMin(
-    x1=QAsked,
+    x1=QAsked_internal,
     x2=QMax,
     deltaX=0.1);
 

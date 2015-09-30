@@ -40,7 +40,8 @@ partial model PartialFlowMachine
   parameter Modelica.SIunits.Time tau=1
     "Time constant of fluid volume for nominal flow, used if dynamicBalance=true"
     annotation (Dialog(tab="Dynamics", group="Nominal condition", enable=dynamicBalance));
-
+  parameter Modelica.SIunits.Time tauHeatLosses=1
+    "Time constant for heat losses";
   // Models
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatPort
     "Heat dissipation to environment"
@@ -48,6 +49,13 @@ partial model PartialFlowMachine
         iconTransformation(extent={{-10,-78},{10,-58}})));
 
 protected
+  final parameter Medium.ThermodynamicState state_default = Medium.setState_pTX(
+      T=Medium.T_default,
+      p=Medium.p_default,
+      X=Medium.X_default[1:Medium.nXi]) "Medium state at default values";
+  // Density at medium default values, used to compute the size of control volumes
+  final parameter Modelica.SIunits.SpecificHeatCapacity cp_default=Medium.specificHeatCapacityCp(
+    state=state_default) "Density, used to compute fluid mass";
   Modelica.SIunits.Density rho_in "Density of inflowing fluid";
 
   IDEAS.Fluid.Movers.BaseClasses.IdealSource preSou(
@@ -65,6 +73,13 @@ protected
   parameter Modelica.SIunits.SpecificEnthalpy h_outflow_start = Medium.specificEnthalpy(sta_start)
     "Start value for outflowing enthalpy";
 
+public
+  Modelica.Thermal.HeatTransfer.Components.ThermalConductor thermalConductor(G=vol.V*
+        Medium.density(state=state_default)*cp_default/tauHeatLosses)
+    annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=90,
+        origin={-40,-30})));
 equation
   // For computing the density, we assume that the fan operates in the design flow direction.
   rho_in = Medium.density(
@@ -74,10 +89,6 @@ equation
       color={191,0,0},
       smooth=Smooth.None));
 
-  connect(vol.heatPort, heatPort) annotation (Line(
-      points={{-40,10},{-40,-80},{-60,-80}},
-      color={191,0,0},
-      smooth=Smooth.None));
   connect(port_a, vol.ports[1]) annotation (Line(
       points={{-100,5.55112e-16},{-66,5.55112e-16},{-66,-5.55112e-16},{-32,
           -5.55112e-16}},
@@ -93,6 +104,10 @@ equation
           5.55112e-16}},
       color={0,127,255},
       smooth=Smooth.None));
+  connect(vol.heatPort, thermalConductor.port_b)
+    annotation (Line(points={{-40,10},{-40,-20}}, color={191,0,0}));
+  connect(thermalConductor.port_a, heatPort)
+    annotation (Line(points={{-40,-40},{-40,-80},{-60,-80}}, color={191,0,0}));
   annotation(Icon(coordinateSystem(preserveAspectRatio=true,
     extent={{-100,-100},{100,100}}),
     graphics={

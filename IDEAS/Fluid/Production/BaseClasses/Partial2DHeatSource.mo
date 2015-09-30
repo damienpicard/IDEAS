@@ -67,6 +67,7 @@ partial model Partial2DHeatSource
         iconTransformation(extent={{-110,-40},{-90,-20}})));
 protected
   Modelica.Blocks.Interfaces.BooleanOutput rev_internal;
+
 equation
   if reversible then
     connect(rev_internal,rev);
@@ -94,7 +95,7 @@ equation
         modulationInit=uModulationMock;
       else
         //If not use perfect modulation
-        modulationInit=QAsked/QMax*100;
+        modulationInit=QAsked_internal/QMax*100;
       end if;
     else
       //If the heater cannot modulate set the modulation to 100

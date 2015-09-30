@@ -6,9 +6,7 @@ model SlabOnGround "opaque floor on ground slab"
     Qgai(y=layMul.port_a.Q_flow
            + (if sim.openSystemConservationOfEnergy then 0 else port_emb.Q_flow)),
     E(y=layMul.E));
-  parameter Modelica.SIunits.Temperature T_start=288.15
-    "Start value of temperature"
-    annotation(Dialog(tab = "Initialization"));
+
   parameter Modelica.SIunits.Length PWall "Total wall perimeter";
   parameter Boolean linearise=true
     "= true, if convective heat transfer should be linearised"

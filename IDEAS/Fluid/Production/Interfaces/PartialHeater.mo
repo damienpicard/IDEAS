@@ -35,7 +35,7 @@ partial model PartialHeater
     "heatPort for thermal losses to environment" annotation (Placement(
         transformation(extent={{-10,-110},{10,-90}}),  iconTransformation(
           extent={{-10,-110},{10,-90}})));
-  Modelica.Blocks.Interfaces.RealInput u if not modulationInput
+  Modelica.Blocks.Interfaces.RealInput u if not modulationInput and modulating
     "Input for the heater. Can be T or Q" annotation (Placement(transformation(
           extent={{20,-20},{-20,20}},
         rotation=90,
@@ -77,7 +77,11 @@ partial model PartialHeater
     modulationInput=modulationInput,
     useTout2=true)
     annotation (Placement(transformation(extent={{-4,22},{-24,42}})));
-  IDEAS.Fluid.Production.BaseClasses.QAsked qAsked
+  IDEAS.Fluid.Production.BaseClasses.QAsked qAsked(
+    reversible=reversible,
+    modulating=modulating,
+    modulationInput=modulationInput,
+    useQSet=useQSet)
     annotation (Placement(transformation(extent={{30,36},{10,56}})));
   Modelica.Blocks.Sources.RealExpression m_flow2
     annotation (Placement(transformation(extent={{62,0},{42,20}})));
@@ -98,6 +102,7 @@ partial model PartialHeater
   parameter Boolean use_modulation_security=false
     "Set to true if power modulation should be used to avoid exceeding temperature."
                                                                                      annotation(dialog(tab="Advanced",group="Events"));
+  parameter Boolean reversible=false;
 equation
   connect(thermalLosses2.port_b, heatPort) annotation (Line(
       points={{-36,-36},{-36,-100},{0,-100}},
@@ -109,14 +114,10 @@ equation
       color={255,0,255},
       smooth=Smooth.None));
 
-  if modulationInput then
-    qAsked.u=0;
-  else
-    connect(u, qAsked.u) annotation (Line(
+  connect(u, qAsked.u) annotation (Line(
       points={{20,108},{20,51.2}},
       color={0,0,127},
       smooth=Smooth.None));
-  end if;
   connect(qAsked.y, heatSource.QAsked) annotation (Line(
       points={{9,46},{4,46},{4,36},{-4,36}},
       color={0,0,127},

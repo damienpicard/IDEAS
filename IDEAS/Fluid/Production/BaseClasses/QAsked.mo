@@ -5,11 +5,14 @@ model QAsked
   //Parameters
   parameter Boolean useQSet=false "Set to true to use Q as an input";
   parameter Boolean reversible=false;
+  parameter Boolean modulating = true;
+  parameter Boolean modulationInput = true;
   replaceable package Medium =
     Modelica.Media.Interfaces.PartialMedium "Medium in the component"
       annotation (choicesAllMatching = true);
 
-  Modelica.Blocks.Interfaces.RealInput u "Input signal. Can be Q or T" annotation (Placement(transformation(
+  Modelica.Blocks.Interfaces.RealInput u if not modulationInput and modulating
+    "Input signal. Can be Q or T"                                                   annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=0,
         origin={-100,0}),  iconTransformation(
@@ -54,20 +57,26 @@ model QAsked
         origin={-58,52})));
 protected
   Modelica.Blocks.Interfaces.BooleanOutput rev_internal;
+  Modelica.Blocks.Interfaces.RealOutput u_internal;
 equation
   if reversible then
     connect(rev,rev_internal);
   else
     rev_internal = false;
   end if;
+ if modulating and not modulationInput then
+    connect(u,u_internal);
+  else
+    u_internal = 0;
+  end if;
  if not useQSet then
     if rev_internal then
-      y = IDEAS.Utilities.Math.Functions.smoothMin(0, m_flow*(Medium.specificEnthalpy(Medium.setState_pTX(Medium.p_default, u, Medium.X_default)) - h_in), 10);
+      y = IDEAS.Utilities.Math.Functions.smoothMin(0, m_flow*(Medium.specificEnthalpy(Medium.setState_pTX(Medium.p_default, u_internal, Medium.X_default)) - h_in), 10);
     else
-      y = IDEAS.Utilities.Math.Functions.smoothMax(0, m_flow*(Medium.specificEnthalpy(Medium.setState_pTX(Medium.p_default, u, Medium.X_default)) - h_in), 10);
+      y = IDEAS.Utilities.Math.Functions.smoothMax(0, m_flow*(Medium.specificEnthalpy(Medium.setState_pTX(Medium.p_default, u_internal, Medium.X_default)) - h_in), 10);
     end if;
  else
-    y = u;
+    y = u_internal;
  end if;
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
