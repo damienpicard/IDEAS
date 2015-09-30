@@ -89,7 +89,7 @@ equation
   //Determine modulation
   if on_internal then
     //Check if the heater can modulate
-    if modulating then
+    if modulating or modulationInput then
       //Check if the modulation is given as an input
       if modulationInput then
         modulationInit=uModulationMock;
