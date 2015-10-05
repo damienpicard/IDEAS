@@ -108,8 +108,10 @@ protected
   datRea1(tableName="data"),
   datRea(tableName="data")) if useTmy3Reader
     annotation (Placement(transformation(extent={{-18,36},{0,54}})));
+public
   Utilities.Psychrometrics.X_pTphi XiEnv(use_p_in=false)
     annotation (Placement(transformation(extent={{-30,-96},{-10,-76}})));
+protected
   Modelica.Blocks.Sources.RealExpression phiEnv(y=relHum)
     annotation (Placement(transformation(extent={{-70,-102},{-50,-82}})));
   Modelica.Blocks.Sources.RealExpression TEnv(y=Te)

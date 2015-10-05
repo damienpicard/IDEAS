@@ -81,7 +81,7 @@ protected
         rotation=180,
         origin={-10,30})));
 
-protected
+public
   Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor senTem
     annotation (Placement(transformation(extent={{0,-28},{-16,-12}})));
 
