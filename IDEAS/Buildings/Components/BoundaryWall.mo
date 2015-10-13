@@ -8,18 +8,14 @@ model BoundaryWall "Opaque wall with boundary conditions"
   parameter Boolean linIntCon=true
     "= true, if convective heat transfer should be linearised"
     annotation(Dialog(tab="Convection"));
-  parameter Modelica.SIunits.TemperatureDifference dT_nominal=-1
-    "Nominal temperature difference used for linearisation, negative temperatures indicate the solid is colder"
-    annotation(Dialog(tab="Convection"));
+
   parameter Modelica.SIunits.Temperature TRef=291.15
     "Reference temperature for calculation of design heat loss";
   parameter Boolean use_T_in = false
     "Get the boundary temperature from the input connector";
   parameter Boolean use_Q_in = false
     "Get the boundary heat flux from the input connector";
-  parameter Modelica.SIunits.Temperature T_start=293.15
-    "Start temperature for each of the layers"
-    annotation(Dialog(tab = "Initialization"));
+
   parameter Modelica.Fluid.Types.Dynamics energyDynamics=Modelica.Fluid.Types.Dynamics.DynamicFreeInitial
     "Formulation of energy balance" annotation(Evaluate=true, Dialog(tab = "Dynamics", group="Equations"));
   Modelica.Blocks.Interfaces.RealInput T if use_T_in annotation (Placement(transformation(
@@ -29,9 +25,6 @@ model BoundaryWall "Opaque wall with boundary conditions"
         transformation(extent={{-60,10},{-40,30}}), iconTransformation(extent={{
             -60,10},{-40,30}})));
 
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_emb
-    "Port for gains by embedded active layers"
-    annotation (Placement(transformation(extent={{-10,-110},{10,-90}})));
 protected
   final parameter Real U_value=1/(1/8 + sum(constructionType.mats.R) + 1/8)
     "Wall U-value";
@@ -41,61 +34,7 @@ protected
     prescribedTemperature if use_T_in
     annotation (Placement(transformation(extent={{-60,50},{-80,70}})));
 
-  IDEAS.Buildings.Components.BaseClasses.MultiLayerOpaque layMul(
-    final A=AWall,
-    final inc=inc,
-    final nLay=constructionType.nLay,
-    final mats=constructionType.mats,
-    final locGain=constructionType.locGain,
-    T_start=T_start,
-    energyDynamics=energyDynamics)
-    "declaration of array of resistances and capacitances for wall simulation"
-    annotation (Placement(transformation(extent={{-20,-40},{0,-20}})));
-  IDEAS.Buildings.Components.BaseClasses.InteriorConvection intCon_b(final A=
-        AWall, final inc=inc,
-    dT_nominal=dT_nominal,
-    linearise=linIntCon or sim.linearise)
-    "convective surface heat transimission on the interior side of the wall"
-    annotation (Placement(transformation(extent={{20,-40},{40,-20}})));
 equation
-  connect(layMul.port_b, intCon_b.port_a) annotation (Line(
-      points={{4.44089e-16,-30},{20,-30}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(layMul.port_gain, port_emb) annotation (Line(
-      points={{-10,-40},{-10,-70},{0,-70},{0,-100}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(intCon_b.port_b, propsBus_a.surfCon) annotation (Line(
-      points={{40,-30},{46,-30},{46,39.9},{50.1,39.9}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(layMul.port_b, propsBus_a.surfRad) annotation (Line(
-      points={{4.44089e-16,-30},{14,-30},{14,39.9},{50.1,39.9}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(layMul.area, propsBus_a.area) annotation (Line(
-      points={{-10,-20},{-10,39.9},{50.1,39.9}},
-      color={0,0,127},
-      smooth=Smooth.None), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}}));
-  connect(layMul.iEpsLw_b, propsBus_a.epsLw) annotation (Line(
-      points={{4.44089e-16,-22},{4,-22},{4,39.9},{50.1,39.9}},
-      color={0,0,127},
-      smooth=Smooth.None), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}}));
-  connect(layMul.iEpsSw_b, propsBus_a.epsSw) annotation (Line(
-      points={{4.44089e-16,-26},{4,-26},{4,39.9},{50.1,39.9}},
-      color={0,0,127},
-      smooth=Smooth.None), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}}));
-
   if use_Q_in then
   connect(Q_flow, prescribedHeatFlow.Q_flow) annotation (Line(
       points={{-50,20},{-60,20}},
@@ -103,7 +42,7 @@ equation
       smooth=Smooth.None));
 
     connect(prescribedHeatFlow.port, layMul.port_a) annotation (Line(
-      points={{-80,20},{-90,20},{-90,-30},{-20,-30}},
+      points={{-80,20},{-90,20},{-90,-28},{-10,-28}},
       color={191,0,0},
       smooth=Smooth.None));
   end if;
@@ -114,7 +53,7 @@ equation
       smooth=Smooth.None));
 
     connect(prescribedTemperature.port, layMul.port_a) annotation (Line(
-      points={{-80,60},{-90,60},{-90,-30},{-20,-30}},
+      points={{-80,60},{-90,60},{-90,-28},{-10,-28}},
       color={191,0,0},
       smooth=Smooth.None));
   end if;

@@ -14,9 +14,6 @@ model SlabOnGround "opaque floor on ground slab"
   parameter Modelica.SIunits.TemperatureDifference dT_nominal=-3
     "Nominal temperature difference used for linearisation, negative temperatures indicate the solid is colder"
     annotation(Dialog(tab="Convection"));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_emb
-    "port for gains by embedded active layers"
-    annotation (Placement(transformation(extent={{-10,-110},{10,-90}})));
   parameter Modelica.SIunits.HeatFlowRate Qm = UEqui*AWall*(22 - 9) - Lpi*4*cos(2*3.1415/12*(m- 1 + alfa)) + Lpe*9*cos(2*3.1415/12*(m - 1 - beta))
     "Two-dimensionl correction for edge flow";
 
@@ -41,23 +38,6 @@ protected
   final parameter Real Lpe=0.37*PWall*ground1.k*log(delta/dt + 1);
   parameter Integer m = 7;
 
-  IDEAS.Buildings.Components.BaseClasses.MultiLayerOpaque layMul(
-    final A=AWall,
-    final inc=inc,
-    final nLay=constructionType.nLay,
-    final mats=constructionType.mats,
-    final locGain=constructionType.locGain,
-    T_start=T_start,
-    energyDynamics=energyDynamics)
-    "Declaration of array of resistances and capacitances for wall simulation"
-    annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
-  IDEAS.Buildings.Components.BaseClasses.InteriorConvection intCon(
-    final A=AWall,
-    final inc=inc,
-    final linearise=linearise,
-    final dT_nominal=dT_nominal)
-    "Convective surface heat transimission on the interior side of the wall"
-    annotation (Placement(transformation(extent={{20,-40},{40,-20}})));
   BaseClasses.MultiLayerGround layGro(
     final A=AWall,
     final inc=inc,
@@ -83,56 +63,11 @@ public
     "Formulation of energy balance" annotation(Evaluate=true, Dialog(tab = "Dynamics", group="Equations"));
 equation
 
-  connect(layMul.port_b, intCon.port_a) annotation (Line(
-      points={{10,-30},{20,-30}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(layGro.port_b, layMul.port_a) annotation (Line(
-      points={{-20,-30},{-10,-30}},
-      color={191,0,0},
-      smooth=Smooth.None));
 
-  connect(intCon.port_b, propsBus_a.surfCon) annotation (Line(
-      points={{40,-30},{46,-30},{46,39.9},{50.1,39.9}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(layMul.port_b, propsBus_a.surfRad) annotation (Line(
-      points={{10,-30},{16,-30},{16,39.9},{50.1,39.9}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(layMul.port_gain, port_emb) annotation (Line(
-      points={{0,-40},{0,-100}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(layMul.port_a, periodicFlow.port) annotation (Line(
-      points={{-10,-30},{-14,-30},{-14,-8},{-20,-8}},
-      color={191,0,0},
-      smooth=Smooth.None));
   connect(fixedTemperature.port, layGro.port_a) annotation (Line(
       points={{-50,-30},{-40,-30}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(layMul.area, propsBus_a.area) annotation (Line(
-      points={{0,-20},{0,39.9},{50.1,39.9}},
-      color={0,0,127},
-      smooth=Smooth.None), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}}));
-  connect(layMul.iEpsLw_b, propsBus_a.epsLw) annotation (Line(
-      points={{10,-22},{12,-22},{12,39.9},{50.1,39.9}},
-      color={0,0,127},
-      smooth=Smooth.None), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}}));
-  connect(layMul.iEpsSw_b, propsBus_a.epsSw) annotation (Line(
-      points={{10,-26},{14,-26},{14,39.9},{50.1,39.9}},
-      color={0,0,127},
-      smooth=Smooth.None), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}}));
   connect(QDesign.y, propsBus_a.QTra_design) annotation (Line(
       points={{11,50},{24,50},{24,39.9},{50.1,39.9}},
       color={0,0,127},
@@ -154,6 +89,10 @@ equation
       string="%second",
       index=1,
       extent={{6,3},{6,3}}));
+  connect(layMul.port_a, layGro.port_b) annotation (Line(points={{-10,-28},{-14,
+          -28},{-14,-30},{-20,-30}}, color={191,0,0}));
+  connect(periodicFlow.port, layMul.port_a) annotation (Line(points={{-20,-8},{
+          -16,-8},{-16,-28},{-10,-28}}, color={191,0,0}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=true, extent={{-50,-100},{50,100}}),
         graphics={

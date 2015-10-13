@@ -35,9 +35,6 @@ model InternalWall "interior opaque wall between two zones"
     "Formulation of energy balance"
     annotation (Evaluate=true, Dialog(tab="Dynamics", group="Equations"));
 
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_emb
-    "port for gains by embedded active layers"
-    annotation (Placement(transformation(extent={{-10,-110},{10,-90}})));
   Interfaces.ZoneBus propsBus_b(
     numAzi=sim.numAzi,
     computeConservationOfEnergy=sim.computeConservationOfEnergy,
@@ -58,24 +55,8 @@ protected
     linearise=linIntCon_b or sim.linearise)
     "convective surface heat transimission on the interior side of the wall"
     annotation (Placement(transformation(extent={{-20,-40},{-40,-20}})));
-  IDEAS.Buildings.Components.BaseClasses.InteriorConvection intCon_a(
-    final A=AWall,
-    final inc=inc + Modelica.Constants.pi,
-    dT_nominal=dT_nominal_a,
-    linearise=linIntCon_a or sim.linearise)
-    "convective surface heat transimission on the interior side of the wall"
-    annotation (Placement(transformation(extent={{20,-40},{40,-20}})));
-  IDEAS.Buildings.Components.BaseClasses.MultiLayerOpaque layMul(
-    final A=AWall,
-    final inc=inc,
-    final nLay=constructionType.nLay,
-    final mats=constructionType.mats,
-    final locGain=constructionType.locGain,
-    T_start=T_start,
-    energyDynamics=energyDynamics)
-    "declaration of array of resistances and capacitances for wall simulation"
-    annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
-  Modelica.Blocks.Sources.RealExpression QDesign_b(y=-QTra_design)
+
+   Modelica.Blocks.Sources.RealExpression QDesign_b(y=-QTra_design)
     annotation (Placement(transformation(extent={{-16,36},{-36,56}})));
   //Negative, because it's losses from zone side b to zone side a, oposite of calculation of QTra_design
   Modelica.Thermal.HeatTransfer.Sources.FixedHeatFlow iSolDif1(Q_flow=0)
@@ -94,11 +75,11 @@ protected
 
 equation
   connect(layMul.port_b, propsBus_a.surfRad) annotation (Line(
-      points={{10,-30},{14,-30},{14,39.9},{50.1,39.9}},
+      points={{10,-28},{22,-28},{22,39.9},{50.1,39.9}},
       color={191,0,0},
       smooth=Smooth.None));
   connect(layMul.port_a, propsBus_b.surfRad) annotation (Line(
-      points={{-10,-30},{-12,-30},{-12,40.1},{-50.1,40.1}},
+      points={{-10,-28},{-12,-28},{-12,40.1},{-50.1,40.1}},
       color={191,0,0},
       smooth=Smooth.None));
   connect(propsBus_b.surfCon, intCon_b.port_b) annotation (Line(
@@ -106,58 +87,54 @@ equation
       color={191,0,0},
       smooth=Smooth.None));
   connect(propsBus_a.surfCon, intCon_a.port_b) annotation (Line(
-      points={{50.1,39.9},{46,39.9},{46,-30},{40,-30}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(layMul.port_gain, port_emb) annotation (Line(
-      points={{0,-40},{0,-100}},
+      points={{50.1,39.9},{46,39.9},{46,-28},{40,-28}},
       color={191,0,0},
       smooth=Smooth.None));
   connect(intCon_b.port_a, layMul.port_a) annotation (Line(
-      points={{-20,-30},{-10,-30}},
+      points={{-20,-30},{-14,-30},{-14,-28},{-10,-28}},
       color={191,0,0},
       smooth=Smooth.None));
   connect(layMul.port_b, intCon_a.port_a) annotation (Line(
-      points={{10,-30},{20,-30}},
+      points={{10,-28},{16,-28},{16,-28},{20,-28}},
       color={191,0,0},
       smooth=Smooth.None));
   connect(layMul.iEpsSw_b, propsBus_a.epsSw) annotation (Line(
-      points={{10,-26},{18,-26},{18,39.9},{50.1,39.9}},
+      points={{10,-24},{22,-24},{22,39.9},{50.1,39.9}},
       color={0,0,127},
       smooth=Smooth.None), Text(
       string="%second",
       index=1,
       extent={{6,3},{6,3}}));
   connect(layMul.iEpsLw_b, propsBus_a.epsLw) annotation (Line(
-      points={{10,-22},{14,-22},{14,39.9},{50.1,39.9}},
+      points={{10,-20},{22,-20},{22,39.9},{50.1,39.9}},
       color={0,0,127},
       smooth=Smooth.None), Text(
       string="%second",
       index=1,
       extent={{6,3},{6,3}}));
   connect(layMul.area, propsBus_a.area) annotation (Line(
-      points={{0,-20},{0,39.9},{50.1,39.9}},
+      points={{0,-18},{0,39.9},{50.1,39.9}},
       color={0,0,127},
       smooth=Smooth.None), Text(
       string="%second",
       index=1,
       extent={{6,3},{6,3}}));
   connect(layMul.area, propsBus_b.area) annotation (Line(
-      points={{0,-20},{0,40.1},{-50.1,40.1}},
+      points={{0,-18},{0,40.1},{-50.1,40.1}},
       color={0,0,127},
       smooth=Smooth.None), Text(
       string="%second",
       index=1,
       extent={{6,3},{6,3}}));
   connect(layMul.iEpsSw_a, propsBus_b.epsSw) annotation (Line(
-      points={{-10,-26},{-18,-26},{-18,40.1},{-50.1,40.1}},
+      points={{-10,-24},{-18,-24},{-18,40.1},{-50.1,40.1}},
       color={0,0,127},
       smooth=Smooth.None), Text(
       string="%second",
       index=1,
       extent={{6,3},{6,3}}));
   connect(layMul.iEpsLw_a, propsBus_b.epsLw) annotation (Line(
-      points={{-10,-22},{-14,-22},{-14,40.1},{-50.1,40.1}},
+      points={{-10,-20},{-14,-20},{-14,40.1},{-50.1,40.1}},
       color={0,0,127},
       smooth=Smooth.None), Text(
       string="%second",
@@ -225,8 +202,7 @@ equation
           smooth=Smooth.None,
           color={0,0,0},
           thickness=0.5)}),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-50,-100},{50,
-            100}})),
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-50,-100},{50,100}})),
     Documentation(info="<html>
 <p><h4><font color=\"#008000\">General description</font></h4></p>
 <p><h5>Goal</h5></p>
