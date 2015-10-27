@@ -5,11 +5,9 @@ partial model PartialHeaterFourPort
   //Extensions
   extends IDEAS.Fluid.Interfaces.FourPortHeatMassExchanger(redeclare final
       IDEAS.Fluid.MixingVolumes.MixingVolume
-                                           vol2(
-      nPorts=2, V=m2/rho2_nominal),
-    vol1(V=m1/rho1_nominal));
+                                           vol2);
   extends IDEAS.Fluid.Production.Interfaces.PartialHeater(
-    final UALoss2=(cDry2 + m2*
+    final UALoss2=(cDry2 + vol2.V*rho2_nominal*
       Medium2.specificHeatCapacityCp(Medium2.setState_pTX(Medium2.p_default, Medium2.T_default,Medium2.X_default)))/tauHeatLoss2,
     m_flow2(y=port_a1.m_flow),
     hIn(y=inStream(port_a2.h_outflow)),
@@ -26,7 +24,6 @@ partial model PartialHeaterFourPort
   parameter Boolean reversible = false;
   parameter Modelica.SIunits.Time tauHeatLoss1=7200
     "Time constant of environmental heat losses";
-  parameter Modelica.SIunits.Mass m1=5 "Mass of water in the secondary circuit";
   parameter Modelica.SIunits.HeatCapacity cDry1=4800
     "Capacity of dry material lumped to the secondary circuit";
 
@@ -35,7 +32,7 @@ partial model PartialHeaterFourPort
         extent={{-6,-6},{6,6}},
         rotation=-90,
        origin={-66,-30})));
-  final parameter Modelica.SIunits.ThermalConductance UALoss1=(cDry1 + m1*
+  final parameter Modelica.SIunits.ThermalConductance UALoss1=(cDry1 + vol1.V*rho2_nominal*
       Medium1.specificHeatCapacityCp(Medium1.setState_pTX(Medium1.p_default, Medium1.T_default,Medium1.X_default)))/tauHeatLoss1;
 
   Modelica.SIunits.Temperature T1in;

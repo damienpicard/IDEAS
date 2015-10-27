@@ -157,7 +157,7 @@ equation
   P_evap = P_el*(cop - 1);
   P_cond = P_el*cop;
 
-  P_el = powerTable.y*sca*modulationSignal_internal*modulation_security_internal*( if on_internal and on_security.y and on_TSetControl_internal then 1 else 0);
+  P_el = powerTable.y*sca*modulationSignal_internal*modulation_security_internal*( if on_internal and on_security_internal and on_TSetControl_internal then 1 else 0);
 
   connect(heatLoss, thermalConductorLosses.port_a) annotation (Line(
       points={{26,-100},{26,-86}},
