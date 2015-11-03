@@ -4,11 +4,11 @@ partial model PartialHeaterTwoPort
 
   extends IDEAS.Fluid.Interfaces.TwoPortHeatMassExchanger(
   redeclare final IDEAS.Fluid.MixingVolumes.MixingVolume vol(
-    nPorts=2, V=m2/rho_default),
+    nPorts=2),
   final showDesignFlowDirection=true);
 
   extends PartialHeater(
-    final UALoss2=(cDry2 + m2*
+    final UALoss2=(cDry2 + vol.V*rho_default*
       Medium.specificHeatCapacityCp(Medium.setState_pTX(Medium.p_default, Medium.T_default,Medium.X_default)))/tauHeatLoss2,
     hIn(y=inStream(port_a.h_outflow)),
     m_flow2(y=port_a.m_flow),

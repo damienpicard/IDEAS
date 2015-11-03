@@ -15,7 +15,6 @@ partial model PartialHeater
   parameter Modelica.SIunits.Power QNom "Nominal power";
   parameter Modelica.SIunits.Time tauHeatLoss2=7200
     "Time constant of environmental heat losses";
-  parameter Modelica.SIunits.Mass m2=5 "Mass of water in the secondary circuit";
   parameter Modelica.SIunits.HeatCapacity cDry2=4800
     "Capacity of dry material lumped to condensor";
 
