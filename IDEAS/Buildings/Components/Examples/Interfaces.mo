@@ -25,8 +25,9 @@ package Interfaces
       inc=0,
       azi=0)
       annotation (Placement(transformation(extent={{-54,-2},{-44,18}})));
-    Fluid.Sources.Boundary_pT bou(nPorts=1, redeclare package Medium = Medium)
-      annotation (Placement(transformation(extent={{-60,80},{-40,100}})));
+    Fluid.Sources.Boundary_pT bou(          redeclare package Medium = Medium,
+        nPorts=2)
+      annotation (Placement(transformation(extent={{-60,100},{-40,80}})));
 
     InternalWall
                commonWall1(
@@ -98,10 +99,6 @@ package Interfaces
         color={255,204,51},
         thickness=0.5,
         smooth=Smooth.None));
-    connect(bou.ports[1], zone.flowPort_In) annotation (Line(
-        points={{-40,90},{32,90},{32,4.44089e-16}},
-        color={0,127,255},
-        smooth=Smooth.None));
     connect(commonWall1.propsBus_a, zone.propsBus[2]) annotation (Line(
         points={{7,-33},{6,-33},{6,-5.2},{20,-5.2}},
         color={255,204,51},
@@ -122,10 +119,6 @@ package Interfaces
         color={255,204,51},
         thickness=0.5,
         smooth=Smooth.None));
-    connect(zone1.flowPort_In, zone.flowPort_In) annotation (Line(
-        points={{32,-50},{32,0}},
-        color={0,0,0},
-        smooth=Smooth.None));
     connect(commonWall1.propsBus_b, zone1.propsBus[1]) annotation (Line(
         points={{7,-43},{6.5,-43},{6.5,-55},{20,-55}},
         color={255,204,51},
@@ -143,6 +136,10 @@ package Interfaces
         points={{-44,-12},{-12,-12},{-12,-7.6},{20,-7.6}},
         color={255,204,51},
         thickness=0.5));
+    connect(bou.ports[1], zone.flowPort_In) annotation (Line(points={{-40,88},{
+            8,88},{32,88},{32,0}}, color={0,127,255}));
+    connect(bou.ports[2], zone1.flowPort_In) annotation (Line(points={{-40,92},
+            {46,92},{46,-38},{32,-38},{32,-50}}, color={0,127,255}));
     annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
               -100},{100,100}})),           __Dymola_Commands(file=
             "Resources/Scripts/Dymola/Buildings/Components/Examples/ZoneExample.mos"

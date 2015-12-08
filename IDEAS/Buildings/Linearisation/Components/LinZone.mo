@@ -7,7 +7,7 @@ model LinZone "Linearisable zone model"
     "Simplify air model to heat capacitor. Used for linearisation.";
 
 protected
-  parameter Boolean simplifyAirModelInternal = simplifyAirModel or sim.linearise
+  parameter Boolean simplifyAirModelInternal = simplifyAirModel or sim.linearise or sim.createOutputs
     "Always use simple model when linearising";
 
   IDEAS.Buildings.Components.BaseClasses.AirLeakage airLeakage(
