@@ -1,53 +1,15 @@
 within IDEAS.Buildings.Linearisation.Components;
 model LinZone "Linearisable zone model"
-  extends IDEAS.Buildings.Components.Interfaces.StateZone(
-    Eexpr(y=vol.dynBal.U),
+  extends IDEAS.Buildings.Components.BaseClasses.partial_zone(
     useFluidPorts=not sim.linearise,
     connectWeaBus=not sim.linearise);
-  extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations(redeclare package
-      Medium = IDEAS.Media.Air);
-  parameter Boolean allowFlowReversal=true
-    "= true to allow flow reversal in zone, false restricts to design direction (port_a -> port_b)."
-    annotation(Dialog(tab="Assumptions"));
-
-  parameter Modelica.SIunits.Volume V "Total zone air volume";
-  parameter Real n50(min=0.01)=0.4
-    "n50 value cfr airtightness, i.e. the ACH at a pressure diffence of 50 Pa";
-  parameter Real corrCV=5 "Multiplication factor for the zone air capacity";
-
-  parameter Boolean linIntRad=sim.linIntRad
-    "Linearized computation of long wave radiation"                             annotation(Dialog(tab="Radiation"));
   parameter Boolean simplifyAirModel = sim.linearise
     "Simplify air model to heat capacitor. Used for linearisation.";
-
-  final parameter Modelica.SIunits.Power QInf_design=1012*1.204*V/3600*n50/20*(273.15
-       + 21 - sim.Tdes)
-    "Design heat losses from infiltration at reference outdoor temperature";
-  final parameter Modelica.SIunits.MassFlowRate m_flow_nominal = 0.1*1.224*V/3600;
-  final parameter Modelica.SIunits.Power QRH_design=A*fRH
-    "Additional power required to compensate for the effects of intermittent heating";
-  parameter Real fRH=11
-    "Reheat factor for calculation of design heat load, (EN 12831, table D.10 Annex D)"
-                                                                                        annotation(Dialog(group="Design heat load"));
-  parameter Modelica.SIunits.Area A = 0 "Total conditioned floor area" annotation(Dialog(group="Design heat load"));
-
-  Modelica.SIunits.Power QTra_design=sum(propsBus.QTra_design)
-    "Total design transmission heat losses for the zone";
-  final parameter Modelica.SIunits.Power Q_design(fixed=false)
-    "Total design heat losses for the zone";
-
-  Modelica.SIunits.Temperature TAir=senTem.T;
-  Modelica.SIunits.Temperature TStar=radDistr.TRad;
 
 protected
   parameter Boolean simplifyAirModelInternal = simplifyAirModel or sim.linearise
     "Always use simple model when linearising";
-  IDEAS.Buildings.Components.BaseClasses.ZoneLwGainDistribution radDistr(final
-      nSurf=nSurf) "distribution of radiative internal gains" annotation (
-      Placement(transformation(
-        extent={{10,10},{-10,-10}},
-        rotation=-90,
-        origin={-54,-44})));
+
   IDEAS.Buildings.Components.BaseClasses.AirLeakage airLeakage(
     redeclare package Medium = Medium,
     m_flow_nominal=V/3600*n50/20,
@@ -56,15 +18,7 @@ protected
     allowFlowReversal=allowFlowReversal,
     show_T=false) if not simplifyAirModelInternal
     annotation (Placement(transformation(extent={{40,30},{60,50}})));
-  IDEAS.Buildings.Components.BaseClasses.ZoneLwDistribution radDistrLw(final
-      nSurf=nSurf, final linearise=linIntRad)
-    "internal longwave radiative heat exchange" annotation (Placement(
-        transformation(
-        extent={{10,-10},{-10,10}},
-        rotation=90,
-        origin={-54,-10})));
-  Modelica.Blocks.Math.Sum summation(nin=2, k={0.5,0.5})
-    annotation (Placement(transformation(extent={{0,-66},{12,-54}})));
+
   Fluid.MixingVolumes.MixingVolume         vol(
     V=V,
     m_flow_nominal=m_flow_nominal,
@@ -84,9 +38,6 @@ protected
         rotation=180,
         origin={-10,30})));
 
-protected
-  Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor senTem
-    annotation (Placement(transformation(extent={{0,-28},{-16,-12}})));
 protected
   outer input IDEAS.Buildings.Components.Interfaces.WeaBus weaBus(
     each final weaBus(outputAngles=not sim.linearise),
@@ -111,14 +62,6 @@ initial equation
   Q_design=QInf_design+QRH_design+QTra_design; //Total design load for zone (additional ventilation losses are calculated in the ventilation system)
 equation
 
-  connect(radDistr.radGain, gainRad) annotation (Line(
-      points={{-50.2,-54},{-50,-54},{-50,-72},{80,-72},{80,-60},{100,-60}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(propsBus[:].surfRad, radDistrLw.port_a) annotation (Line(
-      points={{-100.1,39.9},{-74,39.9},{-74,-26},{-54,-26},{-54,-20}},
-      color={191,0,0},
-      smooth=Smooth.None));
   if not simplifyAirModelInternal then
   connect(summation.y, TSensor) annotation (Line(
       points={{12.6,-60},{59.3,-60},{59.3,0},{106,0}},
@@ -128,47 +71,6 @@ equation
     connect(senTem_lin.port, vol_lin.port) annotation (Line(points={{72,50},{60,50},
           {60,66},{-32,66}}, color={191,0,0}));
   end if;
-  connect(radDistr.TRad, summation.u[1]) annotation (Line(
-      points={{-44,-44},{-22,-44},{-22,-60.6},{-1.2,-60.6}},
-      color={0,0,127},
-      smooth=Smooth.None));
-
-  connect(propsBus.area, radDistr.area) annotation (Line(
-      points={{-100.1,39.9},{-82,39.9},{-82,-40},{-64,-40}},
-      color={127,0,0},
-      smooth=Smooth.None), Text(
-      string="%first",
-      index=-1,
-      extent={{-6,3},{-6,3}}));
-  connect(propsBus.area, radDistrLw.A) annotation (Line(
-      points={{-100.1,39.9},{-82,39.9},{-82,-14},{-64,-14}},
-      color={127,0,0},
-      smooth=Smooth.None), Text(
-      string="%first",
-      index=-1,
-      extent={{-6,3},{-6,3}}));
-  connect(propsBus.epsLw, radDistrLw.epsLw) annotation (Line(
-      points={{-100.1,39.9},{-82,39.9},{-82,-10},{-64,-10}},
-      color={127,0,0},
-      smooth=Smooth.None), Text(
-      string="%first",
-      index=-1,
-      extent={{-6,3},{-6,3}}));
-
-  connect(propsBus.epsLw, radDistr.epsLw) annotation (Line(
-      points={{-100.1,39.9},{-82,39.9},{-82,-44},{-64,-44}},
-      color={127,0,0},
-      smooth=Smooth.None), Text(
-      string="%first",
-      index=-1,
-      extent={{-6,3},{-6,3}}));
-  connect(propsBus.epsSw, radDistr.epsSw) annotation (Line(
-      points={{-100.1,39.9},{-82,39.9},{-82,-48},{-64,-48}},
-      color={127,0,0},
-      smooth=Smooth.None), Text(
-      string="%first",
-      index=-1,
-      extent={{-6,3},{-6,3}}));
   connect(vol.heatPort, gainCon) annotation (Line(
       points={{0,30},{10,30},{10,-30},{100,-30}},
       color={191,0,0},
@@ -182,19 +84,20 @@ for i in 1:nSurf loop
           color={255,204,51},
           thickness=0.5,
           smooth=Smooth.None));
-  connect(radDistr.iSolDir, propsBus[i].iSolDir) annotation (Line(
-      points={{-58,-54},{-58,-80},{-100.1,-80},{-100.1,39.9}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(radDistr.iSolDif, propsBus[i].iSolDif) annotation (Line(
-      points={{-54,-54},{-54,-76},{-100.1,-76},{-100.1,39.9}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(propsBus[i].surfCon, vol.heatPort) annotation (Line(
-      points={{-100.1,39.9},{-46,39.9},{-46,12},{10,12},{10,30},{4.44089e-16,30}},
-      color={191,0,0},
-      smooth=Smooth.None));
 end for;
+
+  connect(prescribedTemperature.port, airLeakage_lin.port_a)
+    annotation (Line(points={{-64,66},{-61,66},{-58,66}}, color={191,0,0}));
+  connect(airLeakage_lin.port_b, vol_lin.port)
+    annotation (Line(points={{-42,66},{-37,66},{-32,66}}, color={191,0,0}));
+  connect(vol_lin.port, gainCon)
+    annotation (Line(points={{-32,66},{100,66},{100,-30}}, color={191,0,0}));
+
+  connect(prescribedTemperature.T, propsBus[1].weaBus.Te) annotation (Line(
+        points={{-77.2,66},{-90,66},{-100.1,66},{-100.1,39.9}}, color={0,0,127}));
+  connect(senTem_lin.T, TSensor) annotation (Line(points={{88,50},{94,50},{94,0},
+          {106,0}}, color={0,0,127}));
+
   connect(flowPort_In, vol.ports[1]) annotation (Line(
       points={{20,100},{20,40},{-10,40}},
       color={0,128,255},
@@ -202,14 +105,6 @@ end for;
   connect(flowPort_Out, vol.ports[2]) annotation (Line(
       points={{-20,100},{-20,40},{-10,40}},
       color={0,128,255},
-      smooth=Smooth.None));
-  connect(senTem.port, gainCon) annotation (Line(
-      points={{0,-20},{10,-20},{10,-30},{100,-30}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(senTem.T, summation.u[2]) annotation (Line(
-      points={{-16,-20},{-18,-20},{-18,-59.4},{-1.2,-59.4}},
-      color={0,0,127},
       smooth=Smooth.None));
       if allowFlowReversal then
   connect(airLeakage.port_a, vol.ports[4]) annotation (Line(
@@ -230,23 +125,6 @@ end for;
       color={0,127,255},
       smooth=Smooth.None));
       end if;
-  connect(radDistr.radSurfTot, radDistrLw.port_a) annotation (Line(
-      points={{-54,-34},{-54,-20}},
-      color={191,0,0},
-      smooth=Smooth.None));
-
-  connect(prescribedTemperature.port, airLeakage_lin.port_a)
-    annotation (Line(points={{-64,66},{-61,66},{-58,66}}, color={191,0,0}));
-  connect(airLeakage_lin.port_b, vol_lin.port)
-    annotation (Line(points={{-42,66},{-37,66},{-32,66}}, color={191,0,0}));
-  connect(vol_lin.port, gainCon)
-    annotation (Line(points={{-32,66},{100,66},{100,-30}}, color={191,0,0}));
-
-  connect(prescribedTemperature.T, propsBus[1].weaBus.Te) annotation (Line(
-        points={{-77.2,66},{-90,66},{-100.1,66},{-100.1,39.9}}, color={0,0,127}));
-  connect(senTem_lin.T, TSensor) annotation (Line(points={{88,50},{94,50},{94,0},
-          {106,0}}, color={0,0,127}));
-
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
          graphics),

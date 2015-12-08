@@ -9,11 +9,23 @@ model structure "Example detailed building structure model"
     AZones={gF_floor.AWall,fF_floor.AWall,sF_floor.AWall});
 
   //Definition of the thermal zones
-  Components.Zone gF(V=216.0, nSurf=8) "second floor (sF) with sleeping area"
+  replaceable Components.Zone
+                  gF(V=216.0, nSurf=8,
+    redeclare package Medium = Medium) constrainedby
+    Components.BaseClasses.partial_zone(V=216.0, nSurf=8,
+    redeclare package Medium = Medium) "second floor (sF) with sleeping area"
     annotation (Placement(transformation(extent={{40,-60},{60,-40}})));
-  Components.Zone fF(V=216.0, nSurf=8) "second floor (sF) with sleeping area"
+  replaceable Components.Zone
+                  fF(V=216.0, nSurf=8,
+    redeclare package Medium = Medium) constrainedby
+    Components.BaseClasses.partial_zone(V=216.0, nSurf=8,
+    redeclare package Medium = Medium) "second floor (sF) with sleeping area"
     annotation (Placement(transformation(extent={{40,0},{60,20}})));
-  Components.Zone sF(V=216.0, nSurf=8) "second floor (sF) with sleeping area"
+  replaceable Components.Zone
+                  sF(V=216.0, nSurf=8,
+    redeclare package Medium = Medium) constrainedby
+    Components.BaseClasses.partial_zone(V=216.0, nSurf=8,
+    redeclare package Medium = Medium) "second floor (sF) with sleeping area"
     annotation (Placement(transformation(extent={{40,60},{60,80}})));
   //Definition of the building envelope for gF
   Components.OuterWall[3] gF_ext(
@@ -27,7 +39,8 @@ model structure "Example detailed building structure model"
         extent={{-5.5,-10.5},{5.5,10.5}},
         rotation=90,
         origin={-17.5,-75.5})));
-  Components.Window[3] gF_win(
+  replaceable Components.Window[
+                    3] gF_win(
     A={5.5,1,5.5},
     azi={IDEAS.Constants.East,IDEAS.Constants.South,IDEAS.Constants.West},
     redeclare IDEAS.Buildings.Data.Glazing.Ins2Kr glazing,
@@ -60,7 +73,8 @@ model structure "Example detailed building structure model"
         extent={{-5.5,-10.5},{5.5,10.5}},
         rotation=90,
         origin={-17.5,-15.5})));
-  Components.Window[3] fF_win(
+  replaceable Components.Window[
+                    3] fF_win(
     A={5.5,1,5.5},
     azi={IDEAS.Constants.East,IDEAS.Constants.South,IDEAS.Constants.West},
     redeclare IDEAS.Buildings.Data.Glazing.Ins2Kr glazing,
@@ -92,7 +106,8 @@ model structure "Example detailed building structure model"
         extent={{-5.5,-10.5},{5.5,10.5}},
         rotation=90,
         origin={-17.5,44.5})));
-  Components.Window[3] sF_win(
+  replaceable Components.Window[
+                    3] sF_win(
     A={5.5,1,5.5},
     azi={IDEAS.Constants.East,IDEAS.Constants.South,IDEAS.Constants.West},
     redeclare IDEAS.Buildings.Data.Glazing.Ins2Kr glazing,
@@ -251,17 +266,17 @@ equation
       points={{52,80},{52,88},{20,88},{20,106.667}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(gF_floor.port_emb, heatPortEmb[1]) annotation (Line(
-      points={{-37,-76},{-32,-76},{-32,-92},{114,-92},{114,53.3333},{150,
+  connect(gF_floor.port_emb[1], heatPortEmb[1]) annotation (Line(
+      points={{-37.2,-76},{-32,-76},{-32,-92},{114,-92},{114,53.3333},{150,
           53.3333}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(fF_floor.port_emb, heatPortEmb[2]) annotation (Line(
-      points={{-37,-16},{-32,-16},{-32,-28},{114,-28},{114,60},{150,60}},
+  connect(fF_floor.port_emb[1], heatPortEmb[2]) annotation (Line(
+      points={{-37.2,-16},{-32,-16},{-32,-28},{114,-28},{114,60},{150,60}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(sF_floor.port_emb, heatPortEmb[3]) annotation (Line(
-      points={{-37,44},{-34,44},{-34,40},{-32,40},{-32,32},{114,32},{114,
+  connect(sF_floor.port_emb[1], heatPortEmb[3]) annotation (Line(
+      points={{-37.2,44},{-34,44},{-34,40},{-32,40},{-32,32},{114,32},{114,
           66.6667},{150,66.6667}},
       color={191,0,0},
       smooth=Smooth.None));
