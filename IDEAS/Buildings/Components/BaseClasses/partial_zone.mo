@@ -32,6 +32,11 @@ partial model partial_zone
 
   Modelica.SIunits.Power QTra_design=sum(propsBus.QTra_design)
     "Total design transmission heat losses for the zone";
+
+  Real U_equivalent=sum(propsBus.QTra_design) / ATraExt / (273.15+21 - sim.Tdes)
+    "Total design transmission heat losses for the zone";
+  Modelica.SIunits.Area ATraExt "Transimission area";
+
   final parameter Modelica.SIunits.Power Q_design(fixed=false)
     "Total design heat losses for the zone";
 
@@ -63,6 +68,13 @@ public
 initial equation
   Q_design = QInf_design + QRH_design + QTra_design;
   //Total design load for zone (additional ventilation losses are calculated in the ventilation system)
+algorithm
+   ATraExt :=0;
+    for i in 1:nSurf loop
+      if propsBus[i].QTra_design > Modelica.Constants.eps then
+        ATraExt :=ATraExt + propsBus[i].area;
+      end if;
+    end for;
 equation
 
   connect(radDistr.radGain, gainRad) annotation (Line(
