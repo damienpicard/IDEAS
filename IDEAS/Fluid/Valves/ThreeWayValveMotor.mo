@@ -5,7 +5,7 @@ model ThreeWayValveMotor
 
 public
   Modelica.Blocks.Interfaces.RealInput ctrl(min=0, max=1)
-    "procentage of flow through flowPort_a1" annotation (Placement(transformation(
+    "fraction of flow through flowPort_a1" annotation (Placement(transformation(
         extent={{20,-20},{-20,20}},
         rotation=90,
         origin={0,106}), iconTransformation(

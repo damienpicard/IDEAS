@@ -26,31 +26,34 @@ public
   replaceable package Medium = Modelica.Media.Interfaces.PartialMedium annotation (
       __Dymola_choicesAllMatching=true);
 
-  IDEAS.Fluid.Sensors.TemperatureTwoPort THot(
-    redeclare package Medium = Medium,
-    m_flow_nominal=m_flow_nominal,
-    tau=tau) annotation (Placement(transformation(extent={{-88,-10},{-68,10}})));
+//   IDEAS.Fluid.Sensors.TemperatureTwoPort THot(
+//     redeclare package Medium = Medium,
+//     m_flow_nominal=m_flow_nominal,
+//     tau=tau) annotation (Placement(transformation(extent={{-88,-10},{-68,10}})));
+  Modelica.SIunits.Temperature THot = Medium.temperature_phX(port_hot.p,inStream(port_hot.h_outflow),inStream(port_hot.Xi_outflow));
 
   IDEAS.Fluid.Interfaces.IdealSource idealSource(
     redeclare package Medium = Medium,
     control_m_flow=true,
-    allowFlowReversal=false)
+    allowFlowReversal=allowFlowReversal)
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
   IDEAS.Fluid.FixedResistances.Pipe_HeatPort pipe_HeatPort(
     redeclare package Medium = Medium,
-    allowFlowReversal=false,
-    dynamicBalance=true,
-    m_flow_nominal=m_flow_nominal)
+    m_flow_nominal=m_flow_nominal,
+    energyDynamics=energyDynamics,
+    massDynamics=massDynamics,
+    allowFlowReversal=allowFlowReversal,
+    dynamicBalance=dynamicBalance)
     annotation (Placement(transformation(extent={{80,10},{100,-10}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature
     prescribedTemperature
     annotation (Placement(transformation(extent={{66,-36},{78,-24}})));
 
-  Modelica.SIunits.Temperature TDHW_actual = min(THot.T,TDHWSet);
+  Modelica.SIunits.Temperature TDHW_actual = min(THot,TDHWSet);
   Modelica.Blocks.Sources.RealExpression mFloCor(y=mFlo60C*(273.15 + 60 - TCold)
         /(TDHWSet - TCold)) "Corrected desired mass flow rate for TDHWSet"
     annotation (Placement(transformation(extent={{-66,76},{-4,96}})));
-  Modelica.Blocks.Sources.RealExpression deltaT(y=THot.T - TCold) "THot-TCold"
+  Modelica.Blocks.Sources.RealExpression deltaT(y=THot - TCold) "THot-TCold"
     annotation (Placement(transformation(extent={{-66,62},{-40,82}})));
   IDEAS.Utilities.Math.SmoothMax deltaT_with_smoothmax(deltaX=0.1)
     annotation (Placement(transformation(extent={{-28,56},{-10,74}})));
@@ -64,15 +67,23 @@ public
   IDEAS.Utilities.Math.SmoothMin mFloHot(deltaX=1e-3*m_flow_nominal)
     "Hot and cold water flowrate"
     annotation (Placement(transformation(extent={{18,34},{36,52}})));
+  parameter Boolean allowFlowReversal=idealSource.system.allowFlowReversal
+    "= true to allow flow reversal, false restricts to design direction (port_a -> port_b)";
+  parameter Modelica.Fluid.Types.Dynamics energyDynamics=Modelica.Fluid.Types.Dynamics.DynamicFreeInitial
+    "Formulation of energy balance";
+  parameter Modelica.Fluid.Types.Dynamics massDynamics=pipe_HeatPort.energyDynamics
+    "Formulation of mass balance";
+  parameter Boolean dynamicBalance=true
+    "Set to true to use a dynamic balance, which often leads to smaller systems of equations";
 equation
-  connect(port_hot, THot.port_a) annotation (Line(
-      points={{-100,4.44089e-16},{-88,4.44089e-16}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(idealSource.port_a, THot.port_b) annotation (Line(
-      points={{40,0},{-68,0}},
-      color={0,127,255},
-      smooth=Smooth.None));
+//   connect(port_hot, THot.port_a) annotation (Line(
+//       points={{-100,4.44089e-16},{-88,4.44089e-16}},
+//       color={0,127,255},
+//       smooth=Smooth.None));
+//   connect(idealSource.port_a, THot.port_b) annotation (Line(
+//       points={{40,0},{-68,0}},
+//       color={0,127,255},
+//       smooth=Smooth.None));
   connect(idealSource.port_b, pipe_HeatPort.port_a) annotation (Line(
       points={{60,0},{80,0}},
       color={0,127,255},
@@ -109,9 +120,10 @@ equation
       points={{36.9,43},{44,43},{44,8}},
       color={0,0,127},
       smooth=Smooth.None));
+  connect(port_hot, idealSource.port_a)
+    annotation (Line(points={{-100,0},{-30,0},{40,0}}, color={0,127,255}));
   annotation (
-    Diagram(coordinateSystem(extent={{-100,-40},{140,100}}, preserveAspectRatio=false),
-                   graphics),
+    Diagram(coordinateSystem(extent={{-100,-40},{140,100}}, preserveAspectRatio=false)),
     Icon(coordinateSystem(extent={{-100,-40},{140,100}}, preserveAspectRatio=
             false), graphics={
         Line(
