@@ -2,10 +2,13 @@ within IDEAS.Climate.Meteo.Solar;
 model RadSolData "Selects or generates correct solar data for this surface"
   parameter SI.Angle inc "inclination";
   parameter SI.Angle azi "azimuth";
-  parameter SI.Angle lat "latitude";
-  parameter Integer numAzi "Number of irradation data calculated in solBus";
-  parameter SI.Angle ceilingInc "Roof inclination angle in solBus";
-  parameter SI.Angle offsetAzi
+  parameter SI.Angle lat = sim.lat "latitude";
+  parameter Integer numAzi = sim.numAzi
+    "Number of irradation data calculated in solBus";
+  parameter SI.Angle ceilingInc = sim.ceilingInc
+    "Roof inclination angle in solBus";
+  parameter SI.Angle ceilingAzi = sim.ceilingAzi "Roof azimuth angle in solBus";
+  parameter SI.Angle offsetAzi = sim.offsetAzi
     "Offset azimuth angle of irradation data calculated in solBus";
   parameter Boolean forceWeaBusPassThrough = sim.linearise
     "Set to true when inputs must be taken from the weather bus, i.e. when linearising"
@@ -14,7 +17,7 @@ model RadSolData "Selects or generates correct solar data for this surface"
   final parameter Boolean solDataInBus=
    forceWeaBusPassThrough or
    isRoof or
-    (inc==IDEAS.Constants.Wall
+    (abs(inc-IDEAS.Constants.Wall)<0.05
       and abs(sin((azi-offsetAzi)*numAzi))<0.05)
     "True if solBus contains correct data for this surface"
     annotation(Evaluate=true);
@@ -52,8 +55,8 @@ model RadSolData "Selects or generates correct solar data for this surface"
   Modelica.Blocks.Interfaces.RealOutput Tenv "Environment temperature"
     annotation (Placement(transformation(extent={{96,-30},{116,-10}})));
 protected
-      parameter Boolean isRoof = ceilingInc == inc
-    "Surface is a horizontal surface";
+      parameter Boolean isRoof = ( (abs(ceilingInc-inc) <0.05) and (abs(ceilingAzi - azi)<0.05))
+    "Surface is the roof surface";
 protected
   output Buildings.Components.Interfaces.SolBus
                                          solBusDummy1(outputAngles=not

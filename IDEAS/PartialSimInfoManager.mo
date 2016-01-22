@@ -172,7 +172,7 @@ public
     inc=inc,
     azi=cat(
         1,
-        fill(ceilingInc,1),
+        fill(ceilingAzi,1),
         fill(offsetAzi, numAzi) + (0:numAzi-1)*Modelica.Constants.pi*2/numAzi),
     each numAzi=numAzi,
     each lat=lat,
@@ -197,6 +197,9 @@ public
     annotation(Dialog(tab="Incidence angles"));
   parameter SI.Angle ceilingInc = IDEAS.Constants.Ceiling
     "Ceiling inclination angle"
+    annotation(Dialog(tab="Incidence angles"));
+  parameter SI.Angle ceilingAzi = 0
+    "Ceiling azimuth angle (only important if ceiling not horizontal)"
     annotation(Dialog(tab="Incidence angles"));
   Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature(T=10e6)
     annotation (Placement(transformation(extent={{40,-80},{20,-60}})));
