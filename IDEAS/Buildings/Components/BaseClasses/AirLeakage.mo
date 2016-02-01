@@ -16,17 +16,14 @@ extends IDEAS.Fluid.Interfaces.PartialTwoPortInterface;
     control_m_flow=true,
     allowFlowReversal=false)
     annotation (Placement(transformation(extent={{0,-10},{20,10}})));
-  Fluid.FixedResistances.Pipe_HeatPort       pipe_HeatPort(
+  Fluid.HeatExchangers.HeaterCooler_T        pipe_HeatPort(
     redeclare package Medium = Medium,
     allowFlowReversal=false,
-    dynamicBalance=false,
-    m_flow_nominal=m_flow_nominal)
+    m_flow_nominal=m_flow_nominal,
+    dp_nominal=0)
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
-  Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature
-    prescribedTemperature
-    annotation (Placement(transformation(extent={{40,60},{60,80}})));
   Modelica.Blocks.Sources.RealExpression realExpression(y=sim.Te)
-    annotation (Placement(transformation(extent={{0,60},{20,80}})));
+    annotation (Placement(transformation(extent={{20,58},{40,78}})));
   Modelica.Blocks.Sources.RealExpression realExpression1(y=V/3600*n50/20)
     annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow prescribedHeatFlow if  sim.computeConservationOfEnergy
@@ -35,14 +32,6 @@ extends IDEAS.Fluid.Interfaces.PartialTwoPortInterface;
     annotation (Placement(transformation(extent={{0,50},{-20,70}})));
 equation
 
-  connect(realExpression.y, prescribedTemperature.T) annotation (Line(
-      points={{21,70},{38,70}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(prescribedTemperature.port, pipe_HeatPort.heatPort) annotation (Line(
-      points={{60,70},{70,70},{70,10}},
-      color={191,0,0},
-      smooth=Smooth.None));
   connect(pipe_HeatPort.port_b, port_b) annotation (Line(
       points={{80,0},{100,0}},
       color={0,127,255},
@@ -63,6 +52,8 @@ equation
     annotation (Line(points={{-60,60},{-90,60},{-90,80}}, color={191,0,0}));
   connect(Qgai.y, prescribedHeatFlow.Q_flow)
     annotation (Line(points={{-21,60},{-40,60}}, color={0,0,127}));
+  connect(realExpression.y, pipe_HeatPort.TSet) annotation (Line(points={{41,68},
+          {52,68},{52,8},{52,6},{58,6}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}),
                    graphics={Text(
