@@ -104,7 +104,6 @@ public
   Real angHou =  (timSol/3600 - 12)*2*Modelica.Constants.pi/24;
   Real angZen = acos(cos(lat)*cos(angDec)*cos(angHou) + sin(lat)*sin(angDec));
 
-protected
   IDEAS.Climate.Time.SimTimes timMan(
     timZonSta=timZonSta,
     lon=lon,
@@ -112,6 +111,7 @@ protected
     ifSolCor=true)
     annotation (Placement(transformation(extent={{-52,18},{-34,36}})));
 
+protected
   BoundaryConditions.WeatherData.ReaderTMY3 weaDat(
   filNam=filNamClim,
   lat=lat,
