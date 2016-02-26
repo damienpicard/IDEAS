@@ -7,7 +7,7 @@ function CorrectedBoreFieldWallTemperature "Return the corrected average borehol
     "Vector containing the short term  borehole wall step-response temperature in function of the time";
 
 protected
-  SI.TemperatureDifference deltaTWallCorBre
+  Modelica.SIunits.TemperatureDifference deltaTWallCorBre
     "Wall temperature of the borefield at the switching time between the short and long-term model";
 
 algorithm

@@ -8,7 +8,9 @@ model SingleBoreHole "Test for the SingleBoreHole model"
     redeclare package Medium = Medium,
     soi=Data.SoilData.SandStone(),
     fil=Data.FillingData.Bentonite(),
-    gen=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.GeneralData.c8x1_h110_b5_d3600_T283())
+    gen=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.GeneralData.c8x1_h110_b5_d3600_T283(),
+    m_flow_nominal=seg.gen.m_flow_nominal_bh,
+    dp_nominal=1000)
             annotation (Placement(transformation(
         extent={{-13,-13},{13,13}},
         rotation=270,

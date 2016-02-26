@@ -30,7 +30,7 @@ protected
 
   String[1] varToStore={"borHolSer.TWallAve"}
     "variables to store in result file";
-  SI.Time[1,gen.tBre_d + 1] timVec={0:gen.tStep:gen.tBre_d*gen.tStep}
+  Modelica.SIuntis.Time[1,gen.tBre_d + 1] timVec={0:gen.tStep:gen.tBre_d*gen.tStep}
     "time vector for which the data are saved";
   String[2] saveName={"Time",varToStore[1]};
 
