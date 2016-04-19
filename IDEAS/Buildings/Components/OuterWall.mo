@@ -94,7 +94,7 @@ equation
   connect(layMul.port_a, extRad.port_a) annotation (Line(points={{-10,-28},{-14,
           -28},{-14,-10},{-20,-10}}, color={191,0,0}));
   connect(layMul.iEpsSw_a, solAbs.epsSw)
-    annotation (Line(points={{-10,-24},{-20,-24},{-20,-24}}, color={0,0,127}));
+    annotation (Line(points={{-10,-24},{-20,-24}},           color={0,0,127}));
   connect(layMul.iEpsLw_a, extRad.epsLw) annotation (Line(points={{-10,-20},{
           -10,-6.6},{-20,-6.6}}, color={0,0,127}));
   annotation (

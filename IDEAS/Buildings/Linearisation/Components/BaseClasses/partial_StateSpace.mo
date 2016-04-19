@@ -25,14 +25,14 @@ partial model partial_StateSpace "State space model with bus inputs"
      D=if use_matrix then D else readMatrix(fileName=fileName, matrixName="D", rows=outputs, columns=inputs),
      x_start=x_start)
      annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
-
+  parameter Integer nExtraInputs = 0;
   parameter Boolean debug=false
     "Set to set to change all heat flow input to zero and all temperature to 293";
 protected
   final parameter Integer[2] Bsize = if use_matrix then size(B) else readMatrixSize(fileName=fileName, matrixName="B");
   final parameter Integer[2] Csize = if use_matrix then size(C) else readMatrixSize(fileName=fileName, matrixName="C");
 
- final parameter Integer[nWin] offWinCon = {sum(winNLay[1:i-1]) + 2*(i-1) for i in 1:nWin}
+ final parameter Integer[nWin] offWinCon = {sum(winNLay[1:i-1]) + 2*(i-1) + nExtraInputs for i in 1:nWin}
     "Offset of index for window connections";
   final parameter Integer lastWinCon = if nWin > 0 then offWinCon[end] + winNLay[end] + 2 else 0;
   final parameter Integer[numSolBus] offSolBus = {lastWinCon + (i-1)*3 for i in 1:numSolBus}
@@ -49,6 +49,13 @@ public
         extent={{-20,-20},{20,20}},
         rotation=90,
         origin={-100,80})));
+  Modelica.Blocks.Interfaces.RealInput extraInputs[nExtraInputs]
+    annotation (Placement(transformation(extent={{-20,-20},{20,20}},
+        rotation=90,
+        origin={0,-120}),
+        iconTransformation(extent={{-10,-10},{10,10}},
+        rotation=90,
+        origin={0,-110})));
   Modelica.Blocks.Interfaces.RealInput Q_flowEmb[nEmb]
     annotation (Placement(transformation(extent={{-140,20},{-100,60}}),
         iconTransformation(extent={{-120,40},{-100,60}})));
@@ -79,6 +86,9 @@ public
     annotation (Placement(transformation(extent={{-60,-100},{-40,-80}})));
 
 equation
+  for i in 1:nExtraInputs loop
+    connect(extraInputs[i],stateSpace.u[i]);
+  end for;
   for i in 1:nWin loop
     if debug then
       connect(const3_0.y, stateSpace.u[offWinCon[i] + 1:(offWinCon[i] + winNLay[
@@ -150,8 +160,8 @@ equation
     end if;
   end for;
 
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}}),
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
+            {100,100}}),
                    graphics={
         Rectangle(extent={{-60,60},{60,-60}}, lineColor={0,0,255}),
         Text(

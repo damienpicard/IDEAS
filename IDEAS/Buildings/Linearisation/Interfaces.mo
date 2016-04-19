@@ -8,7 +8,7 @@ package Interfaces
       winBusIn(each nLay=sim.nLayWin) if sim.linearise;
   public
     output IDEAS.Buildings.Linearisation.Interfaces.WindowBus[sim.nWindow]
-      windowBusOut(each nLay=sim.nLayWin) if sim.createOutputs
+      winBusOut(each nLay=sim.nLayWin) if sim.createOutputs
       "Dummy for getting outputs";
   protected
     inner input IDEAS.Buildings.Components.Interfaces.WeaBus weaBus(
@@ -25,7 +25,7 @@ package Interfaces
 
   equation
     connect(sim.weaBus, weaBusOut);
-    connect(sim.winBusOut,windowBusOut);
+    connect(sim.winBusOut,winBusOut);
   end LinearisationInterface;
 
   partial model StateSpaceModelInterface

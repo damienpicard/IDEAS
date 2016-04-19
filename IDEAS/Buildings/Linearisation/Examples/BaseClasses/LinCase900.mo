@@ -106,11 +106,11 @@ model LinCase900
        1) if gF.useFluidPorts annotation (Placement(transformation(extent={{20,60},{40,80}})));
   IDEAS.Utilities.IO.heatPortPrescribedHeatFlow heatPortPrescribedHeatFlow
     annotation (Placement(transformation(extent={{-40,-100},{-20,-80}})));
-  Modelica.Blocks.Interfaces.RealInput QCon
+  Modelica.Blocks.Interfaces.RealInput QCon(start=100)
     annotation (Placement(transformation(extent={{-130,-80},{-90,-40}})));
   IDEAS.Utilities.IO.heatPortPrescribedHeatFlow heatPortPrescribedHeatFlow1
     annotation (Placement(transformation(extent={{-40,-70},{-20,-50}})));
-  Modelica.Blocks.Interfaces.RealInput QGaiRad
+  Modelica.Blocks.Interfaces.RealInput QGaiRad(start=100)
     annotation (Placement(transformation(extent={{-130,20},{-90,60}})));
 equation
    connect(roof.propsBus_a,gF. propsBus[1]) annotation (Line(

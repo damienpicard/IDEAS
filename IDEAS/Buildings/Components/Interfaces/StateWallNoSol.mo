@@ -64,8 +64,8 @@ protected
   BaseClasses.InteriorConvection                            intCon_a(
     final A=AWall,
     final inc=inc + Modelica.Constants.pi,
-    linearise=linearise,
-    dT_nominal=dT_nominal)
+    dT_nominal=dT_nominal,
+    linearise=sim.linearise or linearise)
     "convective surface heat transimission on the interior side of the wall"
     annotation (Placement(transformation(extent={{20,-38},{40,-18}})));
 equation
