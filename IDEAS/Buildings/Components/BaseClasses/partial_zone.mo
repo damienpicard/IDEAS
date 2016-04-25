@@ -2,7 +2,7 @@ within IDEAS.Buildings.Components.BaseClasses;
 partial model partial_zone
   extends IDEAS.Buildings.Components.Interfaces.StateZone(Eexpr(y=E));
   extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations(redeclare package
-      Medium = IDEAS.Media.Air);
+      Medium = IDEAS.Media.Air, mSenFac=corrCV);
 
   outer Modelica.Fluid.System system
     annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
