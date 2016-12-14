@@ -83,6 +83,8 @@ public
       Medium = Medium, k=bfData.gen.nbBh,
     allowFlowReversal=allowFlowReversal)
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
+protected
+  constant Boolean use_hardCodedSha = false;
 initial equation
   t0=time;
 
@@ -99,7 +101,8 @@ initial algorithm
     lenSim=lenSim,
     gen=bfData.gen,
     soi=bfData.soi,
-    fil=bfData.fil);
+    fil=bfData.fil,
+    use_hardCodedSha=use_hardCodedSha);
 
   R_ss := TSteSta/(bfData.gen.q_ste*bfData.gen.hBor*bfData.gen.nbBh)
     "Steady state resistance";

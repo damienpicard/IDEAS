@@ -7,7 +7,7 @@ function saveAggregationMatrix
   input Data.Records.Filling fil "Thermal properties of the filling material";
 
   input Integer lenSim "Simulation length ([s]). By default = 100 days";
-
+  input Boolean use_hardCodedSha = false "Set to true if need to force function to use existing sha";
   output Real[q_max,p_max] kappaMat "Transient resistance for each cell";
   output Integer[q_max] rArr=
       Aggregation.BaseClasses.cellWidth(                      q_max=q_max,
@@ -39,7 +39,10 @@ protected
   Real[1,1] mat;
 algorithm
   // --------------- Generate SHA-code and path
-
+  if use_hardCodedSha then
+    sha :="5a461c7441b95be68d6d34625f38b54097a661079fbf817d012625cf4ffdb04e773db2cc592e0c2b96d47cefce84a8a480bd1851226a4aebf90";
+    Modelica.Utilities.Streams.print("********** CAREFUL: use_hardCodedSha is set to true! ***********");
+  else
   sha := shaBorefieldRecords(
     soiPath=Modelica.Utilities.Strings.replace(
       soi.pathCom,
@@ -51,6 +54,7 @@ algorithm
       gen.pathCom,
       "\\",
       "/"));
+  end if;
 
  //creation of a folder .BfData in the simulation folder
   Modelica.Utilities.Files.createDirectory(".BfData");
