@@ -9,6 +9,7 @@ function saveAggregationMatrix
   input Integer lenSim "Simulation length ([s]). By default = 100 days";
   input Boolean use_hardCodedSha = false "Set to true if need to force function to use existing sha";
   output Real[q_max,p_max] kappaMat "Transient resistance for each cell";
+  input String sha_hardCoded = "";
   output Integer[q_max] rArr=
       Aggregation.BaseClasses.cellWidth(                      q_max=q_max,
       p_max=p_max) "Width of aggregation cells for each level";
@@ -40,7 +41,7 @@ protected
 algorithm
   // --------------- Generate SHA-code and path
   if use_hardCodedSha then
-    sha :="5a461c7441b95be68d6d34625f38b54097a661079fbf817d012625cf4ffdb04e773db2cc592e0c2b96d47cefce84a8a480bd1851226a4aebf90";
+    sha :=sha_hardCoded;
     Modelica.Utilities.Streams.print("********** CAREFUL: use_hardCodedSha is set to true! ***********");
   else
   sha := shaBorefieldRecords(

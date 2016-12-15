@@ -85,6 +85,7 @@ public
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
 protected
   constant Boolean use_hardCodedSha = false;
+  constant String sha_hardCoded = "";
 initial equation
   t0=time;
 
@@ -102,7 +103,8 @@ initial algorithm
     gen=bfData.gen,
     soi=bfData.soi,
     fil=bfData.fil,
-    use_hardCodedSha=use_hardCodedSha);
+    use_hardCodedSha=use_hardCodedSha,
+    sha_hardCoded=sha_hardCoded);
 
   R_ss := TSteSta/(bfData.gen.q_ste*bfData.gen.hBor*bfData.gen.nbBh)
     "Steady state resistance";
