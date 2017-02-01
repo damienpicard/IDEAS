@@ -3,41 +3,32 @@ model WallUnitTest "Unit test for verifying results for all wall components"
   extends Modelica.Icons.Example;
   BoundaryWall boundaryWall(
     redeclare Data.Constructions.CavityWall constructionType,
-    insulationThickness=0.1,
-    redeclare Data.Insulation.Rockwool insulationType,
     inc=IDEAS.Types.Tilt.Wall,
     azi=IDEAS.Types.Azimuth.S,
-    AWall=2,
-    use_T_in=true)
-             "Boundary wall example"
+    A=2,
+    use_T_in=true) "Boundary wall example"
     annotation (Placement(transformation(extent={{-36,60},{-26,80}})));
   InternalWall internalWall(
     inc=IDEAS.Types.Tilt.Wall,
     azi=IDEAS.Types.Azimuth.S,
-    AWall=2,
+    A=2,
     redeclare Data.Constructions.EpcSolidWall2 constructionType,
-    redeclare Data.Insulation.Eps insulationType,
-    insulationThickness=0.1,
     energyDynamics=Modelica.Fluid.Types.Dynamics.DynamicFreeInitial)
-                             "Internal wall example"
+    "Internal wall example"
     annotation (Placement(transformation(extent={{-36,20},{-24,40}})));
   OuterWall outerWall(
     inc=IDEAS.Types.Tilt.Wall,
     azi=IDEAS.Types.Azimuth.S,
-    AWall=2,
-    redeclare Data.Constructions.CavityWallPartialFill constructionType,
-    redeclare Data.Insulation.Glasswool insulationType,
-    insulationThickness=0.1)
+    A=2,
+    redeclare Data.Constructions.CavityWallPartialFill constructionType)
     "Outer wall example"
     annotation (Placement(transformation(extent={{-36,-20},{-26,0}})));
   SlabOnGround slabOnGround(
     inc=IDEAS.Types.Tilt.Floor,
     azi=IDEAS.Types.Azimuth.S,
-    AWall=2,
-    redeclare Validation.Data.Constructions.HeavyFloor constructionType,
-    redeclare Data.Insulation.Pur insulationType,
-    insulationThickness=0.1)
-             "Slab on ground example"
+    A=2,
+    redeclare Validation.Data.Constructions.HeavyFloor constructionType)
+    "Slab on ground example"
     annotation (Placement(transformation(extent={{-36,-60},{-26,-40}})));
   Modelica.Thermal.HeatTransfer.Sources.FixedTemperature Tzone(T=293.15)
     "Fixed dummy zone temperature"

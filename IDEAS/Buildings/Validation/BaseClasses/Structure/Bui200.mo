@@ -18,23 +18,18 @@ model Bui200 "BESTEST Building model case 195"
     annotation (Placement(transformation(extent={{120,-70},{140,-50}})));
   IDEAS.Buildings.Components.OuterWall[4] wall(
     redeclare final parameter Data.Constructions.LightWall_195 constructionType,
-    redeclare final parameter Data.Insulation.fiberglass insulationType,
     final azi={IDEAS.Types.Azimuth.N,IDEAS.Types.Azimuth.E,IDEAS.Types.Azimuth.S,
         IDEAS.Types.Azimuth.W},
-    final insulationThickness={0.066,0.066,0.066,0.066},
     final inc={IDEAS.Types.Tilt.Wall,IDEAS.Types.Tilt.Wall,IDEAS.Types.Tilt.Wall,
         IDEAS.Types.Tilt.Wall},
-    final AWall={21.6,16.2,21.6,16.2})
-                               annotation (Placement(transformation(
+    final A={21.6,16.2,21.6,16.2}) annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
         rotation=90,
         origin={-49,-14})));
 
   IDEAS.Buildings.Components.BoundaryWall floor(
     redeclare final parameter Data.Constructions.LightFloor constructionType,
-    redeclare final parameter Data.Insulation.insulation insulationType,
-    final insulationThickness=1.003,
-    final AWall=48,
+    final A=48,
     final inc=IDEAS.Types.Tilt.Floor,
     final azi=IDEAS.Types.Azimuth.S) annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
@@ -42,23 +37,21 @@ model Bui200 "BESTEST Building model case 195"
         origin={-19,-14})));
   IDEAS.Buildings.Components.OuterWall roof(
     redeclare final parameter Data.Constructions.LightRoof_195 constructionType,
-    redeclare final parameter Data.Insulation.fiberglass insulationType,
-    final insulationThickness=0.1118,
-    final AWall=48,
+    final A=48,
     final inc=IDEAS.Types.Tilt.Ceiling,
     final azi=IDEAS.Types.Azimuth.S) annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
         rotation=90,
         origin={-79,-14})));
 
+  //fixme: is the implementation of win correct?
   Components.OuterWall[2] win(
-    final AWall={6,6},
-    redeclare final parameter Data.Constructions.HighConductance constructionType,
-    redeclare final parameter Data.Insulation.insulation insulationType,
+    final A={6,6},
+    redeclare final parameter Data.Constructions.HighConductance
+      constructionType,
     final inc={IDEAS.Types.Tilt.Wall,IDEAS.Types.Tilt.Wall},
-    final azi={IDEAS.Types.Azimuth.S,IDEAS.Types.Azimuth.S},
-    each final insulationThickness=1.003)
-    annotation (Placement(transformation(
+    final azi={IDEAS.Types.Azimuth.S,IDEAS.Types.Azimuth.S}) annotation (
+      Placement(transformation(
         extent={{-5,-10},{5,10}},
         rotation=90,
         origin={11,-14})));
@@ -101,11 +94,11 @@ equation
       thickness=0.5,
       smooth=Smooth.None));
 
-  connect(flowPort_Out[1], gF.flowPort_Out) annotation (Line(
+  connect(port_b[1], gF.port_b) annotation (Line(
       points={{-20,100},{-20,60},{56,60},{56,40}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(flowPort_In[1], gF.flowPort_In) annotation (Line(
+  connect(port_a[1], gF.port_a) annotation (Line(
       points={{20,100},{20,62},{64,62},{64,40}},
       color={0,0,0},
       smooth=Smooth.None));

@@ -10,7 +10,7 @@ model Building
   parameter Boolean standAlone=true;
   parameter Boolean isDH=false "True if the building is connected to a DH grid";
 
-  final parameter Modelica.SIunits.Temperature[building.nZones] T_start = ones(building.nZones)*293.15
+  final parameter Modelica.SIunits.Temperature T_start = 293.15
     "Operative zonal start temperatures";
   final parameter Modelica.SIunits.Power[building.nZones] Q_design = building.Q_design+ventilationSystem.Q_design
     "Total design heat load for heating system based on heat losses";
@@ -74,6 +74,7 @@ model Building
   final parameter Boolean InInterface = true;
 initial equation
    voltageSource.pin_n.reference.gamma=0;
+
 
 
 equation
@@ -147,21 +148,19 @@ equation
       color={0,0,127},
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
-  connect(ventilationSystem.flowPort_Out, building.flowPort_In) annotation (
-      Line(
+  connect(ventilationSystem.port_b, building.port_a) annotation (Line(
       points={{-20,28},{-49,28},{-49,10}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(building.flowPort_Out, ventilationSystem.flowPort_In) annotation (
-      Line(
+  connect(building.port_b, ventilationSystem.port_a) annotation (Line(
       points={{-53,10},{-52,10},{-52,32},{-20,32}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(heatingSystem.flowPort_return, flowPort_return) annotation (Line(
+  connect(heatingSystem.port_b, flowPort_return) annotation (Line(
       points={{12,-10},{12,-24},{32,-24},{32,-60},{-20,-60},{-20,-100}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(heatingSystem.flowPort_supply, flowPort_supply) annotation (Line(
+  connect(heatingSystem.port_a, flowPort_supply) annotation (Line(
       points={{16,-10},{16,-20},{40,-20},{40,-70},{20,-70},{20,-100}},
       color={0,0,0},
       smooth=Smooth.None));

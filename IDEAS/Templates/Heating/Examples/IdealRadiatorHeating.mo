@@ -5,6 +5,7 @@ model IdealRadiatorHeating "Example and test for ideal heating with radiators"
   final parameter Integer nZones = 1 "Number of zones";
   IDEAS.Templates.Heating.IdealRadiatorHeating heating(
     final nZones=nZones,
+    Q_design=heating.QNom,
     QNom={20000 for i in 1:nZones},
     t=1,
     nLoads=0,
@@ -29,7 +30,7 @@ model IdealRadiatorHeating "Example and test for ideal heating with radiators"
         origin={86,-30})));
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground ground
     annotation (Placement(transformation(extent={{76,-80},{96,-60}})));
-  IDEAS.Occupants.Standards.ISO13790 iSO13790_1(
+  IDEAS.BoundaryConditions.Occupants.Standards.ISO13790 iSO13790_1(
     nZones=building.nZones,
     nLoads=0,
     AFloor=building.AZones)
@@ -47,11 +48,11 @@ equation
       points={{-51.32,-5.6},{-20.38,-5.6}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(building.flowPort_Out, none.flowPort_In) annotation (Line(
+  connect(building.port_b, none.port_a) annotation (Line(
       points={{-71.2667,12},{-70,12},{-70,54},{-20,54},{-20,52}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(building.flowPort_In, none.flowPort_Out) annotation (Line(
+  connect(building.port_a, none.port_b) annotation (Line(
       points={{-66.7333,12},{-66,12},{-66,50},{-20,50},{-20,48}},
       color={0,0,0},
       smooth=Smooth.None));
@@ -99,5 +100,17 @@ equation
             -100},{100,100}}),
                       graphics),
     experiment(StopTime=200000, Interval=900),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+    <p>Model demonstrating the use of the ideal radiator heating system template.</p>
+    </html>", revisions="<html>
+    <ul>
+    <li>
+    January 23, 2017 by Glenn Reynders:<br/>
+    Revised
+    </li>
+    </ul>
+    </html>"),
+    __Dymola_Commands(file="modelica://IDEAS/Resources/Scripts/Dymola/Templates/Heating/Examples/IdealRadiatorHeating.mos"
+        "Simulate and Plot"));
 end IdealRadiatorHeating;

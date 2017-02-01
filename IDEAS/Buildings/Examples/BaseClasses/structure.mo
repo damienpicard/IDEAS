@@ -6,7 +6,7 @@ model structure "Example detailed building structure model"
     nEmb = 3,
     ATrans=211,
     VZones={gF.V,fF.V,sF.V},
-    AZones={gF_floor.AWall,fF_floor.AWall,sF_floor.AWall});
+    AZones={gF_floor.A,fF_floor.A,sF_floor.A});
 
   //Definition of the thermal zones
   Components.Zone gF(V=216.0, nSurf=8,
@@ -25,10 +25,8 @@ model structure "Example detailed building structure model"
   //Definition of the building envelope for gF
   Components.OuterWall[3] gF_ext(
     redeclare IDEAS.Buildings.Data.Constructions.CavityWall constructionType,
-    redeclare IDEAS.Buildings.Data.Insulation.Rockwool insulationType,
-    AWall={10,21,10},
+    A={10,21,10},
     azi={IDEAS.Types.Azimuth.E,IDEAS.Types.Azimuth.S,IDEAS.Types.Azimuth.W},
-    insulationThickness={0.16,0.16,0.16},
     inc={IDEAS.Types.Tilt.Wall,IDEAS.Types.Tilt.Wall,IDEAS.Types.Tilt.Wall})
     annotation (Placement(transformation(
         extent={{-5.5,-10.5},{5.5,10.5}},
@@ -46,26 +44,21 @@ model structure "Example detailed building structure model"
         rotation=90,
         origin={10.5,-75.5})));
 
-  replaceable Components.SlabOnGround
-                          gF_floor(
-    redeclare IDEAS.Buildings.Data.Insulation.Pur insulationType,
-    insulationThickness=0.14,
-    AWall=72,
+  replaceable Components.SlabOnGround gF_floor(
+    A=72,
     PWall=26,
     inc=IDEAS.Types.Tilt.Floor,
     azi=IDEAS.Types.Azimuth.S,
     redeclare IDEAS.Buildings.Data.Constructions.FloorOnGround constructionType)
-                               annotation (Placement(transformation(
+    annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
         rotation=90,
         origin={-47,-76})));
   //Definition of the building envelope for fF
   Components.OuterWall[3] fF_ext(
     redeclare IDEAS.Buildings.Data.Constructions.CavityWall constructionType,
-    redeclare IDEAS.Buildings.Data.Insulation.Rockwool insulationType,
-    AWall={10,21,10},
+    A={10,21,10},
     azi={IDEAS.Types.Azimuth.E,IDEAS.Types.Azimuth.S,IDEAS.Types.Azimuth.W},
-    insulationThickness={0.16,0.16,0.16},
     inc={IDEAS.Types.Tilt.Wall,IDEAS.Types.Tilt.Wall,IDEAS.Types.Tilt.Wall})
     annotation (Placement(transformation(
         extent={{-5.5,-10.5},{5.5,10.5}},
@@ -83,23 +76,19 @@ model structure "Example detailed building structure model"
         rotation=90,
         origin={10.5,-15.5})));
   Components.InternalWall fF_floor(
-    redeclare IDEAS.Buildings.Data.Insulation.Pur insulationType,
-    insulationThickness=0.04,
-    AWall=74,
+    A=74,
     inc=IDEAS.Types.Tilt.Floor,
     azi=IDEAS.Types.Azimuth.S,
     redeclare IDEAS.Buildings.Data.Constructions.TABS constructionType)
-                               annotation (Placement(transformation(
+    annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
         rotation=90,
         origin={-47,-16})));
   //Definition of the building envelope for sF
   Components.OuterWall[3] sF_ext(
     redeclare IDEAS.Buildings.Data.Constructions.CavityWall constructionType,
-    redeclare IDEAS.Buildings.Data.Insulation.Rockwool insulationType,
-    AWall={10,21,10},
+    A={10,21,10},
     azi={IDEAS.Types.Azimuth.E,IDEAS.Types.Azimuth.S,IDEAS.Types.Azimuth.W},
-    insulationThickness={0.16,0.16,0.16},
     inc={IDEAS.Types.Tilt.Wall,IDEAS.Types.Tilt.Wall,IDEAS.Types.Tilt.Wall})
     annotation (Placement(transformation(
         extent={{-5.5,-10.5},{5.5,10.5}},
@@ -117,21 +106,17 @@ model structure "Example detailed building structure model"
         rotation=90,
         origin={10.5,44.5})));
   Components.InternalWall sF_floor(
-    redeclare IDEAS.Buildings.Data.Insulation.Pur insulationType,
-    insulationThickness=0.04,
-    AWall=74,
+    A=74,
     inc=IDEAS.Types.Tilt.Floor,
     azi=IDEAS.Types.Azimuth.S,
     redeclare IDEAS.Buildings.Data.Constructions.TABS constructionType)
-                               annotation (Placement(transformation(
+    annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
         rotation=90,
         origin={-47,44})));
   Components.OuterWall sF_roof(
     redeclare IDEAS.Buildings.Data.Constructions.CavityWall constructionType,
-    redeclare IDEAS.Buildings.Data.Insulation.Xps insulationType,
-    insulationThickness=0.32,
-    AWall=74,
+    A=74,
     inc=IDEAS.Types.Tilt.Ceiling,
     azi=IDEAS.Types.Azimuth.S) annotation (Placement(transformation(
         extent={{-5,-10},{5,10}},
@@ -150,7 +135,7 @@ equation
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
   connect(sF_floor.propsBus_a, sF.propsBus[7]) annotation (Line(
-      points={{-49,49},{-49,72.75},{40,72.75}},
+      points={{-49,48.1667},{-49,72.75},{40,72.75}},
       color={0,0,0},
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
@@ -165,12 +150,12 @@ equation
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
   connect(sF_floor.propsBus_b, fF.propsBus[8]) annotation (Line(
-      points={{-51,39},{-51,12.25},{40,12.25}},
+      points={{-49,39.8333},{-49,12.25},{40,12.25}},
       color={0,0,0},
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
   connect(fF_floor.propsBus_a, fF.propsBus[7]) annotation (Line(
-      points={{-49,-11},{-49,12.75},{40,12.75}},
+      points={{-49,-11.8333},{-49,12.75},{40,12.75}},
       color={0,0,0},
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
@@ -185,7 +170,7 @@ equation
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
   connect(fF_floor.propsBus_b, gF.propsBus[8]) annotation (Line(
-      points={{-51,-21},{-51,-47.75},{40,-47.75}},
+      points={{-49,-20.1667},{-49,-47.75},{40,-47.75}},
       color={0,0,0},
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
@@ -241,28 +226,28 @@ equation
       points={{60.6,70},{104,70},{104,-53.3333},{156,-53.3333}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(gF.flowPort_Out, flowPort_Out[1]) annotation (Line(
-      points={{48,-40},{48,-36},{-100,-36},{-100,84},{-22,84},{-22,93.3333},{
-          -20,93.3333}},
+  connect(gF.port_b, port_b[1]) annotation (Line(
+      points={{48,-40},{48,-36},{-100,-36},{-100,84},{-22,84},{-22,93.3333},{-20,
+          93.3333}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(gF.flowPort_In, flowPort_In[1]) annotation (Line(
+  connect(gF.port_a, port_a[1]) annotation (Line(
       points={{52,-40},{52,-32},{-96,-32},{-96,80},{20,80},{20,93.3333}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(fF.flowPort_Out, flowPort_Out[2]) annotation (Line(
+  connect(fF.port_b, port_b[2]) annotation (Line(
       points={{48,20},{48,26},{-100,26},{-100,84},{-20,84},{-20,100}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(fF.flowPort_In, flowPort_In[2]) annotation (Line(
+  connect(fF.port_a, port_a[2]) annotation (Line(
       points={{52,20},{52,30},{-96,30},{-96,80},{20,80},{20,100}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(sF.flowPort_Out, flowPort_Out[3]) annotation (Line(
+  connect(sF.port_b, port_b[3]) annotation (Line(
       points={{48,80},{48,84},{-20,84},{-20,106.667}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(sF.flowPort_In, flowPort_In[3]) annotation (Line(
+  connect(sF.port_a, port_a[3]) annotation (Line(
       points={{52,80},{52,88},{20,88},{20,106.667}},
       color={0,0,0},
       smooth=Smooth.None));

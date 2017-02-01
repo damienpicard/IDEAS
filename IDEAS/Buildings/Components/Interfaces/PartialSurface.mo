@@ -9,6 +9,8 @@ partial model PartialSurface "Partial model for building envelope component"
     "Inclination (tilt) angle of the wall, see IDEAS.Types.Tilt";
   parameter Modelica.SIunits.Angle azi
     "Azimuth angle of the wall, i.e. see IDEAS.Types.Azimuth";
+  parameter Modelica.SIunits.Area A
+    "Component surface area";
   parameter Modelica.SIunits.Power QTra_design
     "Design heat losses at reference temperature of the boundary space"
     annotation (Dialog(group="Design power",tab="Advanced"));
@@ -46,9 +48,17 @@ partial model PartialSurface "Partial model for building envelope component"
   IDEAS.Buildings.Components.BaseClasses.ConvectiveHeatTransfer.InteriorConvection intCon_a(
     linearise=linIntCon_a or sim.linearise,
     dT_nominal=dT_nominal_a,
-    final inc=inc)
+    final inc=inc,
+    A=A)
     "Convective heat transfer correlation for port_a"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
+
+  IDEAS.Buildings.Components.BaseClasses.ConductiveHeatTransfer.MultiLayer
+    layMul(final inc=inc, energyDynamics=energyDynamics,
+    linIntCon=linIntCon_a or sim.linearise,
+    A=A)
+    "Multilayer component for simulating walls, windows and other surfaces"
+    annotation (Placement(transformation(extent={{10,-10},{-10,10}})));
 
 protected
   Modelica.Blocks.Sources.RealExpression QDesign(y=QTra_design);
@@ -68,12 +78,6 @@ protected
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow prescribedHeatFlowQgai if
      sim.computeConservationOfEnergy
     "Component for computing conservation of energy";
-public
-  IDEAS.Buildings.Components.BaseClasses.ConductiveHeatTransfer.MultiLayer
-    layMul(final inc=inc, energyDynamics=energyDynamics,
-    linIntCon=sim.linIntCon or sim.linearise)
-    "Multilayer component that allows simulating walls, windows and other surfaces"
-    annotation (Placement(transformation(extent={{10,-10},{-10,10}})));
 
 equation
   connect(prescribedHeatFlowE.port, propsBus_a.E);
@@ -124,6 +128,19 @@ equation
     Documentation(revisions="<html>
 <ul>
 <li>
+January 10, 2017, by Filip Jorissen:<br/>
+Declared parameter <code>A</code> instead of using
+<code>AWall</code> in 
+<a href=modelica://IDEAS.Buildings.Components.Interfaces.PartialOpaqueSurface>
+IDEAS.Buildings.Components.Interfaces.PartialOpaqueSurface</a>.
+This is for 
+<a href=https://github.com/open-ideas/IDEAS/issues/609>#609</a>.
+</li>
+<li>
+November 15, 2016, by Filip Jorissen:<br/>
+Revised documentation for IDEAS 1.0.
+</li>
+<li>
 March 8, 2016, by Filip Jorissen:<br/>
 Added energyDynamics parameter.
 </li>
@@ -136,5 +153,36 @@ February 6, 2016 by Damien Picard:<br/>
 First implementation.
 </li>
 </ul>
+</html>", info="<html>
+<p>
+Partial model for all surfaces and windows that contains common building blocks such as material layers and parameters.
+</p>
+<h4>Main equations</h4>
+<p>
+Submodel <code>layMul</code> contains equations
+for simulating conductive (and sometimes radiative) heat transfer
+inside material layers.
+</p>
+<h4>Assumption and limitations</h4>
+<p>
+This model assumes 1D heat transfer, i.e. edge effects are neglected.
+Mass exchange (moisture) is not modelled.
+</p>
+<h4>Typical use and important parameters</h4>
+<p>
+Parameters <code>inc</code> and <code>azi</code> may be
+used to specify the inclination and azimuth/tilt angle of the surface.
+Variables in <a href=modelica://IDEAS.Types.Azimuth>IDEAS.Types.Azimuth</a>
+and <a href=modelica://IDEAS.Types.Tilt>IDEAS.Types.Tilt</a>
+may be used for this purpose or custom variables may be defined.
+</p>
+<h4>Options</h4>
+<p>
+Convection equations may be simplified (linearised) by setting <code>linIntCon_a = true</code>.
+</p>
+<h4>Dynamics</h4>
+<p>
+This model contains multiple state variables for describing the temperature state of the component.
+</p>
 </html>"));
 end PartialSurface;

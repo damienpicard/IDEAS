@@ -10,8 +10,8 @@ model Simple
   parameter Real radFra(min=0,max=1) = occupancyType.radFra
     "Radiant fraction of sensible heat exchange, default based on Ashrae fundamentals chap 18.4 for low air velocity";
 protected
-  constant Modelica.SIunits.SpecificEnthalpy lambdaWater = 2260000
-    "Latent heat of evaporation water";
+  constant Modelica.SIunits.SpecificEnthalpy lambdaWater = 2418000
+    "Latent heat of evaporation of water at 35 degrees Celsius";
   constant Modelica.SIunits.SpecificEnthalpy E_glu = 16e6
     "Calorific value of glucose";
   constant Real MM_glu = 180
@@ -75,10 +75,23 @@ equation
   connect(gain.u, gaiHea.y)
     annotation (Line(points={{-10,-60},{-39,-60},{-39,-40}}, color={0,0,127}));
   annotation (Documentation(info="<html>
-<p>This occupancy model assumes a constant latent and sensible load per person. We assume this heat gain is caused by the metabolic combustion of suger, resulting into a corresponding CO2 production. The CO2 mass flow rate is added only if the Medium contains CO2. Latent heat is only added if the Medium is a moist air medium. Sensible heat is emitted both as convective and radiant heat using a fixed weighing factor.</p>
+<p>
+This occupancy model assumes a constant latent and sensible load per person. 
+We assume this heat gain is caused by the metabolic combustion of suger, 
+resulting into a corresponding CO2 production. 
+The CO2 mass flow rate is added only if the Medium contains CO2. 
+Latent heat is only added if the Medium is a moist air medium. 
+Sensible heat is emitted both as convective and radiant heat using a fixed weighing factor.
+</p>
 </html>",
         revisions="<html>
 <ul>
+<li>
+January 18, 2017 by Filip Jorissen:<br/>
+Changed latent heat of evaporation of water.
+This is for issue
+<a href=https://github.com/open-ideas/IDEAS/issues/635>#635</a>.
+</li>
 <li>
 July 18, 2016 by Filip Jorissen:<br/>
 First implementation

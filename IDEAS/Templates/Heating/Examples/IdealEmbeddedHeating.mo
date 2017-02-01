@@ -6,6 +6,7 @@ model IdealEmbeddedHeating
   final parameter Integer nZones=1 "Number of zones";
   IDEAS.Templates.Heating.IdealEmbeddedHeating heating(
     nZones=nZones,
+    Q_design=heating.QNom,
     QNom={20000 for i in 1:nZones},
     t=10,
     VZones=building.VZones)
@@ -43,7 +44,7 @@ model IdealEmbeddedHeating
     annotation (Placement(transformation(extent={{-18,28},{-38,48}})));
   IDEAS.Templates.Ventilation.None none(nZones=nZones, VZones=building.VZones)
     annotation (Placement(transformation(extent={{-40,60},{-20,80}})));
-  IDEAS.Occupants.Standards.ISO13790 iSO13790_1(
+  IDEAS.BoundaryConditions.Occupants.Standards.ISO13790 iSO13790_1(
     nZones=building.nZones,
     nLoads=0,
     AFloor=building.AZones)
@@ -86,11 +87,11 @@ equation
       points={{-39,38},{-48,38},{-48,8}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(none.flowPort_In, building.flowPort_Out) annotation (Line(
+  connect(none.port_a, building.port_b) annotation (Line(
       points={{-40,72},{-82.1333,72},{-82.1333,4}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(none.flowPort_Out, building.flowPort_In) annotation (Line(
+  connect(none.port_b, building.port_a) annotation (Line(
       points={{-40,68},{-77.8667,68},{-77.8667,4}},
       color={0,0,0},
       smooth=Smooth.None));
@@ -136,5 +137,17 @@ equation
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
             100,100}}), graphics),
     experiment(StopTime=200000, Interval=900),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+    <p>Model demonstrating the use of the ideal embedded heating system template.</p>
+    </html>", revisions="<html>
+    <ul>
+    <li>
+    January 23, 2017 by Glenn Reynders:<br/>
+    Revised
+    </li>
+    </ul>
+    </html>"),
+    __Dymola_Commands(file="modelica://IDEAS/Resources/Scripts/Dymola/Templates/Heating/Examples/IdealEmbeddedHeating.mos"
+        "Simulate and Plot"));
 end IdealEmbeddedHeating;

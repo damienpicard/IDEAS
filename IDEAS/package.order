@@ -3,12 +3,10 @@ Airflow
 BoundaryConditions
 Buildings
 Controls
-Electric
 Fluid
 HeatTransfer
 Media
 Templates
-Occupants
 ThermalZones
 Utilities
 Types

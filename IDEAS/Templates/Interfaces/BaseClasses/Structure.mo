@@ -12,6 +12,9 @@ partial model Structure "Partial model for building structure models"
 
   // Building characteristics  //////////////////////////////////////////////////////////////////////////
 
+  parameter Modelica.SIunits.Temperature T_start = Medium.T_default
+    "Operative zonal start temperatures";
+
   parameter Integer nZones(min=1)
     "Number of conditioned thermal zones in the building";
   parameter Integer nEmb(min=0) "Number of embedded systems in the building";
@@ -24,8 +27,6 @@ partial model Structure "Partial model for building structure models"
   final parameter Modelica.SIunits.Length C=sum(VZones)/ATrans
     "Building compactness";
 
-  parameter Modelica.SIunits.Temperature[nZones] T_start = fill(Medium.T_default,nZones)
-    "Operative zonal start temperatures";
 
   parameter Modelica.SIunits.Power[ nZones] Q_design=zeros(nZones)
     "Design heat loss of zones";//must be filled in in the Building interface, e.g.: QDesign={building.zone1.Q_design,building.zone2.Q_design}
@@ -47,9 +48,9 @@ partial model Structure "Partial model for building structure models"
   Modelica.Blocks.Interfaces.RealOutput[nZones] TSensor(final quantity="ThermodynamicTemperature",unit="K",displayUnit="degC", min=0)
     "Sensor temperature of the zones"
     annotation (Placement(transformation(extent={{146,-70},{166,-50}})));
-  Fluid.Interfaces.FlowPort_b[nZones] flowPort_Out(redeclare package Medium = Medium)
+  Modelica.Fluid.Interfaces.FluidPort_b[nZones] port_b(redeclare package Medium = Medium)
     annotation (Placement(transformation(extent={{-30,90},{-10,110}})));
-  Fluid.Interfaces.FlowPort_a[nZones] flowPort_In(redeclare package Medium = Medium)
+  Modelica.Fluid.Interfaces.FluidPort_a[nZones] port_a(redeclare package Medium = Medium)
     annotation (Placement(transformation(extent={{10,90},{30,110}})));
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-150,-100},
