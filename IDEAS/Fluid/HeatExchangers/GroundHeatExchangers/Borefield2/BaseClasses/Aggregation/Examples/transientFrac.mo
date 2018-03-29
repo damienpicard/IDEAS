@@ -72,7 +72,8 @@ algorithm
     p_max,
     rArr);
 
-  kappaMat :=Aggregation.transientFrac(
+  kappaMat :=
+    IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield2.BaseClasses.Aggregation.AggregationMassimo(
     q_max=q_max,
     p_max=p_max,
     gen=

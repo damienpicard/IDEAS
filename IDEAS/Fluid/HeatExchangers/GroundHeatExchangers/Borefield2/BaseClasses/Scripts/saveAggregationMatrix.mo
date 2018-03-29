@@ -95,14 +95,15 @@ The borefield model with this BfData record has not yet been initialized. Please
       TResSho=TResSho[1, :],
       t_d=gen.tSteSta_d);
 
-    kappaMat := Aggregation.transientFrac(
-            q_max=q_max,
-            p_max=p_max,
-            gen=gen,
-            soi=soi,
-            TResSho=TResSho[1, :],
-            nuMat=nuMat,
-            TWallSteSta=TWallSteSta);
+    kappaMat :=
+      IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield2.BaseClasses.Aggregation.AggregationMassimo(
+      q_max=q_max,
+      p_max=p_max,
+      gen=gen,
+      soi=soi,
+      TResSho=TResSho[1, :],
+      nuMat=nuMat,
+      TWallSteSta=TWallSteSta);
 
     writeTWallSteSta := writeMatrix(
       fileName=pathSave + "TWallSteSta.mat",
