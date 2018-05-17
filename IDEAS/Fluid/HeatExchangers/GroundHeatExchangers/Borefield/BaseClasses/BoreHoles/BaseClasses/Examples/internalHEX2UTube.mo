@@ -14,9 +14,9 @@ model internalHEX2UTube
     m4_flow_nominal=intHex.gen.m_flow_nominal_bh,
     dp3_nominal=10,
     dp4_nominal=10,
-    soi=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.SoilData.SoilTrt(),
-    fil=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.FillingData.FillingTrt(),
-    gen=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.GeneralData.GeneralTrt2(),
+    soi=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.SoilData.WetSand_validation(),
+    fil=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.FillingData.Bentonite_validation(),
+    gen=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.GeneralData.SandBox_validation(singleUTube=false),
     dynFil=true,
     T_start=285.15)
     annotation (Placement(transformation(extent={{-10,-12},{10,10}})));

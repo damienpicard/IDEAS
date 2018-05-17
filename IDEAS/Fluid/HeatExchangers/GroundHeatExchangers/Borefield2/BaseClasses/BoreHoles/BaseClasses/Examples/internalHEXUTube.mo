@@ -28,7 +28,7 @@ model internalHEXUTube
     annotation (Placement(transformation(extent={{54,4},{34,-16}})));
   Sources.FixedBoundary bou(nPorts=2, redeclare package Medium = Medium)
     annotation (Placement(transformation(extent={{-48,-34},{-28,-14}})));
-  Real Rb_sim = ((senTem.T + senTem1.T)/2 - intHex.port.T)/max(-intHex.port.Q_flow / borFieDat.conDat.hSeg,1);
+  Real Rb_sim = ((senTem.T + senTem1.T)/2 - intHex.port_wall.T)/max(-intHex.port_wall.Q_flow / borFieDat.conDat.hSeg,1);
   IDEAS.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium =
         Medium, m_flow_nominal=borFieDat.conDat.m_flow_nominal_bh)
     annotation (Placement(transformation(extent={{16,0},{28,12}})));
@@ -41,13 +41,11 @@ model internalHEXUTube
     annotation (Placement(transformation(extent={{-10,-80},{10,-60}})));
   Modelica.Blocks.Math.Add error(k2=-1)
     annotation (Placement(transformation(extent={{22,-70},{42,-50}})));
-  IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.BorefieldData.SandBox_validation
-    borFieDat
+  parameter IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.BorefieldData.SandBox_validation
+    borFieDat = IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.BorefieldData.SandBox_validation()
     annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 equation
 
-  connect(fixedTemperature.port, intHex.port)
-    annotation (Line(points={{-2,40},{0,40},{0,10}}, color={191,0,0}));
   connect(boundary1.ports[1], intHex.port_a2)
     annotation (Line(points={{34,-6},{22,-6},{10,-6}}, color={0,127,255}));
   connect(boundary.ports[1], intHex.port_a1)
@@ -64,6 +62,8 @@ equation
           {14,-54},{20,-54}}, color={0,0,127}));
   connect(Rb_ref.y, error.u2) annotation (Line(points={{11,-70},{14,-70},{14,-66},
           {20,-66}}, color={0,0,127}));
+  connect(fixedTemperature.port, intHex.port_wall)
+    annotation (Line(points={{-2,40},{0,40},{0,10}}, color={191,0,0}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),
     experiment(StopTime=100000),

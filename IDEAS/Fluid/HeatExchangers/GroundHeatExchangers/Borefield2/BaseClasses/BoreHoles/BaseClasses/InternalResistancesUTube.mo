@@ -7,8 +7,8 @@ model InternalResistancesUTube
     annotation(Evaluate=true, Dialog(tab = "Dynamics", group="Equations"));
   parameter Data.BorefieldData.Template borFieDat "Borefield data"
     annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
-  parameter Modelica.SIunits.HeatCapacity Co_fil=fil.d*fil.c*gen.hSeg*Modelica.Constants.pi
-      *(gen.rBor^2 - 4*(gen.rTub + gen.eTub)^2)
+  parameter Modelica.SIunits.HeatCapacity Co_fil=borFieDat.filDat.d*borFieDat.filDat.c*borFieDat.conDat.hSeg*Modelica.Constants.pi
+      *(borFieDat.conDat.rBor^2 - 2*(borFieDat.conDat.rTub + borFieDat.conDat.eTub)^2)
     "Heat capacity of the whole filling material";
   parameter Real Rgb_val
     "Thermal resistance between grout zone and borehole wall";

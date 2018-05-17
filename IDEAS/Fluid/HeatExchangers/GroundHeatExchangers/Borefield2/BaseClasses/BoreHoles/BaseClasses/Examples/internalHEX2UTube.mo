@@ -1,47 +1,44 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield2.BaseClasses.BoreHoles.BaseClasses.Examples;
 model internalHEX2UTube
   "Comparison of the effective borehole thermal resistance from the thermal network of Bauer et al. with the resistance calculated by doubleUTubeResistances (ref)"
-  import IDEAS;
-
   extends Modelica.Icons.Example;
   package Medium = Modelica.Media.Water.ConstantPropertyLiquidWater;
   InternalHEX2UTube intHex(
     redeclare package Medium = Medium,
-    m1_flow_nominal=intHex.gen.m_flow_nominal_bh,
-    m2_flow_nominal=intHex.gen.m_flow_nominal_bh,
+    m1_flow_nominal=borFieDat.conDat.m_flow_nominal_bh,
+    m2_flow_nominal=borFieDat.conDat.m_flow_nominal_bh,
     dp1_nominal=10,
     dp2_nominal=10,
-    m3_flow_nominal=intHex.gen.m_flow_nominal_bh,
-    m4_flow_nominal=intHex.gen.m_flow_nominal_bh,
+    m3_flow_nominal=borFieDat.conDat.m_flow_nominal_bh,
+    m4_flow_nominal=borFieDat.conDat.m_flow_nominal_bh,
     dp3_nominal=10,
     dp4_nominal=10,
-    soi=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.SoilData.SoilTrt(),
-    fil=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.FillingData.FillingTrt(),
-    gen=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.ConfigurationData.GeneralTrt2(),
     dynFil=true,
-    T_start=285.15)
+    T_start=285.15,
+    borFieDat=borFieDat)
     annotation (Placement(transformation(extent={{-10,-12},{10,10}})));
 
-  Modelica.Thermal.HeatTransfer.Celsius.FixedTemperature fixedTemperature(T=12)
+  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature(T=273.15
+         + 12)
     annotation (Placement(transformation(extent={{-22,30},{-2,50}})));
   Sources.MassFlowSource_T boundary(nPorts=2,
     redeclare package Medium = Medium,
-    m_flow=intHex.gen.m_flow_nominal_bh,
+    m_flow=borFieDat.conDat.m_flow_nominal_bh,
     T=293.15)
     annotation (Placement(transformation(extent={{-48,0},{-28,20}})));
   Sources.MassFlowSource_T boundary1(nPorts=2,
     redeclare package Medium = Medium,
-    m_flow=intHex.gen.m_flow_nominal_bh,
+    m_flow=borFieDat.conDat.m_flow_nominal_bh,
     T=288.15)
     annotation (Placement(transformation(extent={{54,4},{34,-16}})));
   Sources.FixedBoundary bou(nPorts=4, redeclare package Medium = Medium)
     annotation (Placement(transformation(extent={{-60,-14},{-40,-34}})));
-  Real Rb_sim = ((senTem.T + senTem1.T + senTem2.T + senTem3.T)/4 - intHex.port.T)/max(-intHex.port.Q_flow / intHex.gen.hSeg,1);
+  Real Rb_sim = ((senTem.T + senTem1.T + senTem2.T + senTem3.T)/4 - intHex.port_wall.T)/max(-intHex.port_wall.Q_flow / borFieDat.conDat.hSeg,1);
   IDEAS.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium =
-        Medium, m_flow_nominal=intHex.gen.m_flow_nominal_bh)
+        Medium, m_flow_nominal=borFieDat.conDat.m_flow_nominal_bh)
     annotation (Placement(transformation(extent={{16,2},{28,14}})));
   IDEAS.Fluid.Sensors.TemperatureTwoPort senTem1(redeclare package Medium =
-        Medium, m_flow_nominal=intHex.gen.m_flow_nominal_bh)
+        Medium, m_flow_nominal=borFieDat.conDat.m_flow_nominal_bh)
     annotation (Placement(transformation(extent={{-24,-12},{-36,0}})));
   Modelica.Blocks.Sources.RealExpression realExpression(y=Rb_sim)
     annotation (Placement(transformation(extent={{-10,-58},{10,-38}})));
@@ -50,15 +47,18 @@ model internalHEX2UTube
   Modelica.Blocks.Math.Add error(k2=-1)
     annotation (Placement(transformation(extent={{22,-70},{42,-50}})));
   IDEAS.Fluid.Sensors.TemperatureTwoPort senTem2(redeclare package Medium =
-        Medium, m_flow_nominal=intHex.gen.m_flow_nominal_bh)
+        Medium, m_flow_nominal=borFieDat.conDat.m_flow_nominal_bh)
     annotation (Placement(transformation(extent={{-14,-22},{-26,-10}})));
   IDEAS.Fluid.Sensors.TemperatureTwoPort senTem3(
                                                 redeclare package Medium =
-        Medium, m_flow_nominal=intHex.gen.m_flow_nominal_bh)
+        Medium, m_flow_nominal=borFieDat.conDat.m_flow_nominal_bh)
     annotation (Placement(transformation(extent={{16,-22},{28,-10}})));
+  parameter IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.BorefieldData.SandBox_validation
+    borFieDat = IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.BorefieldData.SandBox_validation(conDat=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.ConfigurationData.SandBox_validation(singleUTube=false))
+    annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 equation
 
-  connect(fixedTemperature.port, intHex.port)
+  connect(fixedTemperature.port, intHex.port_wall)
     annotation (Line(points={{-2,40},{0,40},{0,10}}, color={191,0,0}));
   connect(boundary.ports[1], intHex.port_a1)
     annotation (Line(points={{-28,12},{-10,12},{-10,8}},
