@@ -10,7 +10,6 @@ model InternalHEXUTube "Internal part of a borehole for a U-Tube configuration"
         m1_flow_nominal,
     final tau2=Modelica.Constants.pi*borFieDat.conDat.rTub^2*borFieDat.conDat.hSeg*rho2_nominal/
         m2_flow_nominal,
-    final show_T=true,
     vol1(
       final energyDynamics=energyDynamics,
       final massDynamics=massDynamics,
