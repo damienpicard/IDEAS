@@ -29,7 +29,7 @@ model SingleBoreHole "Test for the SingleBoreHole model"
     p=101330,
     T=283.15) annotation (Placement(transformation(extent={{-60,10},{-40,30}},
           rotation=0)));
-  parameter IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.BorefieldData.Template
+  parameter IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.BorefieldData.SandBox_validation
                                         borFieDat "Borefield parameters"
     annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 equation
