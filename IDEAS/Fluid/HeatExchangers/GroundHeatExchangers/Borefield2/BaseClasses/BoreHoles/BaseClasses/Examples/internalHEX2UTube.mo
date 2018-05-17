@@ -16,14 +16,12 @@ model internalHEX2UTube
     dp3_nominal=10,
     dp4_nominal=10,
     soi=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.SoilData.SoilTrt(),
-
     fil=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.FillingData.FillingTrt(),
-
-    gen=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.ConfigurationData.GeneralTrt2
-        (),
+    gen=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.ConfigurationData.GeneralTrt2(),
     dynFil=true,
     T_start=285.15)
     annotation (Placement(transformation(extent={{-10,-12},{10,10}})));
+
   Modelica.Thermal.HeatTransfer.Celsius.FixedTemperature fixedTemperature(T=12)
     annotation (Placement(transformation(extent={{-22,30},{-2,50}})));
   Sources.MassFlowSource_T boundary(nPorts=2,

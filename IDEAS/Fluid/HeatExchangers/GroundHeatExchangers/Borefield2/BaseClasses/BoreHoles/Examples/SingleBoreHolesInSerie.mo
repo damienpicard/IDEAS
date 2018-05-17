@@ -1,4 +1,4 @@
-within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield2.BaseClasses.BoreHoles.BaseClasses.Examples;
+within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield2.BaseClasses.BoreHoles.Examples;
 model SingleBoreHolesInSerie "Test for the SingleBoreHole model"
   import IDEAS;
   extends Modelica.Icons.Example;
@@ -8,11 +8,9 @@ model SingleBoreHolesInSerie "Test for the SingleBoreHole model"
     seg(
     redeclare package Medium = Medium,
     soi=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.SoilData.SandStone(),
-
     fil=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.FillingData.Bentonite(),
-
-    gen=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.GeneralData.c8x1_h110_b5_d3600_T283
-        ()) annotation (Placement(transformation(
+    gen=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.GeneralData.c8x1_h110_b5_d3600_T283())
+            annotation (Placement(transformation(
         extent={{-13,-13},{13,13}},
         rotation=270,
         origin={9,33})));

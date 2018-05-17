@@ -1,283 +1,200 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield2.BaseClasses.BoreHoles.BaseClasses;
 model InternalResistances2UTube
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a
+  parameter Modelica.SIunits.Temperature T_start
+    "Initial temperature of the filling material";
+  parameter Modelica.Fluid.Types.Dynamics energyDynamics=Modelica.Fluid.Types.Dynamics.DynamicFreeInitial
+    "Type of energy balance: dynamic (3 initialization options) or steady state"
+    annotation(Evaluate=true, Dialog(tab = "Dynamics", group="Equations"));
+  parameter Data.BorefieldData.Template borFieDat "Borefield data"
+    annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
+  parameter Modelica.SIunits.HeatCapacity Co_fil=borFieDat.filDat.d*borFieDat.filDat.c*borFieDat.conDat.hSeg*Modelica.Constants.pi
+      *(borFieDat.conDat.rBor^2 - 2*(borFieDat.conDat.rTub + borFieDat.conDat.eTub)^2)
+    "Heat capacity of the whole filling material";
+  parameter Modelica.SIunits.ThermalResistance Rgb_val
+    "Thermal resistance between a grout capacity and the borehole wall, as defined by Bauer et al (2010)";
+  parameter Modelica.SIunits.ThermalResistance Rgg1_val
+    "Thermal resistance between two neightbouring grout capacities, as defined by Bauer et al (2010)";
+  parameter Modelica.SIunits.ThermalResistance Rgg2_val
+    "Thermal resistance between two  grout capacities opposite to each other, as defined by Bauer et al (2010)";
+  parameter Modelica.SIunits.ThermalResistance RCondGro_val
+    "Thermal resistance between a pipe wall and the grout capacity, as defined by Bauer et al (2010)";
+  parameter Real x "Capacity location";
+  parameter Boolean dynFil=true
+      "Set to false to remove the dynamics of the filling material."
+      annotation (Dialog(tab="Dynamics"));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_1
     annotation (Placement(transformation(extent={{-10,90},{10,110}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b port_b
-    annotation (Placement(transformation(extent={{-10,-110},{10,-90}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port
-    annotation (Placement(transformation(extent={{90,-10},{110,10}})));
-  Modelica.Thermal.HeatTransfer.Components.ConvectiveResistor RConv1
-    "Pipe convective resistance" annotation (Placement(transformation(
-        extent={{-6,-6},{6,6}},
-        rotation=90,
-        origin={-26,70})));
-  Modelica.Thermal.HeatTransfer.Components.ConvectiveResistor RConv2
-    "Pipe convective resistance"
-    annotation (Placement(transformation(extent={{32,12},{40,20}})));
-  Modelica.Thermal.HeatTransfer.Components.ConvectiveResistor RConv3
-    "Pipe convective resistance" annotation (Placement(transformation(
-        extent={{4,4},{-4,-4}},
-        rotation=180,
-        origin={-26,-52})));
-  Modelica.Thermal.HeatTransfer.Components.ConvectiveResistor RConv4
-    "Pipe convective resistance" annotation (Placement(transformation(
-        extent={{-4,4},{4,-4}},
-        rotation=180,
-        origin={-50,16})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_wall
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rpg1(R=RCondGro_val)
     "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{7,-7},{-7,7}},
+        extent={{8,-8},{-8,8}},
         rotation=90,
-        origin={-9,51})));
+        origin={0,80})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgb1(R=Rgb_val)
     "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{7,-7},{-7,7}},
+        extent={{8,-8},{-8,8}},
         rotation=90,
-        origin={-9,27})));
+        origin={0,30})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rpg2(R=RCondGro_val)
     "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{-7,7},{7,-7}},
+        extent={{-8,8},{8,-8}},
         rotation=180,
-        origin={25,5})));
+        origin={80,1.77636e-015})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgb2(R=Rgb_val)
     "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{7,-7},{-7,7}},
+        extent={{8,-8},{-8,8}},
         rotation=0,
-        origin={7,5})));
+        origin={30,0})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rpg3(R=RCondGro_val)
     "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{-7,-7},{7,7}},
+        extent={{-8,8},{8,-8}},
         rotation=90,
-        origin={-9,-29})));
+        origin={0,-80})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgb3(R=Rgb_val)
     "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{-7,-7},{7,7}},
+        extent={{-8,8},{8,-8}},
         rotation=90,
-        origin={-9,-9})));
+        origin={0,-30})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rpg4(R=RCondGro_val)
     "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{7,-7},{-7,7}},
+        extent={{8,-8},{-8,8}},
         rotation=180,
-        origin={-39,7})));
+        origin={-80,1.77636e-015})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgb4(R=Rgb_val)
     "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{7,-7},{-7,7}},
+        extent={{8,-8},{-8,8}},
         rotation=180,
-        origin={-21,7})));
+        origin={-30,0})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg11(R=Rgg1_val)
     "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{7,-7},{-7,7}},
+        extent={{8,-8},{-8,8}},
         rotation=90,
-        origin={13,27})));
+        origin={90,30})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg21(R=Rgg2_val)
     "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{7,-7},{-7,7}},
-        rotation=180,
-        origin={35,51})));
+        extent={{8,-8},{-8,8}},
+        rotation=270,
+        origin={50,30})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg12(R=Rgg1_val)
     "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{7,-7},{-7,7}},
+        extent={{8,-8},{-8,8}},
         rotation=90,
-        origin={13,-13})));
+        origin={50,-30})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg22(R=Rgg2_val)
     "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{7,-7},{-7,7}},
-        rotation=90,
-        origin={41,-15})));
+        extent={{8,-8},{-8,8}},
+        rotation=180,
+        origin={32,-92})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg14(R=Rgg1_val)
     "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{7,-7},{-7,7}},
+        extent={{8,-8},{-8,8}},
         rotation=90,
-        origin={-29,25})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg24(R=Rgg2_val)
-    "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{-7,-7},{7,7}},
-        rotation=90,
-        origin={-47,29})));
+        origin={-50,30})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg13(R=Rgg1_val)
     "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{7,-7},{-7,7}},
+        extent={{8,-8},{-8,8}},
         rotation=90,
-        origin={-27,-13})));
-  Modelica.Thermal.HeatTransfer.Components.ThermalResistor Rgg23(R=Rgg2_val)
-    "Grout thermal resistance" annotation (Placement(transformation(
-        extent={{7,-7},{-7,7}},
-        rotation=180,
-        origin={-37,-33})));
+        origin={-50,-30})));
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil1(T(start=
           T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
       der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)),
     C=Co_fil/4) if  dynFil "Heat capacity of the filling material"
                                             annotation (Placement(
         transformation(
-        extent={{-54,21.6},{-42,9.6}},
+        extent={{-72,28.8},{-56,12.8}},
         rotation=90,
-        origin={23.6,98})));
+        origin={28.8,124})));
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil2(T(start=
           T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
       der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)),
     C=Co_fil/4) if   dynFil "Heat capacity of the filling material"
                                             annotation (Placement(
         transformation(
-        extent={{54,-21.6},{42,-9.6}},
+        extent={{63,-25.2},{49,-11.2}},
         rotation=180,
-        origin={73.6,-26})));
+        origin={117,-25.2})));
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil3(T(start=
           T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
       der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)),
     C=Co_fil/4) if  dynFil "Heat capacity of the filling material"
                                             annotation (Placement(
         transformation(
-        extent={{54,-21.6},{42,-9.6}},
-        rotation=180,
-        origin={53.6,-46})));
+        extent={{63,25.2},{49,11.2}},
+        rotation=270,
+        origin={-25.2,-3})));
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor capFil4(T(start=
           T_start, fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)),
       der_T(fixed=(energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyStateInitial)),
     C=Co_fil/4) if  dynFil "Heat capacity of the filling material"
                                             annotation (Placement(
         transformation(
-        extent={{54,-21.6},{42,-9.6}},
+        extent={{70.2,27.648},{54.6,12.288}},
         rotation=180,
-        origin={7.6,-24})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a1
-    annotation (Placement(transformation(extent={{30,90},{50,110}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b port_b1
-    annotation (Placement(transformation(extent={{30,-110},{50,-90}})));
+        origin={2.2,27.648})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_2
+    annotation (Placement(transformation(extent={{90,-10},{110,10}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_3
+    annotation (Placement(transformation(extent={{-10,-90},{10,-110}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_4
+    annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
 equation
-  connect(RConv1.solid,Rpg1. port_a) annotation (Line(
-      points={{-26,64},{-26,58},{-9,58}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rpg1.port_b,Rgb1. port_a) annotation (Line(
-      points={{-9,44},{-9,34}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(RConv2.solid,Rpg2. port_a) annotation (Line(
-      points={{32,16},{32,5}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgb2.port_a,Rpg2. port_b) annotation (Line(
-      points={{14,5},{18,5}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgb2.port_b, port) annotation (Line(
-      points={{0,5},{0,6},{-2,6},{-2,66},{12,66},{12,0},{100,0}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgb1.port_b, port) annotation (Line(
-      points={{-9,20},{-8,20},{-8,6},{-2,6},{-2,66},{12,66},{12,0},{100,0}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(RConv3.solid,Rpg3. port_a) annotation (Line(
-      points={{-30,-52},{-32,-52},{-32,-40},{-9,-40},{-9,-36}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgb3.port_a,Rpg3. port_b) annotation (Line(
-      points={{-9,-16},{-9,-22}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgb3.port_b, port) annotation (Line(
-      points={{-9,-2},{-8,-2},{-8,6},{-2,6},{-2,66},{12,66},{12,0},{100,0}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(RConv4.solid,Rpg4. port_a) annotation (Line(
-      points={{-46,16},{-46,7}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rpg4.port_b,Rgb4. port_a) annotation (Line(
-      points={{-32,7},{-28,7}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgb4.port_b, port) annotation (Line(
-      points={{-14,7},{-12,7},{-12,6},{-2,6},{-2,66},{12,66},{12,0},{100,0}},
-      color={191,0,0},
-      smooth=Smooth.None));
-     connect(capFil1.port,Rpg1. port_b) annotation (Line(
-      points={{2,50},{2,40},{-8,40},{-8,44},{-9,44}},
-      color={191,0,0},
-      smooth=Smooth.None));
-    connect(capFil2.port,Rpg2. port_b) annotation (Line(
-      points={{25.6,-4.4},{18,-4.4},{18,5}},
-      color={191,0,0},
-      smooth=Smooth.None));
-    connect(capFil3.port,Rpg3. port_b) annotation (Line(
-      points={{5.6,-24.4},{5.6,-22},{-9,-22}},
-      color={191,0,0},
-      smooth=Smooth.None));
-    connect(capFil4.port,Rpg4. port_b) annotation (Line(
-      points={{-40.4,-2.4},{-32,-2.4},{-32,7}},
-      color={191,0,0},
-      smooth=Smooth.None));
-    connect(Rgg21.port_b,capFil3. port) annotation (Line(
-      points={{42,51},{72,51},{72,50},{104,50},{104,-24.4},{5.6,-24.4}},
-      color={191,0,0},
-      smooth=Smooth.None));
-    connect(Rgg22.port_a,capFil2. port) annotation (Line(
-      points={{41,-8},{40,-8},{40,-4.4},{25.6,-4.4}},
-      color={191,0,0},
-      smooth=Smooth.None));
-    connect(Rgg22.port_b,capFil4. port) annotation (Line(
-      points={{41,-22},{42,-22},{42,-84},{-50,-84},{-50,-2.4},{-40.4,-2.4}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg11.port_a,Rpg1. port_b) annotation (Line(
-      points={{13,34},{14,34},{14,40},{-9,40},{-9,44}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg11.port_b,Rgb2. port_a) annotation (Line(
-      points={{13,20},{14,20},{14,5}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg12.port_a,Rgb2. port_a) annotation (Line(
-      points={{13,-6},{14,-6},{14,5}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg12.port_b,Rpg3. port_b) annotation (Line(
-      points={{13,-20},{8,-20},{8,-22},{-9,-22}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg13.port_b,Rpg3. port_b) annotation (Line(
-      points={{-27,-20},{-10,-20},{-9,-22}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg13.port_a,Rpg4. port_b) annotation (Line(
-      points={{-27,-6},{-30,-6},{-30,-2},{-32,-2},{-32,7}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg14.port_b,Rgb4. port_a) annotation (Line(
-      points={{-29,18},{-28,18},{-28,7}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg14.port_a,Rgb1. port_a) annotation (Line(
-      points={{-29,32},{-28,32},{-28,40},{-10,40},{-9,34}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg21.port_a,Rpg1. port_b) annotation (Line(
-      points={{28,51},{22,51},{22,40},{-9,40},{-9,44}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg23.port_b,Rpg3. port_b) annotation (Line(
-      points={{-30,-33},{-26,-33},{-26,-34},{-20,-34},{-20,-20},{-10,-20},{-9,
-          -22}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg23.port_a,Rpg1. port_b) annotation (Line(
-      points={{-44,-33},{-64,-33},{-64,-34},{-82,-34},{-82,40},{-9,40},{-9,44}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg24.port_a,Rgb4. port_a) annotation (Line(
-      points={{-47,22},{-40,22},{-40,16},{-28,16},{-28,7}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Rgg24.port_b,Rgb2. port_a) annotation (Line(
-      points={{-47,36},{-46,36},{-46,90},{24,90},{24,18},{14,18},{14,5}},
-      color={191,0,0},
-      smooth=Smooth.None));
+  connect(Rpg2.port_a, port_2) annotation (Line(points={{88,7.77156e-016},{96,7.77156e-016},
+          {96,0},{100,0}}, color={191,0,0}));
+  connect(Rpg4.port_a, port_4) annotation (Line(points={{-88,2.77556e-015},{-100,
+          2.77556e-015},{-100,-2},{-100,0}}, color={191,0,0}));
+  connect(Rpg1.port_a, port_1) annotation (Line(points={{4.44089e-016,88},{0,88},
+          {0,100}}, color={191,0,0}));
+  connect(capFil1.port, Rpg1.port_b) annotation (Line(points={{-1.33227e-014,60},
+          {0,60},{0,72},{-4.44089e-016,72}}, color={191,0,0}));
+  connect(Rpg4.port_b, capFil4.port)
+    annotation (Line(points={{-72,0},{-60.2,0},{-60.2,0}}, color={191,0,0}));
+  connect(capFil4.port, Rgb4.port_a) annotation (Line(points={{-60.2,0},{-38,0},
+          {-38,8.88178e-016}}, color={191,0,0}));
+  connect(Rgb2.port_a, capFil2.port) annotation (Line(points={{38,0},{61,0},{61,
+          9.76996e-015}}, color={191,0,0}));
+  connect(Rpg2.port_b, capFil2.port) annotation (Line(points={{72,0},{61,0},{61,
+          9.76996e-015}}, color={191,0,0}));
+  connect(capFil1.port, Rgb1.port_a)
+    annotation (Line(points={{0,60},{0,38}}, color={191,0,0}));
+  connect(Rgb1.port_b, port_wall)
+    annotation (Line(points={{0,22},{0,22},{0,0}}, color={191,0,0}));
+  connect(Rgb4.port_b, port_wall) annotation (Line(points={{-22,-8.88178e-016},{
+          0,-8.88178e-016},{0,0}}, color={191,0,0}));
+  connect(Rgb2.port_b, port_wall)
+    annotation (Line(points={{22,0},{22,0},{0,0}}, color={191,0,0}));
+  connect(Rgb3.port_b, port_wall) annotation (Line(points={{4.44089e-016,-22},{0,
+          -22},{0,0}}, color={191,0,0}));
+  connect(Rgg14.port_a, capFil1.port) annotation (Line(points={{-50,38},{-50,38},
+          {-50,50},{0,50},{0,60},{-1.33227e-014,60}}, color={191,0,0}));
+  connect(Rgg14.port_b, capFil4.port)
+    annotation (Line(points={{-50,22},{-50,0},{-60.2,0}}, color={191,0,0}));
+  connect(Rgg21.port_a, capFil2.port) annotation (Line(points={{50,22},{50,22},{
+          50,2},{50,0},{61,0}}, color={191,0,0}));
+  connect(Rgg21.port_b, capFil1.port) annotation (Line(points={{50,38},{50,38},{
+          50,50},{0,50},{0,60}}, color={191,0,0}));
+  connect(Rpg3.port_a, port_3)
+    annotation (Line(points={{0,-88},{0,-100},{0,-100}}, color={191,0,0}));
+  connect(capFil3.port, Rpg3.port_b)
+    annotation (Line(points={{0,-59},{0,-65.5},{0,-72}}, color={191,0,0}));
+  connect(Rgb3.port_a, capFil3.port)
+    annotation (Line(points={{0,-38},{0,-59},{0,-59}}, color={191,0,0}));
+  connect(Rgg12.port_a, capFil2.port)
+    annotation (Line(points={{50,-22},{50,0},{61,0}}, color={191,0,0}));
+  connect(Rgg12.port_b, capFil3.port) annotation (Line(points={{50,-38},{50,-38},
+          {50,-46},{50,-50},{0,-50},{0,-59}}, color={191,0,0}));
+  connect(Rgg13.port_a, capFil4.port) annotation (Line(points={{-50,-22},{-50,-22},
+          {-50,-6},{-50,0},{-60.2,0}}, color={191,0,0}));
+  connect(Rgg13.port_b, capFil3.port) annotation (Line(points={{-50,-38},{-50,-50},
+          {0,-50},{0,-59}}, color={191,0,0}));
+  connect(Rgg11.port_a, capFil1.port)
+    annotation (Line(points={{90,38},{90,68},{0,68},{0,60}}, color={191,0,0}));
+  connect(Rgg11.port_b, capFil3.port) annotation (Line(points={{90,22},{90,-50},
+          {0,-50},{0,-59},{-8.88178e-015,-59}}, color={191,0,0}));
+  connect(Rgg22.port_b, capFil2.port) annotation (Line(points={{40,-92},{68,-92},
+          {68,0},{61,0}}, color={191,0,0}));
+  connect(Rgg22.port_a, capFil4.port) annotation (Line(points={{24,-92},{24,-92},
+          {-66,-92},{-66,7.10543e-015},{-60.2,7.10543e-015}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
-        coordinateSystem(preserveAspectRatio=false), graphics={
-        Text(
-          extent={{-18,20},{-8,10}},
-          lineColor={0,0,0},
-          textString="Tb")}));
+        coordinateSystem(preserveAspectRatio=false)));
 end InternalResistances2UTube;

@@ -1,18 +1,16 @@
-within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield2.BaseClasses.BoreHoles.BaseClasses.Examples;
-model SingleBoreHole "Test for the SingleBoreHole model"
+within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield2.BaseClasses.BoreHoles.Examples;
+model SingleBoreHole2UTUbe "Test for the SingleBoreHole model"
   import IDEAS;
   extends Modelica.Icons.Example;
   package Medium = Modelica.Media.Water.ConstantPropertyLiquidWater;
 
-  IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield2.BaseClasses.BoreHoles.SingleBoreHoleUTube
+  IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.BaseClasses.BoreHoles.BaseClasses.SingleBoreHole2UTube
     seg(
     redeclare package Medium = Medium,
     soi=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.SoilData.SandStone(),
-
     fil=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.FillingData.Bentonite(),
-
-    gen=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.ConfigurationData.c8x1_h110_b5_d3600_T283
-        ()) annotation (Placement(transformation(
+    gen=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield.Data.GeneralData.c8x1_h110_b5_d3600_T283())
+            annotation (Placement(transformation(
         extent={{-13,-13},{13,13}},
         rotation=270,
         origin={9,33})));
@@ -61,4 +59,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end SingleBoreHole;
+end SingleBoreHole2UTUbe;
