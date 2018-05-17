@@ -1,10 +1,9 @@
 within IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield2.BaseClasses.BoreHoles.BaseClasses.Examples;
 model internalHEXUTube
   "Comparison of the effective borehole thermal resistance  from the thermal network of Bauer et al. with the resistance calculated by singleUTubeResistances (ref)"
-  import IDEAS;
   extends Modelica.Icons.Example;
   package Medium = Modelica.Media.Water.ConstantPropertyLiquidWater;
-  InternalHEXUTube intHex(
+  BaseClasses.InternalHEXUTube intHex(
     redeclare package Medium = Medium,
     dp1_nominal=10,
     dp2_nominal=10,
@@ -14,7 +13,8 @@ model internalHEXUTube
     T_start=285.15)
     annotation (Placement(transformation(extent={{-10,-12},{10,10}})));
 
-  Modelica.Thermal.HeatTransfer.Celsius.FixedTemperature fixedTemperature(T=12)
+  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature(T=273.15
+         + 12)
     annotation (Placement(transformation(extent={{-22,30},{-2,50}})));
   Sources.MassFlowSource_T boundary(nPorts=1,
     redeclare package Medium = Medium,
