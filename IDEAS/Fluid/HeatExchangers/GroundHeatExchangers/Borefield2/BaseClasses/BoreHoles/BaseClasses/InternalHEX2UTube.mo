@@ -18,7 +18,6 @@ model InternalHEX2UTube
         m3_flow_nominal,
     final tau4=Modelica.Constants.pi*borFieDat.conDat.rTub^2*borFieDat.conDat.hSeg*rho4_nominal/
         m4_flow_nominal,
-    final show_T=true,
     vol1(
       final energyDynamics=energyDynamics,
       final massDynamics=massDynamics,
@@ -26,14 +25,14 @@ model InternalHEX2UTube
       final allowFlowReversal=allowFlowReversal1,
       final m_flow_small=m1_flow_small,
       final V=borFieDat.conDat.volOneLegSeg,
-      mSenFac=mSenFac),
+      final mSenFac=mSenFac),
     vol2(
       final energyDynamics=energyDynamics,
       final massDynamics=massDynamics,
       final prescribedHeatFlowRate=false,
       final m_flow_small=m2_flow_small,
       final V=borFieDat.conDat.volOneLegSeg,
-      mSenFac=mSenFac),
+      final mSenFac=mSenFac),
     vol3(
       final energyDynamics=energyDynamics,
       final massDynamics=massDynamics,
@@ -41,14 +40,14 @@ model InternalHEX2UTube
       final allowFlowReversal=allowFlowReversal3,
       final m_flow_small=m3_flow_small,
       final V=borFieDat.conDat.volOneLegSeg,
-      mSenFac=mSenFac),
+      final mSenFac=mSenFac),
     vol4(
       final energyDynamics=energyDynamics,
       final massDynamics=massDynamics,
       final prescribedHeatFlowRate=false,
       final m_flow_small=m4_flow_small,
       final V=borFieDat.conDat.volOneLegSeg,
-      mSenFac=mSenFac));
+      final mSenFac=mSenFac));
 
   replaceable package Medium =
       Modelica.Media.Interfaces.PartialMedium "Medium"

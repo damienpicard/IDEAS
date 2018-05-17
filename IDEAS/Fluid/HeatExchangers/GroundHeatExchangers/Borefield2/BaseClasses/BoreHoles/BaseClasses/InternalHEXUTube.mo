@@ -15,15 +15,15 @@ model InternalHEXUTube "Internal part of a borehole for a U-Tube configuration"
       final massDynamics=massDynamics,
       final prescribedHeatFlowRate=false,
       final m_flow_small=m1_flow_small,
-      V=borFieDat.conDat.volOneLegSeg,
-      mSenFac=mSenFac),
+      final V=borFieDat.conDat.volOneLegSeg,
+      final mSenFac=mSenFac),
     redeclare IDEAS.Fluid.MixingVolumes.MixingVolume vol2(
       final energyDynamics=energyDynamics,
       final massDynamics=massDynamics,
       final prescribedHeatFlowRate=false,
       final m_flow_small=m2_flow_small,
-      V=borFieDat.conDat.volOneLegSeg,
-      mSenFac=mSenFac));
+      final V=borFieDat.conDat.volOneLegSeg,
+      final mSenFac=mSenFac));
   replaceable package Medium =
       Modelica.Media.Interfaces.PartialMedium "Medium"
       annotation (choicesAllMatching = true);

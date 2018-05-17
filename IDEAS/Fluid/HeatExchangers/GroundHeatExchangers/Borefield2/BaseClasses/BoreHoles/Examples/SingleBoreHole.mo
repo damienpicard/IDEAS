@@ -5,12 +5,11 @@ model SingleBoreHole "Test for the SingleBoreHole model"
   package Medium = Modelica.Media.Water.ConstantPropertyLiquidWater;
 
   IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Borefield2.BaseClasses.BoreHoles.SingleBoreHoleUTube
-    seg(
+    borHol(
     redeclare package Medium = Medium,
-    soi=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.SoilData.SandStone(),
-    fil=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.FillingData.Bentonite(),
-    gen=IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.ConfigurationData.c8x1_h110_b5_d3600_T283())
-            annotation (Placement(transformation(
+    borFieDat=borFieDat,
+    m_flow_nominal=borFieDat.conDat.m_flow_nominal_bh,
+    dp_nominal=10) annotation (Placement(transformation(
         extent={{-13,-13},{13,13}},
         rotation=270,
         origin={9,33})));
@@ -19,7 +18,7 @@ model SingleBoreHole "Test for the SingleBoreHole model"
     redeclare package Medium = Medium,
     nPorts=1,
     use_T_in=false,
-    m_flow=seg.gen.m_flow_nominal_bh,
+    m_flow=borFieDat.conDat.m_flow_nominal_bh,
     T=303.15) annotation (Placement(transformation(extent={{-60,40},{-40,
             60}}, rotation=0)));
   IDEAS.Fluid.Sources.Boundary_pT sin_2(
@@ -30,12 +29,15 @@ model SingleBoreHole "Test for the SingleBoreHole model"
     p=101330,
     T=283.15) annotation (Placement(transformation(extent={{-60,10},{-40,30}},
           rotation=0)));
+  parameter IDEAS.Fluid.HeatExchangers.GroundHeatExchangers.Data.BorefieldData.Template
+                                        borFieDat "Borefield parameters"
+    annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 equation
-  connect(sou_1.ports[1], seg.port_a) annotation (Line(
+  connect(sou_1.ports[1], borHol.port_a) annotation (Line(
       points={{-40,50},{9,50},{9,46}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(seg.port_b, sin_2.ports[1]) annotation (Line(
+  connect(borHol.port_b, sin_2.ports[1]) annotation (Line(
       points={{9,20},{-40,20}},
       color={0,127,255},
       smooth=Smooth.None));
