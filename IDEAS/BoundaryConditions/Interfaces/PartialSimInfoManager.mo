@@ -147,8 +147,8 @@ public
     lat=lat,
     lon=lon,
     timZon=timZonSta,
-    datRea1(tableName="data"),
-    datRea(tableName="data")) if
+    datRea1(tableName="tab1"),
+    datRea(tableName="tab1")) if
                                useTmy3Reader
     annotation (Placement(transformation(extent={{-80,-100},{-60,-80}})));
 public
