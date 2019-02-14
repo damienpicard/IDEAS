@@ -52,7 +52,7 @@ partial model PartialSimInfoManager
   parameter Modelica.SIunits.Energy Emax=1
     "Error bound for violation of conservation of energy" annotation (Evaluate=true,
       Dialog(tab="Conservation of energy", enable=strictConservationOfEnergy));
-  final parameter String filNamClim=filDir + filNam;
+  parameter String filNamClim=filDir + filNam;
 
   parameter Boolean useTmy3Reader=true
     "Set to false if you do not want to use the TMY3 reader for providing data";

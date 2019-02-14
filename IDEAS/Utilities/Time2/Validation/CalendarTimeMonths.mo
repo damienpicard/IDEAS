@@ -1,7 +1,7 @@
-within IDEAS.Utilities.Time.Validation;
+within IDEAS.Utilities.Time2.Validation;
 model CalendarTimeMonths "Validation model for the calendar time model"
   extends Modelica.Icons.Example;
-  IDEAS.Utilities.Time.CalendarTime calTim(zerTim=IDEAS.Utilities.Time.Types.ZeroTime.NY2015)
+  IDEAS.Utilities.Time2.CalendarTime calTim(zerTim=IDEAS.Utilities.Time2.Types.ZeroTime.NY2015)
     "Computes date and time assuming time=0 corresponds to new year 2015"
     annotation (Placement(transformation(extent={{-20,-10},{0,10}})));
 
@@ -14,8 +14,8 @@ equation
     info="<html>
 <p>
 This model validates the use of the
-<a href=\"modelica://IDEAS.Utilities.Time.CalendarTime\">
-IDEAS.Utilities.Time.CalendarTime</a>
+<a href=\"modelica://IDEAS.Utilities.Time2.CalendarTime\">
+IDEAS.Utilities.Time2.CalendarTime</a>
 block for a period of a couple of months.
 This shorter simulation time has been selected to
 store the reference results that are used in the regression tests

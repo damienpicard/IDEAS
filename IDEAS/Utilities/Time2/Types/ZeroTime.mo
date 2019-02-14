@@ -1,4 +1,4 @@
-within IDEAS.Utilities.Time.Types;
+within IDEAS.Utilities.Time2.Types;
 type ZeroTime = enumeration(
     UnixTimeStamp "Thu, 01 Jan 1970 00:00:00 local time",
     Custom "User specified local time",
@@ -17,11 +17,11 @@ type ZeroTime = enumeration(
   annotation (Documentation(info="<html>
 <p>
 Type for choosing how to set the reference time in
-<a href=\"modelica://IDEAS.Utilities.Time.CalendarTime\">
-IDEAS.Utilities.Time.CalendarTime</a>.
+<a href=\"modelica://IDEAS.Utilities.Time2.CalendarTime\">
+IDEAS.Utilities.Time2.CalendarTime</a>.
 </p>
 <p>
-For example, <code>IDEAS.Utilities.Time.Types.TimeReference.NY2016</code>
+For example, <code>IDEAS.Utilities.Time2.Types.TimeReference.NY2016</code>
 means that if the Modelica built-in variable <code>time=0</code>, it is
 January 1, 2016, 0:00:00 local time.
 </p>
@@ -30,8 +30,8 @@ January 1, 2016, 0:00:00 local time.
 <li>
 September 10, 2016, by Michael Wetter:<br/>
 Revised implementation and moved to new package
-<a href=\"modelica://IDEAS.Utilities.Time.CalendarTime.Types\">
-IDEAS.Utilities.Time.CalendarTime.Types</a>.
+<a href=\"modelica://IDEAS.Utilities.Time2.CalendarTime.Types\">
+IDEAS.Utilities.Time2.CalendarTime.Types</a>.
 </li>
 <li>
 August 3, 2016, by Filip Jorissen:<br/>

@@ -40,7 +40,7 @@ January 16, 2015, by Michael Wetter:<br/>
 Moved block from
 <code>IDEAS.Utilities.SimulationTime</code>
 to
-<code>IDEAS.Utilities.Time.ModelTime</code>.
+<code>IDEAS.Utilities.Time2.ModelTime</code>.
 </li>
 <li>
 May 18, 2010, by Wangda Zuo:<br/>

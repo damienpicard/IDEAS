@@ -20,8 +20,8 @@ First implementation.
 </html>", info="<html>
 <p>
 This model demonstrates the use of the
-<a href=\"modelica://IDEAS.Utilities.Time.CalendarTime\">
-IDEAS.Utilities.Time.CalendarTime</a>
+<a href=\"modelica://IDEAS.Utilities.Time2.CalendarTime\">
+IDEAS.Utilities.Time2.CalendarTime</a>
 block.
 </p>
 </html>"),
