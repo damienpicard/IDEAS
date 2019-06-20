@@ -1029,6 +1029,9 @@ initial equation
     assert(abs(ACei-w*l) < 1e-6, "The overwrite parameter ACei should not be used when the roof has a window
                                   since then the window surface area cannot be factored in correctly.");
   end if;
+  if hasInt then
+    assert(lInt > 1e-6, "Length of internal wall must be greater than zero if hasInt is true");
+  end if;
 equation
   connect(intA.propsBus_a, propsBusInt[indWalA]) annotation (Line(
       points={{-165,12},{-152,12},{-152,40},{-80,40}},
