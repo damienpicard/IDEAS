@@ -90,7 +90,7 @@ model PartialZone "Building zone model"
       m_flow_nominal_vent=m_flow_nominal)
       "Interzonal air flow model"
     annotation (choicesAllMatching = true,Dialog(tab="Advanced", group="Air model"),
-      Placement(transformation(extent={{-40,60},{-20,80}})),
+      Placement(transformation(extent={{-40,72},{-20,92}})),
     choicesAllMatching=true,
     Dialog(group="Building physics"));
   replaceable IDEAS.Buildings.Components.Occupants.Fixed occNum
@@ -175,6 +175,8 @@ model PartialZone "Building zone model"
     Placement(transformation(extent={{80,52},{60,72}})));
 
 
+  parameter Boolean hasVAV = false "Set to true if zone has a VAV"
+    annotation(Dialog(tab="Ventilation"));
 
 protected
   IDEAS.Buildings.Components.Interfaces.ZoneBus[nSurf] propsBusInt(
@@ -212,7 +214,6 @@ protected
         extent={{-10,10},{10,-10}},
         rotation=270,
         origin={-30,-10})));
-
 
 
 initial equation
@@ -381,16 +382,18 @@ end for;
   connect(occNum.nOcc, ligCtr.nOcc) annotation (Line(points={{58,32},{96,32},{96,
           64},{82,64}},
                    color={0,0,127}));
-  connect(airModel.port_b, interzonalAirFlow.port_a_interior)
-    annotation (Line(points={{-36,40},{-36,60}}, color={0,127,255}));
+  if not hasVAV then
+    connect(airModel.port_b, interzonalAirFlow.port_a_interior)
+    annotation (Line(points={{-36,40},{-36,72}}, color={0,127,255}));
+  end if;
   connect(airModel.port_a, interzonalAirFlow.port_b_interior)
-    annotation (Line(points={{-24,40},{-24,60}}, color={0,127,255}));
-  connect(interzonalAirFlow.ports, airModel.ports) annotation (Line(points={{
-          -29.8,60},{-30,60},{-30,40}}, color={0,127,255}));
-  connect(interzonalAirFlow.port_b_exterior, port_b) annotation (Line(points={{
-          -32,80},{-32,92},{-20,92},{-20,100}}, color={0,127,255}));
-  connect(interzonalAirFlow.port_a_exterior, port_a) annotation (Line(points={{
-          -28,80},{-28,84},{20,84},{20,100}}, color={0,127,255}));
+    annotation (Line(points={{-24,40},{-24,72}}, color={0,127,255}));
+  connect(interzonalAirFlow.ports[1:interzonalAirFlow.nPorts], airModel.ports[1:interzonalAirFlow.nPorts]) annotation (Line(points={{-29.8,
+          72},{-30,72},{-30,40}},       color={0,127,255}));
+  connect(interzonalAirFlow.port_b_exterior, port_b) annotation (Line(points={{-32,92},
+          {-32,100},{-20,100}},                 color={0,127,255}));
+  connect(interzonalAirFlow.port_a_exterior, port_a) annotation (Line(points={{-28,92},
+          {20,92},{20,100}},                  color={0,127,255}));
   connect(ppm, airModel.ppm) annotation (Line(points={{110,0},{52,0},{52,16},{-8,
           16},{-8,28},{-19,28}}, color={0,0,127}));
   connect(intGaiLig.portRad, gainRad) annotation (Line(points={{20,60},{4,60},{4,
@@ -407,6 +410,10 @@ end for;
 <p>See extending models.</p>
 </html>", revisions="<html>
 <ul>
+<li>
+June 21, 2019 by Damien Picard:<br/>
+Make air connection conditional to allow the use of VAV.
+</li>
 <li>
 April 11, 2019 by Filip Jorissen:<br/>
 Revised implementation such that default value of relative humidity is

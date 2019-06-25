@@ -1,10 +1,10 @@
 BoundaryWall
 InternalWall
 OuterWall
-RectangularZoneTemplate
 SlabOnGround
 Window
 Zone
+RectangularZoneTemplate
 Comfort
 InternalGains
 InterzonalAirFlow
