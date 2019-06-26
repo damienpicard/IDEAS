@@ -385,9 +385,10 @@ end for;
   if not hasVAV then
     connect(airModel.port_b, interzonalAirFlow.port_a_interior)
     annotation (Line(points={{-36,40},{-36,72}}, color={0,127,255}));
-  end if;
-  connect(airModel.port_a, interzonalAirFlow.port_b_interior)
+    connect(airModel.port_a, interzonalAirFlow.port_b_interior)
     annotation (Line(points={{-24,40},{-24,72}}, color={0,127,255}));
+  end if;
+
   connect(interzonalAirFlow.ports[1:interzonalAirFlow.nPorts], airModel.ports[1:interzonalAirFlow.nPorts]) annotation (Line(points={{-29.8,
           72},{-30,72},{-30,40}},       color={0,127,255}));
   connect(interzonalAirFlow.port_b_exterior, port_b) annotation (Line(points={{-32,92},
