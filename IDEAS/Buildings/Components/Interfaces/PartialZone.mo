@@ -177,7 +177,43 @@ model PartialZone "Building zone model"
 
   parameter Boolean hasVAV = false "Set to true if zone has a VAV"
     annotation(Dialog(tab="Ventilation"));
+  parameter Boolean hasDucPreLos=false
+    "Set to true if ventilation duct pressure loss is computed in the zone"
+    annotation (Dialog(tab="Ventilation"));
 
+  Fluid.FixedResistances.PressureDrop ducPreLosRet(
+    redeclare package Medium = Medium,
+    m_flow_nominal=m_flow_nominal_venRet,
+    dp_nominal=dp_nominal_venRet) if hasDucPreLos
+    "Duct pressure loss for return ventilation" annotation (Placement(
+        transformation(
+        extent={{4,-6},{-4,6}},
+        rotation=270,
+        origin={-34,58})));
+  Fluid.FixedResistances.PressureDrop ducPreLosSup(
+    redeclare package Medium = Medium,
+    m_flow_nominal=m_flow_nominal_venSup,
+    dp_nominal=dp_nominal_venSup) if hasDucPreLos
+    "Duct pressure loss for supply ventilation" annotation (Placement(
+        transformation(
+        extent={{-4,6},{4,-6}},
+        rotation=270,
+        origin={-26,58})));
+  parameter Real V_flow_nominal_venSup(unit="m3/h")=1
+    "Nominal volume flow rate per hour for supply ventilation"
+    annotation (Dialog(tab="Ventilation", enable=hasDucPreLos));
+  final parameter SI.MassFlowRate m_flow_nominal_venSup = V_flow_nominal_venSup / 3600 * 1.17 "Nominal mass flow rate for supply ventilation";
+  parameter SI.PressureDifference dp_nominal_venSup=1
+    "Duct pressure drop at nominal mass flow rate for supply ventilation"
+    annotation (Dialog(tab="Ventilation", enable=hasDucPreLos));
+  parameter Real V_flow_nominal_venRet(unit="m3/h")=1
+    "Nominal volume flow rate per hour for return ventilation"
+    annotation (Dialog(tab="Ventilation", enable=hasDucPreLos));
+  final parameter SI.MassFlowRate m_flow_nominal_venRet = V_flow_nominal_venRet / 3600 * 1.17 "Nominal mass flow rate for supply ventilation";
+
+  parameter SI.PressureDifference dp_nominal_venRet=1
+    "Duct pressure drop at nominal mass flow rate for return ventilation"
+    annotation (Dialog(tab="Ventilation", enable=hasDucPreLos));
 protected
   IDEAS.Buildings.Components.Interfaces.ZoneBus[nSurf] propsBusInt(
     each final numIncAndAziInBus=sim.numIncAndAziInBus,
@@ -220,6 +256,8 @@ initial equation
   Q_design=QInf_design+QRH_design+QTra_design; //Total design load for zone (additional ventilation losses are calculated in the ventilation system)
 
 equation
+  assert(not (hasDucPreLos and hasVAV), "hasDucPreLos and hasVAV should not be true at the same time. "
+     + "Duct pressure drop should be included in the VAV model instead");
   if interzonalAirFlow.verifyBothPortsConnected then
     assert(cardinality(port_a)>1 and cardinality(port_b)>1 or cardinality(port_a) == 1 and cardinality(port_b) == 1,
       "WARNING: Only one of the FluidPorts of " + getInstanceName() + " is 
@@ -383,10 +421,21 @@ end for;
           64},{82,64}},
                    color={0,0,127}));
   if not hasVAV then
-    connect(airModel.port_b, interzonalAirFlow.port_a_interior)
-    annotation (Line(points={{-36,40},{-36,72}}, color={0,127,255}));
-    connect(airModel.port_a, interzonalAirFlow.port_b_interior)
-    annotation (Line(points={{-24,40},{-24,72}}, color={0,127,255}));
+    if not hasDucPreLos then
+      connect(airModel.port_b, interzonalAirFlow.port_a_interior)
+        annotation (Line(points={{-36,40},{-36,72}}, color={0,127,255}));
+      connect(airModel.port_a, interzonalAirFlow.port_b_interior)
+        annotation (Line(points={{-24,40},{-24,72}}, color={0,127,255}));
+    else
+      connect(ducPreLosRet.port_b, interzonalAirFlow.port_a_interior)
+        annotation (Line(points={{-34,62},{-34,72},{-36,72}}, color={0,127,255}));
+      connect(ducPreLosRet.port_a, airModel.port_b) annotation (Line(points={{-34,54},
+              {-34,40},{-36,40}},     color={0,127,255}));
+      connect(ducPreLosSup.port_a, interzonalAirFlow.port_b_interior)
+        annotation (Line(points={{-26,62},{-26,72},{-24,72}}, color={0,127,255}));
+      connect(ducPreLosSup.port_b, airModel.port_a) annotation (Line(points={{-26,
+              54},{-26,40},{-24,40}}, color={0,127,255}));
+    end if;
   end if;
 
   connect(interzonalAirFlow.ports[1:interzonalAirFlow.nPorts], airModel.ports[1:interzonalAirFlow.nPorts]) annotation (Line(points={{-29.8,
