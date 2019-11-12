@@ -4,7 +4,7 @@ model RectangularZoneTemplate
   extends IDEAS.Buildings.Components.Interfaces.RectangularZoneTemplateInterface;
 
   Modelica.Blocks.Interfaces.RealInput ctrlA if
-                                               shaTypA.controlled
+                                               shaTypA.controlled or ctrlWinA
     "Control input for windows in face A, if controlled"
     annotation (Placement(transformation(extent={{11,-11},{-11,11}},
         rotation=-90,
@@ -13,7 +13,7 @@ model RectangularZoneTemplate
         rotation=-90,
         origin={84,112})));
   Modelica.Blocks.Interfaces.RealInput ctrlB if
-                                               shaTypB.controlled
+                                               shaTypB.controlled  or ctrlWinB
     "Control input for windows in face B, if controlled" annotation (Placement(
         transformation(
         extent={{11,-11},{-11,11}},
@@ -21,7 +21,7 @@ model RectangularZoneTemplate
         origin={-155,-111}), iconTransformation(extent={{123,-99},{101,-77}},
           rotation=0)));
   Modelica.Blocks.Interfaces.RealInput ctrlC if
-                                               shaTypC.controlled
+                                               shaTypC.controlled or ctrlWinC
     "Control input for windows in face C, if controlled" annotation (Placement(
         transformation(
         extent={{11,-11},{-11,11}},
@@ -31,7 +31,7 @@ model RectangularZoneTemplate
         rotation=-90,
         origin={-88,-112})));
   Modelica.Blocks.Interfaces.RealInput ctrlD if
-                                               shaTypD.controlled
+                                               shaTypD.controlled or ctrlWinD
     "Control input for windows in face D, if controlled" annotation (Placement(
         transformation(
         extent={{11,-11},{-11,11}},
@@ -41,7 +41,7 @@ model RectangularZoneTemplate
         rotation=180,
         origin={-112,72})));
   Modelica.Blocks.Interfaces.RealInput ctrlCei if
-                                               shaTypCei.controlled
+                                               shaTypCei.controlled or ctrlWinCei
     "Control input for windows in ceiling, if controlled" annotation (Placement(
         transformation(
         extent={{11,-11},{-11,11}},
@@ -105,6 +105,8 @@ replaceable
       enable=hasWinA,
       choicesAllMatching=true,
       Placement(transformation(extent={{-100,0},{-90,20}})));
+  parameter Boolean ctrlWinA = false  annotation (Dialog(tab="Advanced",group="Windows"),
+      enable=hasWinA);
   replaceable
   IDEAS.Buildings.Components.Window winB(
       inc=IDEAS.Types.Tilt.Wall,
@@ -162,6 +164,8 @@ replaceable
         extent={{-5,-10},{5,10}},
         rotation=0,
         origin={-95,-10})));
+    parameter Boolean ctrlWinB = false  annotation (Dialog(tab="Advanced",group="Windows"),
+      enable=hasWinB);
   replaceable
   IDEAS.Buildings.Components.Window winC(inc=IDEAS.Types.Tilt.Wall,
     glazing(
@@ -218,6 +222,8 @@ replaceable
         extent={{-5,-10},{5,10}},
         rotation=0,
         origin={-95,-30})));
+  parameter Boolean ctrlWinC = false  annotation (Dialog(tab="Advanced",group="Windows"),
+      enable=hasWinC);
   replaceable
   IDEAS.Buildings.Components.Window winD(inc=IDEAS.Types.Tilt.Wall, azi=aziD,
     glazing(
@@ -273,6 +279,8 @@ replaceable
         extent={{-5,-10},{5,10}},
         rotation=0,
         origin={-95,-50})));
+  parameter Boolean ctrlWinD = false  annotation (Dialog(tab="Advanced",group="Windows"),
+      enable=hasWinD);
   replaceable
   IDEAS.Buildings.Components.Window winCei(inc=IDEAS.Types.Tilt.Ceiling, azi=aziAInt,
     glazing(
@@ -328,6 +336,8 @@ replaceable
         extent={{-5,-10},{5,10}},
         rotation=0,
         origin={-95,-90})));
+  parameter Boolean ctrlWinCei = false  annotation (Dialog(tab="Advanced",group="Windows"),
+      enable=hasWinCei);
 equation
   connect(winA.propsBus_a, propsBusInt[indWinA]) annotation (Line(
       points={{-90.8333,12},{-88,12},{-88,40},{-80,40}},
