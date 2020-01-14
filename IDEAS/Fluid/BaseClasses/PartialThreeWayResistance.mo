@@ -67,8 +67,8 @@ partial model PartialThreeWayResistance
       allowFlowReversal=portFlowDirection_2 == Modelica.Fluid.Types.PortFlowDirection.Bidirectional)
     "Partial model, to be replaced with a fluid component"
     annotation (Placement(transformation(extent={{60,-10},{40,10}})));
-  replaceable IDEAS.Fluid.Interfaces.PartialTwoPortInterface res3
-    constrainedby IDEAS.Fluid.Interfaces.PartialTwoPortInterface(
+  replaceable IDEAS.Fluid.Interfaces.PartialTwoPortTransport res3
+    constrainedby IDEAS.Fluid.Interfaces.PartialTwoPortTransport(
       redeclare final package Medium = Medium,
       allowFlowReversal=portFlowDirection_3 == Modelica.Fluid.Types.PortFlowDirection.Bidirectional)
     "Partial model, to be replaced with a fluid component"

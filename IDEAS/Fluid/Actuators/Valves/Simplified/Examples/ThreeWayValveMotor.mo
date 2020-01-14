@@ -28,9 +28,9 @@ model ThreeWayValveMotor
     annotation (Placement(transformation(extent={{-58,-70},{-78,-50}})));
   Sources.Boundary_pT hot(
     redeclare package Medium = Medium,
-    nPorts=1,
     p=100000,
-    T=333.15) annotation (Placement(transformation(extent={{78,-10},{58,10}})));
+    T=333.15,
+    nPorts=1) annotation (Placement(transformation(extent={{78,-10},{58,10}})));
   IDEAS.Fluid.Actuators.Valves.Simplified.ThreeWayValveMotor threeWayValveMotor(
     m_flow_nominal=1,
     redeclare package Medium = Medium,
@@ -38,9 +38,9 @@ model ThreeWayValveMotor
                                        annotation (Placement(transformation(extent={{10,-10},{-10,10}})));
   Sources.Boundary_pT cold(
     redeclare package Medium = Medium,
-    nPorts=1,
     p=100000,
-    T=283.15) annotation (Placement(transformation(extent={{80,-70},{60,-50}})));
+    T=283.15,
+    nPorts=1) annotation (Placement(transformation(extent={{80,-70},{60,-50}})));
 
   Modelica.Fluid.Sensors.TemperatureTwoPort temperature(redeclare package
       Medium = Medium, m_flow_nominal=1)
@@ -48,14 +48,6 @@ model ThreeWayValveMotor
 equation
   connect(sink.ports[1], pumpFlow1.port_b) annotation (Line(
       points={{-78,-60},{-88,-60},{-88,0},{-82,0}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(threeWayValveMotor.port_a1, hot.ports[1]) annotation (Line(
-      points={{10,0},{58,0}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(cold.ports[1], threeWayValveMotor.port_a2) annotation (Line(
-      points={{60,-60},{0,-60},{0,-10}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(ctrl.y, threeWayValveMotor.ctrl) annotation (Line(
@@ -66,12 +58,14 @@ equation
       points={{-62,0},{-44,0}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(temperature.port_a, threeWayValveMotor.port_b) annotation (Line(
-      points={{-24,0},{-10,0}},
-      color={0,127,255},
-      smooth=Smooth.None));
   connect(flow_pump.y, pumpFlow1.m_flow_in) annotation (Line(points={{-77,70},{-72,
           70},{-72,12}},         color={0,0,127}));
+  connect(threeWayValveMotor.port_1, hot.ports[1])
+    annotation (Line(points={{10,0},{36,0},{36,0},{58,0}}, color={0,127,255}));
+  connect(cold.ports[1], threeWayValveMotor.port_3)
+    annotation (Line(points={{60,-60},{0,-60},{0,-10}}, color={0,127,255}));
+  connect(temperature.port_a, threeWayValveMotor.port_2)
+    annotation (Line(points={{-24,0},{-10,0}}, color={0,127,255}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),
     experiment(StopTime=100, Tolerance=1e-06),

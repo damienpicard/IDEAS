@@ -1,7 +1,7 @@
 within IDEAS.Fluid.Actuators.Valves.Simplified;
 model ThreeWayValveMotor
   "Ideal three way valve with a krane controlled with a Real input with value between 0 and 1"
-  extends BaseClasses.Partial3WayValve(idealSource(dp_start=0));
+  extends BaseClasses.Partial3WayValve2;
 
   Modelica.Blocks.Interfaces.RealInput ctrl(min=0, max=1)
     "procentage of flow through flowPort_a1" annotation (Placement(transformation(
@@ -13,17 +13,14 @@ model ThreeWayValveMotor
         origin={0,108})));
 
   Modelica.Blocks.Sources.RealExpression realExpression(y=-(l + (1 - ctrl)*(1 -
-        2*l))*port_b.m_flow)
+        2*l))*port_2.m_flow)
     annotation (Placement(transformation(extent={{92,-60},{28,-40}})));
 equation
 
-  connect(realExpression.y, idealSource.m_flow_in) annotation (Line(
-      points={{24.8,-50},{8,-50}},
-      color={0,0,127},
-      smooth=Smooth.None));
+  connect(realExpression.y, res3.m_flow_in) annotation (Line(points={{24.8,-50},
+          {18,-50},{18,-56},{8,-56}}, color={0,0,127}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}}),
-                      graphics), Icon(coordinateSystem(preserveAspectRatio=false,
+            -100},{100,100}})),  Icon(coordinateSystem(preserveAspectRatio=false,
                    extent={{-100,-100},{100,100}}),
                                       graphics={
         Polygon(
