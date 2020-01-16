@@ -34,7 +34,7 @@ block TWetBul_TDryBulPhi
 protected
   Modelica.SIunits.Conversions.NonSIunits.Temperature_degC TDryBul_degC
     "Dry bulb temperature in degree Celsius";
-  Real rh_per(min=0) "Relative humidity in percentage";
+  Real rh_per "Relative humidity in percentage";
   Modelica.SIunits.MassFraction XiDryBul
     "Water vapor mass fraction at dry bulb state";
   Modelica.SIunits.MassFraction XiSat "Water vapor mass fraction at saturation";
